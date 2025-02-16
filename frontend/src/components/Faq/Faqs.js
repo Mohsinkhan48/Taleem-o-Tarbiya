@@ -36,7 +36,7 @@ const FAQ = () => {
   return (
     <section className="bg-light-gray py-24">
     <div className="container mx-auto px-6">
-      <h2 className="text-4xl font-bold text-deep-blue mb-8 text-center animate__animated animate__fadeInUp">
+      <h2 className="text-4xl font-bold text-primaryColor mb-8 text-center animate__animated animate__fadeInUp">
         Frequently Asked Questions
       </h2>
   
@@ -44,7 +44,7 @@ const FAQ = () => {
         {/* Left Section: Image */}
         <div className="flex flex-col h-full">
           <img
-            src={images.seerat_un_nabwi}
+            src={images.FAQS}
             alt="FAQs"
             className="w-full h-full object-cover rounded-lg shadow-xl transform transition duration-500 hover:scale-105 animate__animated animate__fadeInUp"
           />
@@ -61,12 +61,12 @@ const FAQ = () => {
                 onClick={() => toggleAnswer(index)}
                 className="flex justify-between items-center p-6 cursor-pointer hover:bg-light-gray transition duration-300"
               >
-                <h3 className="text-xl font-semibold text-deep-blue">{faq.question}</h3>
+                <h3 className="text-xl font-semibold text-textColor">{faq.question}</h3>
                 <span>
                   {openIndex === index ? (
-                    <FaChevronUp className="text-emerald-green text-2xl" />
+                    <FaChevronUp className="text-secondaryColor text-2xl" />
                   ) : (
-                    <FaChevronDown className="text-emerald-green text-2xl" />
+                    <FaChevronDown className="text-secondaryColor text-2xl" />
                   )}
                 </span>
               </div>

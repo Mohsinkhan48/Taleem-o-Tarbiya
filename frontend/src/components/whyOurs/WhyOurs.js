@@ -15,7 +15,7 @@ const WhyOurs = () => {
         </div>
 
         <div className="md:w-2/3 w-full space-y-6 text-center md:text-left animate__animated animate__fadeInRight md:ml-16"> {/* Added margin-left for more space */}
-          <h2 className="text-4xl font-bold text-royal-blue leading-tight">
+          <h2 className="text-4xl font-bold text-primaryColor leading-tight">
             Why Choose Taleem-o-Tarbiya?
           </h2>
           <p className="text-lg text-charcoal-gray opacity-80 max-w-3xl mx-auto">
@@ -26,7 +26,7 @@ const WhyOurs = () => {
             <div className="flex items-center space-x-4 animate__animated animate__fadeInUp animate__delay-1s">
               <span className="text-3xl font-semibold text-soft-yellow">10</span>
               <div>
-                <h3 className="font-bold text-royal-blue">University Scholars</h3>
+                <h3 className="font-bold text-secondaryColor">University Scholars</h3>
                 <p className="text-sm">Our platform empowers over 55,000 university scholars, delivering high-quality courses in Islamic studies.</p>
               </div>
             </div>
@@ -35,7 +35,7 @@ const WhyOurs = () => {
             <div className="flex items-center space-x-4 animate__animated animate__fadeInUp animate__delay-2s">
               <span className="text-3xl font-semibold text-soft-yellow">9</span>
               <div>
-                <h3 className="font-bold text-royal-blue">Professional Educators</h3>
+                <h3 className="font-bold text-secondaryColor">Professional Educators</h3>
                 <p className="text-sm">We have over 17,000 professional educators dedicated to teaching and mentoring students in Islamic education.</p>
               </div>
             </div>
@@ -44,7 +44,7 @@ const WhyOurs = () => {
             <div className="flex items-center space-x-4 animate__animated animate__fadeInUp animate__delay-3s">
               <span className="text-3xl font-semibold text-soft-yellow">11+</span>
               <div>
-                <h3 className="font-bold text-royal-blue">Accredited Courses</h3>
+                <h3 className="font-bold text-secondaryColor">Accredited Courses</h3>
                 <p className="text-sm">We offer accredited courses in Urdu for BS, M.Phil., Ph.D., and Daras e Nizami levels. Our goal is to expand to English courses for a global audience.</p>
               </div>
             </div>

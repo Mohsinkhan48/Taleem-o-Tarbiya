@@ -3,6 +3,10 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        'primaryColor': '#DB7C26',
+        'lightBackground': '#F2E8CF',
+        'textColor': '#231F20',
+        'secondaryColor': '#0EB1D2',
         'deep-blue': '#1A2A6C',
         'sunset-orange': '#FF6F61',
         'emerald-green': '#2ECC71',

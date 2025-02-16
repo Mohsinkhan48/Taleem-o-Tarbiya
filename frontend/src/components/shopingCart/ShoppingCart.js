@@ -38,7 +38,7 @@ const ShoppingCart = () => {
                         {/* Proceed to Checkout */}
                         <Link
                             to="/checkout"
-                            className="block bg-blue-600 text-white text-center py-3 mt-6 rounded-lg hover:bg-blue-700 transition-all duration-300"
+                            className="block bg-primaryColor text-white text-center py-3 mt-6 rounded-lg hover:bg-primaryColor/80 transition-all duration-300"
                         >
                             Proceed to Checkout
                         </Link>
@@ -52,7 +52,7 @@ const ShoppingCart = () => {
                                     placeholder="Enter Coupon"
                                     className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 />
-                                <button className="mt-2 w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition-all duration-300">
+                                <button className="mt-2 w-full bg-primaryColor text-white py-2 rounded-lg hover:bg-secondaryColor/80 transition-all duration-300">
                                     Apply
                                 </button>
                             </div>

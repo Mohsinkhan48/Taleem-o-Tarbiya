@@ -28,11 +28,11 @@ const Hero = () => {
             Unlock your potential through immersive and accessible Islamic courses and learning resources designed for every level.
           </p>
           <div className="space-x-4">
-            <button className="bg-emerald-green text-ivory-white py-2 px-8 rounded-lg shadow-lg hover:bg-emerald-green hover:scale-105 transition-all">
+            <button className="bg-primaryColor text-ivory-white py-2 px-8 rounded-lg shadow-lg hover:bg-primaryColor hover:scale-105 transition-all">
               Start Learning
             </button>
             <Link to="/explore-courses">
-              <button className="border-2 border-bright-white text-bright-white py-2 px-8 rounded-lg shadow-lg hover:bg-bright-white hover:text-emerald-green hover:scale-105 transition-all">
+              <button className="border-2 border-bright-white text-bright-white py-2 px-8 rounded-lg shadow-lg hover:bg-bright-white hover:text-textColor hover:scale-105 transition-all">
                 Explore Courses
               </button>
             </Link>

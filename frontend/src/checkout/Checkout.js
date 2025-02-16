@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Checkout = () => {
     const cart = useSelector((state) => Array.isArray(state.cart.courses) ? state.cart.courses : []);
@@ -21,23 +21,25 @@ const Checkout = () => {
     const handlePaymentMethodChange = (method) => {
         setPaymentMethod(method);
     };
+    const navigate =useNavigate()
 
     // Handle form submission
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        if (paymentMethod === "card") {
-            console.log("Card Details:", cardDetails);
-            alert("Payment Successful!");
-        } else if (paymentMethod === "paypal") {
-            console.log("Redirecting to PayPal...");
-            alert("Redirecting to PayPal...");
-        }
-    };
+    // const handleSubmit = (e) => {
+
+    //     e.preventDefault();
+    //     if (paymentMethod === "card") {
+    //         console.log("Card Details:", cardDetails);
+    //         alert("Payment Successful!");
+    //     } else if (paymentMethod === "paypal") {
+    //         console.log("Redirecting to PayPal...");
+    //         alert("Redirecting to PayPal...");
+    //     }
+    // };
 
     return (
         <div className="w-full min-h-screen bg-gray-100 p-6">
             <div className="mx-auto max-w-6xl bg-white shadow-lg p-6 rounded-lg">
-                <h1 className="text-3xl font-bold border-b pb-4">Checkout</h1>
+                <h1 className="text-3xl font-bold border-b pb-4 text-primaryColor">Checkout</h1>
 
                 <div className="mt-6 grid grid-cols-1 lg:grid-cols-2 gap-8">
                     {/* Payment Method Column */}
@@ -46,7 +48,7 @@ const Checkout = () => {
 
                         {/* Card Payment Form */}
                         {paymentMethod === "card" && (
-                            <form onSubmit={handleSubmit} className="space-y-4">
+                            <form onSubmit={navigate("/course-content")} className="space-y-4">
                                 <div>
                                     <label className="block text-sm font-medium text-gray-700">Card Number</label>
                                     <input
@@ -139,8 +141,8 @@ const Checkout = () => {
 
                         {/* Pay Button */}
                         <button
-                            onClick={handleSubmit}
-                            className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition-all duration-300"
+                                onClick={() => navigate("/course-content")}
+                            className="w-full bg-primaryColor text-white py-3 rounded-lg hover:bg-primaryColor/80 transition-all duration-300"
                         >
                             Pay Now
                         </button>

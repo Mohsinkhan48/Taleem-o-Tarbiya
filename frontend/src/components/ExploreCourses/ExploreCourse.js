@@ -1,38 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import 'animate.css';
 import images from '../../images';
+import { Link } from 'react-router-dom';
+import { addCourse } from '../../store';
 
 const dummyCourses = [
-  {
-    id: 1,
-    title: 'Dawa o Irshad',
-    duration: 3.5,
-    modules: 3,
-    rating: 4.5,
-    popularity: 100,
-    image: images.Dawa_o_Irshad,
-    createdAt: new Date(2025, 0, 5),
-  },
-  {
-    id: 2,
-    title: 'Islamic History',
-    duration: 3.75,
-    modules: 4,
-    rating: 4.7,
-    popularity: 150,
-    image: images.Islamic_History,
-    createdAt: new Date(2025, 0, 10),
-  },
-  {
-    id: 3,
-    title: 'Seerat un Nabi',
-    duration: 4.0,
-    modules: 5,
-    rating: 5.0,
-    popularity: 200,
-    image: images.seerat_un_nabwi,
-    createdAt: new Date(2025, 0, 15),
-  },
+  { id: 1, title: 'The Fiqh of Fasting and Zakat', time: '3 hr 30 min', price: 30, chapters: 10, modules: 5, rating: 4.5, description: 'The holy month of Ramadan is only a few weeks away, and the blessed time will soon be upon us.', image: images.Ramadan },
+        { id: 2, title: 'Al Asma ul Husna The 99 Beautiful Names of Allah', time: '3 hr 45 min', price: 35, chapters: 12, modules: 6, rating: 4.7, description: 'Students will explore the meanings, implications, and practical applications of Allah’s Names, fostering a closer relationship with the Creator. ', image: images.Allah_Names },
+        { id: 3, title: 'Seerat un Nabi', time: '4 hr 0 min', price: 40, chapters: 15, modules: 8, rating: 5.0, description: 'Dive deep into the life and teachings of the Prophet Muhammad (PBUH).', image: images.Seerat  },
+       
   {
     id: 4,
     title: 'Islamic and Modern Social Thought',
@@ -40,6 +17,7 @@ const dummyCourses = [
     modules: 6,
     rating: 4.6,
     popularity: 120,
+    price: 39.99,
     image: images.Islamic_Thoughts,
     createdAt: new Date(2025, 0, 8),
   },
@@ -50,12 +28,19 @@ const dummyCourses = [
     modules: 5,
     rating: 4.8,
     popularity: 180,
+    price: 54.99,
     image: images.History_Principles,
     createdAt: new Date(2025, 0, 12),
   },
+  { id: 6, title: 'Tafseer-ul-Quran', time: '5 hr 15 min', price: 45, chapters: 20, modules: 10, rating: 4.8, description: 'Learn the interpretation and deeper meanings of the Holy Quran.', image: images.Allah_Names },
+  { id: 7, title: 'Quranic Arabic', time: '4 hr 30 min', price: 40, chapters: 18, modules: 8, rating: 4.6, description: 'Understand the language of the Quran and its linguistic beauty.', image: images.Islamic_Thoughts},
+  { id: 8, title: 'Hifz-ul-Quran', time: '6 hr 0 min', price: 50, chapters: 30, modules: 12, rating: 5.0, description: 'Memorization techniques and guidance for becoming a Hafiz of the Quran.', image: images.Seerat },
 ];
 
 const ExploreCourses = () => {
+  const dispatch = useDispatch();
+  const cartCourses = useSelector((state) => state.cart.courses);
+
   const [filters, setFilters] = useState({
     rating: 0,
     duration: 0,
@@ -65,8 +50,9 @@ const ExploreCourses = () => {
 
   const [filteredCourses, setFilteredCourses] = useState(dummyCourses);
 
-  const applyFilters = () => {
+  useEffect(() => {
     let courses = [...dummyCourses];
+
     if (filters.rating > 0) {
       courses = courses.filter((course) => course.rating >= filters.rating);
     }
@@ -81,12 +67,16 @@ const ExploreCourses = () => {
     } else if (filters.sortBy === 'newest') {
       courses.sort((a, b) => b.createdAt - a.createdAt);
     }
+
     setFilteredCourses(courses);
-  };
+  }, [filters]);
 
   const handleFilterChange = (field, value) => {
-    setFilters({ ...filters, [field]: value });
-    applyFilters();
+    setFilters((prevFilters) => ({ ...prevFilters, [field]: value }));
+  };
+
+  const handleEnroll = (course) => {
+    dispatch(addCourse(course));
   };
 
   return (
@@ -99,79 +89,64 @@ const ExploreCourses = () => {
           Discover a wide variety of Islamic courses tailored for your learning needs.
         </p>
 
-        {/* Filters Section */}
-        <div className="flex flex-wrap items-center justify-center gap-6 mb-12 animate__animated animate__fadeInUp">
-          <div>
-            <label className="block text-gray-600 mb-2">Rating:</label>
-            <select
-              className="border border-gray-300 rounded px-4 py-2"
-              onChange={(e) => handleFilterChange('rating', parseFloat(e.target.value))}
-            >
-              <option value="0">All Ratings</option>
-              <option value="4.0">4.0+</option>
-              <option value="4.5">4.5+</option>
-              <option value="5.0">5.0</option>
-            </select>
-          </div>
-          <div>
-            <label className="block text-gray-600 mb-2">Duration (hours):</label>
-            <input
-              type="number"
-              className="border border-gray-300 rounded px-4 py-2"
-              placeholder="Max Duration"
-              onChange={(e) => handleFilterChange('duration', parseFloat(e.target.value))}
-            />
-          </div>
-          <div>
-            <label className="block text-gray-600 mb-2">Modules:</label>
-            <input
-              type="number"
-              className="border border-gray-300 rounded px-4 py-2"
-              placeholder="Min Modules"
-              onChange={(e) => handleFilterChange('modules', parseFloat(e.target.value))}
-            />
-          </div>
-          <div>
-            <label className="block text-gray-600 mb-2">Sort By:</label>
-            <select
-              className="border border-gray-300 rounded px-4 py-2"
-              onChange={(e) => handleFilterChange('sortBy', e.target.value)}
-            >
-              <option value="popularity">Most Popular</option>
-              <option value="newest">Newest</option>
-            </select>
-          </div>
+        <div className="flex justify-center gap-4 mb-8">
+          <input
+            type="number"
+            placeholder="Min Rating"
+            className="border p-2 rounded"
+            onChange={(e) => handleFilterChange('rating', parseFloat(e.target.value) || 0)}
+          />
+          <input
+            type="number"
+            placeholder="Max Duration"
+            className="border p-2 rounded"
+            onChange={(e) => handleFilterChange('duration', parseFloat(e.target.value) || 0)}
+          />
+          <input
+            type="number"
+            placeholder="Min Modules"
+            className="border p-2 rounded"
+            onChange={(e) => handleFilterChange('modules', parseInt(e.target.value) || 0)}
+          />
+          <select
+            className="border p-2 rounded"
+            onChange={(e) => handleFilterChange('sortBy', e.target.value)}
+          >
+            <option value="popularity">Most Popular</option>
+            <option value="newest">Newest</option>
+          </select>
         </div>
 
-        {/* Courses Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 animate__animated animate__fadeInUp">
           {filteredCourses.length > 0 ? (
-            filteredCourses.map((course) => (
-              <div
-                key={course.id}
-                className="rounded-lg shadow-md bg-white p-4 hover:shadow-lg transition duration-300 cursor-pointer"
-              >
-                <img
-                  src={course.image}
-                  alt={course.title}
-                  className="w-full h-48 object-cover rounded-t-lg"
-                />
-                <div className="mt-4">
-                  <h2 className="text-xl font-semibold text-gray-800">{course.title}</h2>
-                  <p className="text-gray-600 mt-2">
-                    Duration: <span className="font-medium">{course.duration} hrs</span>
-                  </p>
-                  <p className="text-gray-600">
-                    Modules: <span className="font-medium">{course.modules}</span>
-                  </p>
-                  <p className="text-gray-600">
-                    Rating: <span className="font-medium">{course.rating} &#9733;</span>
-                  </p>
+            filteredCourses.map((course) => {
+              const isEnrolled = cartCourses.some((c) => c.id === course.id);
+              return (
+                <div
+                  key={course.id}
+                  className="rounded-lg shadow-md bg-white p-4 hover:shadow-lg transition duration-300 cursor-pointer"
+                >
+                  <img
+                    src={course.image}
+                    alt={course.title}
+                    className="w-full h-48 object-cover rounded-t-lg"
+                  />
+                  <div className="mt-4">
+                    <h2 className="text-xl font-semibold text-gray-800">{course.title}</h2>
+                    <p className="text-gray-600 mt-2">Duration: {course.duration} hrs</p>
+                    <p className="text-gray-800 font-bold mt-2">Price: ${course.price}</p>
+                    <button
+                      onClick={() => handleEnroll(course)}
+                      className={`mt-4 w-full py-2 rounded-lg text-white transition-all duration-300 ${isEnrolled ? 'bg-secondaryColor hover:bg-secondaryColor/70' : 'bg-primaryColor hover:bg-primaryColor/70'}`}
+                    >
+                      {isEnrolled ? <Link to="/my-cart">Go to Cart</Link> : 'Enroll'}
+                    </button>
+                  </div>
                 </div>
-              </div>
-            ))
+              );
+            })
           ) : (
-            <p className="text-gray-600 text-center col-span-3">No courses found.</p>
+            <p className="text-center text-gray-600">No courses match the selected filters.</p>
           )}
         </div>
       </div>

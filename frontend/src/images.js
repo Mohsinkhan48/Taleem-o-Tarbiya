@@ -11,10 +11,21 @@ import Islamic_Thoughts from '../src/assets/Islamic-and-Modern-Social-Thought.jp
 import History_Principles from '../src/assets/History-and-Principles-of-Hadith.jpg'
 import Sciences_Quran from '../src/assets/Sciences-of-Quran.jpg'
 import Deen_Mazhab from '../src/assets/Deen-and-Mazhab.jpg'
-
+import Brand_Logo from '../src/assets/brand_logo1.png'
+import Ramadan from '../src/assets/ramadan.png'
+import Allah_Names from '../src/assets/namesofallah.jpg'
+import Seerat from '../src/assets/seerat.jpg'
+import FAQS from '../src/assets/faqs.jpg'
+import CEO from '../src/assets/ceo.jpg'
 
 const images = {
     main3,
+    FAQS,
+    CEO,
+    Seerat,
+    Allah_Names,
+    Ramadan,
+    Brand_Logo,
     Deen_Mazhab,
     Sciences_Quran,
     History_Principles,

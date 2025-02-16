@@ -49,7 +49,7 @@ const AboutUs = () => {
           <div className="flex flex-wrap justify-center gap-10">
             {/* Team Member 1 */}
             <div className="w-full sm:w-1/4 text-center p-6">
-              <img src={images.Islamic_Thoughts} alt="Team Member 1" className="w-32 h-32 rounded-full mx-auto mb-4" />
+              <img src={images.CEO} alt="Team Member 1" className="w-32 h-32 rounded-full mx-auto mb-4" />
               <h4 className="text-xl font-semibold text-charcoal-gray">Mohsin Khan</h4>
               <p className="text-lg text-gray-700">Founder & CEO</p>
             </div>

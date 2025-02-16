@@ -8,6 +8,8 @@ import { useSelector } from "react-redux";
 import ShoppingCart from "../shopingCart/ShoppingCart";
 import { clearCart } from "../../store";
 import { useDispatch } from "react-redux";
+import images from "../../images";
+
 
 const Navbar = ({ profile, isAuthenticated, setIsAuthenticated, email }) => {
   const [loggedInUser, setLoggedInUser] = useState("");
@@ -48,7 +50,12 @@ const Navbar = ({ profile, isAuthenticated, setIsAuthenticated, email }) => {
     <>
       <header className="bg-white shadow-md">
         <div className="px-4 py-2 flex justify-between items-center">
-          <h1 className="text-2xl font-bold">LOGOO</h1>
+          <h1 className="text-2xl font-bold">
+  <Link to="/">
+    <img  src={images.Brand_Logo} alt="Brand Logo" className="h-12 w-auto object-contain" />
+  </Link>
+</h1>
+
           <div className={toggleMenu ? "md:flex flex-col md:flex-row w-full md:w-auto" : "hidden md:flex"} id="menu">
             <ul className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-6">
               <li className="cursor-pointer hover:text-soft-yellow py-2 px-3">
@@ -122,14 +129,15 @@ const Navbar = ({ profile, isAuthenticated, setIsAuthenticated, email }) => {
     // Login & Signup Buttons
     <div className="flex space-x-2">
       <Link to="/login">
-        <button className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition">
+        <button className="bg-primaryColor text-white px-4 py-2 rounded-lg hover:bg-primaryColor transition">
           Login
         </button>
       </Link>
       <Link to="/signup">
-        <button className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition">
-          Sign Up
-        </button>
+      <button className="bg-lightBackground text-black border border-black px-4 py-2 rounded-lg transition hover:bg-primaryColor hover:text-white hover:border-primaryColor">
+  Sign Up
+</button>
+
       </Link>
     </div>
   )}
