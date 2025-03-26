@@ -1,6 +1,6 @@
 import React from "react";
 import { useDispatch } from "react-redux";
-import { removeCourse } from "../../store";
+import { removeCourse } from "../../redux/features/CartSlice";
 
 const CartItem = ({ course }) => {
     const dispatch = useDispatch();
@@ -21,18 +21,30 @@ const CartItem = ({ course }) => {
                 <h4 className="text-lg font-semibold text-gray-800 hover:text-blue-600 transition-colors duration-300">
                     {course.title}
                 </h4>
-                <p className="text-sm text-gray-600 mt-1">By {course.instructor}</p>
+                
+                {/* Instructor Name (Fix Applied) */}
+                <p className="text-sm text-gray-600 mt-1">
+                    By {course.instructor?.name || "Unknown"}
+                </p>
+
+                {/* Ratings (Fix Applied) */}
                 <div className="flex items-center mt-2">
                     <span className="text-sm text-yellow-600">Bestseller</span>
                     <span className="mx-2 text-gray-400">•</span>
-                    <span className="text-sm text-gray-600">{course.rating} ⭐ ({course.ratingsCount} ratings)</span>
+                    <span className="text-sm text-gray-600">
+                        {course.ratings?.[0] || "No Ratings"} ⭐ ({course.students?.length || 0} students)
+                    </span>
                 </div>
+
+                {/* Course Details */}
                 <div className="text-sm text-gray-600 mt-1">
-                    {course.totalHours} total hours • {course.lecturesCount} lectures • {course.level}
+                    {course.duration} • {course.chapters} chapters • {course.level}
                 </div>
+
+                {/* Actions */}
                 <div className="mt-3 flex space-x-4">
                     <button
-                        onClick={() => dispatch(removeCourse(course.id))}
+                        onClick={() => dispatch(removeCourse(course._id))}
                         className="text-sm text-red-500 hover:text-red-700 hover:underline"
                     >
                         Remove
@@ -48,7 +60,7 @@ const CartItem = ({ course }) => {
 
             {/* Price */}
             <div className="w-full md:w-24 flex-shrink-0 mt-4 md:mt-0">
-                <p className="text-xl font-bold text-gray-900">${course.price}</p>
+                <p className="text-xl font-bold text-gray-900">Rs: {course.price}</p>
             </div>
         </div>
     );

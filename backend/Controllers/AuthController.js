@@ -25,25 +25,30 @@
 
 const UserModel = require("../Models/User");
 const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken')
+const jwt = require('jsonwebtoken');
 
 // Signup Controller
 const signup = async (req, res) => {
     try {
-        const { name, email, password } = req.body;
+        const { name, email, password, role } = req.body;
 
         // Check if the user already exists
-        const user = await UserModel.findOne({ email });
-        if (user) {
+        const existingUser = await UserModel.findOne({ email });
+        if (existingUser) {
             return res.status(409).json({
                 message: "User already exists, you can login",
                 success: false
             });
         }
 
-        // Create a new user
+        // Hash password and create user
         const hashedPassword = await bcrypt.hash(password, 10);
-        const newUser = new UserModel({ name, email, password: hashedPassword });
+        const newUser = new UserModel({ 
+            name, 
+            email, 
+            password: hashedPassword, 
+            role: role || "learner" // Default to 'learner' if role is not provided
+        });
         await newUser.save();
 
         res.status(201).json({
@@ -59,44 +64,46 @@ const signup = async (req, res) => {
     }
 };
 
-
+// Login Controller
 const login = async (req, res) => {
     try {
         const { email, password } = req.body;
 
-        // Check if the user already exists
+        // Find user by email
         const user = await UserModel.findOne({ email });
-        const errorMSg ='Auth failed email or password is wrong'
         if (!user) {
             return res.status(403).json({
-                message: errorMSg,
+                message: "Auth failed: Email or password is incorrect",
                 success: false
             });
         }
 
-        const isPassEqual= await bcrypt.compare(password, user.password)
-        if(!isPassEqual){
+        // Compare passwords
+        const isPassEqual = await bcrypt.compare(password, user.password);
+        if (!isPassEqual) {
             return res.status(403).json({
-                message: errorMSg,
+                message: "Auth failed: Email or password is incorrect",
                 success: false
             });
         }
 
-        const jwtToken= jwt.sign({email:user.email, id:user.id},
+        // Generate JWT token
+        const jwtToken = jwt.sign(
+            { email: user.email, id: user._id, role: user.role },
             process.env.JWT_SECRET,
-            {expiresIn:'24h'}
-
-        )
+            { expiresIn: '24h' }
+        );
 
         res.status(200).json({
             message: "Login successful",
             success: true,
             jwtToken,
-            email,
-            name:user.name
+            name: user.name,
+            role: user.role,
+            id: user._id  // <-- Include user ID in response
         });
     } catch (error) {
-        console.error("Error during signup:", error);
+        console.error("Error during login:", error);
         res.status(500).json({
             message: "Internal server error",
             success: false
@@ -104,7 +111,8 @@ const login = async (req, res) => {
     }
 };
 
+
 module.exports = {
     signup,
-    login 
+    login
 };

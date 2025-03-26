@@ -5,7 +5,8 @@
     const schema = joi.object({
         name:joi.string().min(3).max(100).required(),
         email:joi.string().email().required(),
-        password:joi.string().min(4).max(100).required()
+        password:joi.string().min(4).max(100).required(),
+        role: joi.string().valid("teacher", "learner").required()
 
     })
     const {error} = schema.validate(req.body);

@@ -17,6 +17,7 @@ import Sidebar from './components/sidebar/Sidebar';
 import Dashboard from './instructorAdmin/Dashboard/Dashboard';
 import Checkout from './checkout/Checkout';
 import CourseContent from './components/CourseContent';
+import CreateCourse from './components/createcourse/CreateCourse';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -68,6 +69,8 @@ function App() {
           <Route path="/my-cart" element={<ShoppingCart cart={cart} />} />
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/course-content" element={<CourseContent />} />
+          <Route path="/create-course" element={<CreateCourse />} />
+          
         </Routes>
       )}
 

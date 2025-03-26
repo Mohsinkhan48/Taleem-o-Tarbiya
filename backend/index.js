@@ -4,6 +4,7 @@ require('dotenv').config()
 const bodyParser = require('body-parser')
 const AuthRouter = require('./Routes/AuthRouter')
 const ProductRouter = require('./Routes/ProductRouter')
+const courseRoutes = require("./Routes/CourseRoute");
 
 const cors = require('cors')
 require('./Models/db')
@@ -20,6 +21,7 @@ app.use(express.json());
 app.use(cors())
 app.use('/auth',AuthRouter)
 app.use('/products',ProductRouter)
+app.use("/api", courseRoutes);
 
 
 

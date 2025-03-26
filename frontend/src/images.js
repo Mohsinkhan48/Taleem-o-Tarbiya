@@ -17,9 +17,18 @@ import Allah_Names from '../src/assets/namesofallah.jpg'
 import Seerat from '../src/assets/seerat.jpg'
 import FAQS from '../src/assets/faqs.jpg'
 import CEO from '../src/assets/ceo.jpg'
+import Zika_First from '../src/assets/zakaat1.mp4'
+import Zika_Second from '../src/assets/zakaat2.mp4'
+import Zika_Third from '../src/assets/zakaat3.mp4'
+import Zika_Fourth from '../src/assets/zakaat4.mp4'
+
 
 const images = {
     main3,
+    Zika_First,
+    Zika_Second,
+    Zika_Third,
+    Zika_Fourth,
     FAQS,
     CEO,
     Seerat,

@@ -4,27 +4,27 @@ import { faShoppingCart } from "@fortawesome/free-solid-svg-icons";
 import { Link, useNavigate } from "react-router-dom";
 import { handleSuccess } from "../../utils";
 import { ToastContainer } from "react-toastify";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import ShoppingCart from "../shopingCart/ShoppingCart";
-import { clearCart } from "../../store";
-import { useDispatch } from "react-redux";
-import images from "../../images";
+import { clearCart } from "../../redux/features/CartSlice";
+import axios from "axios";
 
-
-const Navbar = ({ profile, isAuthenticated, setIsAuthenticated, email }) => {
+const Navbar = ({ isAuthenticated, setIsAuthenticated }) => {
   const [loggedInUser, setLoggedInUser] = useState("");
+  const [userEmail, setUserEmail] = useState("");
   const [cartVisible, setCartVisible] = useState(false);
   const [toggleMenu, setToggleMenu] = useState(false);
   const [dropdownVisible, setDropdownVisible] = useState(false);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const cart = useSelector((state) => Array.isArray(state.cart.courses) ? state.cart.courses : []);
+  const cart = useSelector((state) => (Array.isArray(state.cart.courses) ? state.cart.courses : []));
 
-  console.log("Cart state:", cart);
-  console.log("Is cart an array?", Array.isArray(cart)); // Should log `true`
   useEffect(() => {
-    setLoggedInUser(localStorage.getItem("loggedInUser"));
+    const storedUser = localStorage.getItem("loggedInUser");
+    const storedEmail = localStorage.getItem("userEmail");
+    if (storedUser) setLoggedInUser(storedUser);
+    if (storedEmail) setUserEmail(storedEmail);
   }, []);
 
   const handleToggle = () => {
@@ -35,6 +35,7 @@ const Navbar = ({ profile, isAuthenticated, setIsAuthenticated, email }) => {
     setIsAuthenticated(false);
     localStorage.removeItem("token");
     localStorage.removeItem("loggedInUser");
+    localStorage.removeItem("userEmail");
     dispatch(clearCart()); 
     handleSuccess("User Logged out successfully");
     setTimeout(() => {
@@ -50,12 +51,9 @@ const Navbar = ({ profile, isAuthenticated, setIsAuthenticated, email }) => {
     <>
       <header className="bg-white shadow-md">
         <div className="px-4 py-2 flex justify-between items-center">
-          <h1 className="text-2xl font-bold">
-  <Link to="/">
-    <img  src={images.Brand_Logo} alt="Brand Logo" className="h-12 w-auto object-contain" />
-  </Link>
-</h1>
-
+          <Link to="/">
+            <h1 className="text-2xl font-bold">Taleem-o-Tarbiya</h1>
+          </Link>
           <div className={toggleMenu ? "md:flex flex-col md:flex-row w-full md:w-auto" : "hidden md:flex"} id="menu">
             <ul className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-6">
               <li className="cursor-pointer hover:text-soft-yellow py-2 px-3">
@@ -74,76 +72,69 @@ const Navbar = ({ profile, isAuthenticated, setIsAuthenticated, email }) => {
           </div>
 
           <div className="flex items-center space-x-4">
-  {/* Shopping Cart */}
-  <Link to="/my-cart" className="relative cursor-pointer">
-    <FontAwesomeIcon icon={faShoppingCart} className="text-2xl text-gray-700" />
-    {cart.length > 0 && (
-      <div className="absolute -top-2 -right-2 bg-red-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-        {cart.length}
-      </div>
-    )}
-  </Link>
-  {cartVisible && <ShoppingCart closeCart={() => setCartVisible(false)} />}
+            <Link to="/my-cart" className="relative cursor-pointer">
+              <FontAwesomeIcon icon={faShoppingCart} className="text-2xl text-gray-700" />
+              {cart.length > 0 && (
+                <div className="absolute -top-2 -right-2 bg-red-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                  {cart.length}
+                </div>
+              )}
+            </Link>
+            {cartVisible && <ShoppingCart closeCart={() => setCartVisible(false)} />}
 
-  {isAuthenticated ? (
-    // Profile Dropdown
-    <div className="relative">
-      <div onClick={handleDropdownToggle} className="cursor-pointer flex items-center space-x-2">
-        <div className="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center text-white">
-          <span className="text-xl font-bold">{profile ? profile.charAt(0) : "U"}</span>
-        </div>
-      </div>
-
-      {dropdownVisible && (
-        <div className="absolute top-12 right-0 bg-white shadow-lg rounded-md w-64 py-4 px-6 z-10">
-          <div className="flex items-center space-x-3">
-            <div className="w-12 h-12 bg-gray-300 rounded-full flex items-center justify-center text-white">
-              <span className="text-xl font-bold">{profile ? profile.charAt(0) : "U"}</span>
-            </div>
-            <div className="flex flex-col">
-              <span className="font-semibold">{profile}</span>
-              <span className="text-sm text-gray-500">{email}</span>
-            </div>
+            {isAuthenticated ? (
+              <div className="relative">
+                <div onClick={handleDropdownToggle} className="cursor-pointer flex items-center space-x-2">
+                  <div className="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center text-white">
+                    <span className="text-xl font-bold">{loggedInUser ? loggedInUser.charAt(0) : "U"}</span>
+                  </div>
+                </div>
+                {dropdownVisible && (
+                  <div className="absolute top-12 right-0 bg-white shadow-lg rounded-md w-64 py-4 px-6 z-10">
+                    <div className="flex items-center space-x-3">
+                      <div className="w-12 h-12 bg-gray-300 rounded-full flex items-center justify-center text-white">
+                        <span className="text-xl font-bold">{loggedInUser ? loggedInUser.charAt(0) : "M"}</span>
+                      </div>
+                      <div className="flex flex-col">
+                        <span className="font-semibold">{loggedInUser}</span>
+                        <span className="text-sm text-gray-500">{userEmail}</span>
+                      </div>
+                    </div>
+                    <hr className="my-4 border-gray-300" />
+                    <ul className="space-y-2">
+                      {cart.map((item, index) => (
+                        <li key={index} className="cursor-pointer hover:text-soft-yellow">
+                          {item.title}
+                        </li>
+                      ))}
+                      <li className="cursor-pointer hover:text-soft-yellow">
+                        <Link to="/my-cart">Go to Cart</Link>
+                      </li>
+                      <li className="cursor-pointer hover:text-soft-yellow">
+                        <button onClick={handleLogout} className="w-full text-left">
+                          Logout
+                        </button>
+                        <ToastContainer />
+                      </li>
+                    </ul>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div className="flex space-x-2">
+                <Link to="/login">
+                  <button className="bg-primaryColor text-white px-4 py-2 rounded-lg hover:bg-primaryColor transition">
+                    Login
+                  </button>
+                </Link>
+                <Link to="/signup">
+                  <button className="bg-lightBackground text-black border border-black px-4 py-2 rounded-lg transition hover:bg-primaryColor hover:text-white hover:border-primaryColor">
+                    Sign Up
+                  </button>
+                </Link>
+              </div>
+            )}
           </div>
-          <hr className="my-4 border-gray-300" />
-          <ul className="space-y-2">
-            {cart.map((item, index) => (
-              <li key={index} className="cursor-pointer hover:text-soft-yellow">
-                {item.title}
-              </li>
-            ))}
-            <li className="cursor-pointer hover:text-soft-yellow">
-              <Link to="/my-cart">Go to Cart</Link>
-            </li>
-            <li className="cursor-pointer hover:text-soft-yellow">
-              <button onClick={handleLogout} className="w-full text-left">
-                Logout
-              </button>
-              <ToastContainer />
-            </li>
-          </ul>
-        </div>
-      )}
-    </div>
-  ) : (
-    // Login & Signup Buttons
-    <div className="flex space-x-2">
-      <Link to="/login">
-        <button className="bg-primaryColor text-white px-4 py-2 rounded-lg hover:bg-primaryColor transition">
-          Login
-        </button>
-      </Link>
-      <Link to="/signup">
-      <button className="bg-lightBackground text-black border border-black px-4 py-2 rounded-lg transition hover:bg-primaryColor hover:text-white hover:border-primaryColor">
-  Sign Up
-</button>
-
-      </Link>
-    </div>
-  )}
-</div>
-
-          {/* Mobile Menu */}
           <div className="md:hidden cursor-pointer">
             <button onClick={handleToggle} className="focus:outline-none">
               <span className="text-xl">&#9776;</span>

@@ -36,13 +36,24 @@ function Login() {
         body: JSON.stringify(loginInfo),
       });
       const result = await response.json();
-      const { success, message, jwtToken, name, error } = result;
+      const { success, message, jwtToken, name, role,id, error } = result;
+
       if (success) {
         handleSuccess(message);
         localStorage.setItem('token', jwtToken);
         localStorage.setItem('loggedInUser', name);
+        localStorage.setItem('userRole', role);
+        localStorage.setItem('user', id);
+        
+
         setTimeout(() => {
-          navigate('/secondHome');
+          if (role === 'learner') {
+            navigate('/secondHome');
+          } else if (role === 'teacher') {
+            navigate('/dashboard');
+          } else {
+            handleError('Invalid role');
+          }
         }, 1000);
       } else if (error) {
         const details = error?.details[0]?.message || 'An error occurred';

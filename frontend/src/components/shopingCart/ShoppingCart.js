@@ -4,16 +4,19 @@ import CartItem from "./CartItem";
 import { Link } from "react-router-dom";
 
 const ShoppingCart = () => {
-    const cart = useSelector(state => Array.isArray(state.cart.courses) ? state.cart.courses : []);
+    // Ensure `cart` is an array
+    const cart = useSelector(state => 
+        Array.isArray(state.cart.courses) ? state.cart.courses.filter(course => course && course._id && course.price) : []
+    );
 
-    // Calculate total price with fallback for invalid prices
+    // Debugging: Log cart contents
+    console.log("Filtered Cart Data:", cart);
+
+    // Calculate total price (ensuring valid numbers)
     const totalPrice = cart.reduce((total, course) => {
         const price = parseFloat(course.price);
         return total + (isNaN(price) ? 0 : price);
     }, 0);
-
-    // Debugging: Log cart data to check for invalid prices
-    console.log("Cart Data:", cart);
 
     return (
         <div className="w-full min-h-screen bg-gray-100 p-6">
@@ -26,13 +29,13 @@ const ShoppingCart = () => {
                 ) : (
                     <div className="mt-6 space-y-4">
                         {cart.map(course => (
-                            <CartItem key={course.id} course={course} />
+                            <CartItem key={course._id} course={course} />
                         ))}
 
                         {/* Total Price */}
                         <div className="flex justify-between items-center border-t pt-4">
                             <span className="text-lg font-semibold">Total:</span>
-                            <span className="text-xl font-bold">${totalPrice.toFixed(2)}</span>
+                            <span className="text-xl font-bold">Rs:{totalPrice.toFixed(2)}</span>
                         </div>
 
                         {/* Proceed to Checkout */}
@@ -42,21 +45,6 @@ const ShoppingCart = () => {
                         >
                             Proceed to Checkout
                         </Link>
-
-                        {/* Promotions Section */}
-                        <div className="mt-6 p-4 bg-gray-50 rounded-lg">
-                            <h3 className="text-lg font-semibold">Promotions</h3>
-                            <div className="mt-2">
-                                <input
-                                    type="text"
-                                    placeholder="Enter Coupon"
-                                    className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                />
-                                <button className="mt-2 w-full bg-primaryColor text-white py-2 rounded-lg hover:bg-secondaryColor/80 transition-all duration-300">
-                                    Apply
-                                </button>
-                            </div>
-                        </div>
                     </div>
                 )}
             </div>

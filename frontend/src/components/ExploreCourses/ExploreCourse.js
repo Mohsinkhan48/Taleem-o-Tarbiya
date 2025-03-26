@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import 'animate.css';
 import images from '../../images';
 import { Link } from 'react-router-dom';
-import { addCourse } from '../../store';
+import {addCourse} from '../../redux/features/CartSlice'
 
 const dummyCourses = [
   { id: 1, title: 'The Fiqh of Fasting and Zakat', time: '3 hr 30 min', price: 30, chapters: 10, modules: 5, rating: 4.5, description: 'The holy month of Ramadan is only a few weeks away, and the blessed time will soon be upon us.', image: images.Ramadan },

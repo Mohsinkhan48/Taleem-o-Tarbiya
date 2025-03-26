@@ -9,23 +9,22 @@ const Signup = () => {
   const [signupInfo, setSignupInfo] = useState({
     name: '',
     email: '',
-    password: ''
+    password: '',
+    role: 'learner' 
   });
 
   const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    const copySignupInfo = { ...signupInfo };
-    copySignupInfo[name] = value;
-    setSignupInfo(copySignupInfo);
+    setSignupInfo((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSignup = async (e) => {
     e.preventDefault();
-    const { name, email, password } = signupInfo;
-    if (!name || !email || !password) {
-      return handleError('Name, email, and password are required');
+    const { name, email, password, role } = signupInfo;
+    if (!name || !email || !password || !role) {
+      return handleError('All fields are required');
     }
     try {
       const url = `http://localhost:8080/auth/signup`;
@@ -44,9 +43,9 @@ const Signup = () => {
           navigate('/login');
         }, 1000);
       } else if (error) {
-        const details = error?.details[0].message;
+        const details = error?.details[0]?.message || message;
         handleError(details);
-      } else if (!success) {
+      } else {
         handleError(message);
       }
     } catch (err) {
@@ -108,6 +107,20 @@ const Signup = () => {
                 value={signupInfo.password}
                 className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-green"
               />
+            </div>
+            <div>
+              <label htmlFor="role" className="block text-charcoal-gray font-semibold mb-2">
+                Role
+              </label>
+              <select
+                name="role"
+                value={signupInfo.role}
+                onChange={handleChange}
+                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-green"
+              >
+                <option value="learner">Learner</option>
+                <option value="teacher">Teacher</option>
+              </select>
             </div>
             <button
               type="submit"

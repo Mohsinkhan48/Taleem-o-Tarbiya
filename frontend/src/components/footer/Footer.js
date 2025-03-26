@@ -10,7 +10,7 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
           {/* Logo and Tagline */}
           <div className="flex flex-col items-center md:items-start text-center md:text-left">
-            <h1 className="text-3xl font-bold text-[#DB7C26] animate__animated animate__fadeInUp">LOGO</h1>
+            <h1 className="text-3xl font-bold text-[#DB7C26] animate__animated animate__fadeInUp">Taleem-o-Tarbiya</h1>
             <p className="text-xl text-[#E9C46A] mt-4 animate__animated animate__fadeInUp">
               Empowering Education for All
             </p>
