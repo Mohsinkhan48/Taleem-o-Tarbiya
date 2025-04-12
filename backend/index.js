@@ -22,6 +22,7 @@ app.use(cors())
 app.use('/auth',AuthRouter)
 app.use('/products',ProductRouter)
 app.use("/api", courseRoutes);
+app.use('/uploads', express.static('uploads'));
 
 
 

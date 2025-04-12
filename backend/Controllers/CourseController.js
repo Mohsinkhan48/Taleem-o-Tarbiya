@@ -34,6 +34,10 @@ const createCourse = async (req, res) => {
 
         // Assign image path
         courseData.image = `/uploads/${req.file.filename}`;
+        console.log("Incoming Course Data:", courseData);
+        console.log("Type of instructor:", typeof courseData.instructor);
+
+
 
         // Validate required fields
         if (
@@ -58,13 +62,15 @@ const createCourse = async (req, res) => {
             return res.status(400).json({ success: false, message: "Chapters must be a valid positive number" });
         }
 
-        if (!courseData.instructor.match(/^[0-9a-fA-F]{24}$/)) {
+        if (typeof courseData.instructor !== "string" || !courseData.instructor.match(/^[0-9a-fA-F]{24}$/)) {
             return res.status(400).json({ success: false, message: "Invalid instructor ID format" });
         }
+        
 
         // Set default values for optional fields
-        courseData.ratings = courseData.ratings || 0;
-        courseData.students = courseData.students || 0;
+        courseData.ratings = courseData.ratings || []; // not 0
+        courseData.students = courseData.students || []; // not 0
+
 
         const newCourse = new CourseModel(courseData);
         await newCourse.save();

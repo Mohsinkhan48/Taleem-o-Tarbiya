@@ -46,7 +46,7 @@ const CreateCourse = () => {
   };
 
   const handleImageChange = (e) => {
-    setImage(e.target.files[0]); // Store selected file
+    setImage(e.target.files[0]);
   };
 
   const handleSubmit = async (e) => {
@@ -58,13 +58,19 @@ const CreateCourse = () => {
     }
 
     const formData = new FormData();
-    formData.append("image", image);
-    Object.keys(course).forEach((key) => {
-      formData.append(key, course[key] || "N/A");
-    });
+formData.append("image", image);
+Object.keys(course).forEach((key) => {
+  if (key !== "instructor" && key !== "students") {
+    formData.append(key, course[key] || "N/A");
+  }
+});
 
-    // Append the correct instructor ID
-    formData.append("instructor", instructorId);
+// Set students as an empty array if not specified
+formData.append("students", []);
+
+// ✅ Append instructor ID correctly
+formData.append("instructor", instructorId);
+    
 
     try {
       const response = await fetch("http://localhost:8080/api/courses", {
@@ -77,6 +83,8 @@ const CreateCourse = () => {
 
       const data = await response.json();
 
+      console.log("Server Response:", response.status, data);
+
       if (data.success) {
         alert("Course added successfully!");
         setCourse({
@@ -86,7 +94,7 @@ const CreateCourse = () => {
           price: "",
           chapters: "",
           ratings: "0",
-          instructor: instructorId, // Keep instructor ID
+          instructor: instructorId,
           level: "",
           students: "0",
           category: "",
