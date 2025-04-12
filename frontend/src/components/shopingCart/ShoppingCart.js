@@ -35,7 +35,7 @@ const ShoppingCart = () => {
                         {/* Total Price */}
                         <div className="flex justify-between items-center border-t pt-4">
                             <span className="text-lg font-semibold">Total:</span>
-                            <span className="text-xl font-bold">Rs:{totalPrice.toFixed(2)}</span>
+                            <span className="text-xl font-bold">{totalPrice.toFixed(2)}$</span>
                         </div>
 
                         {/* Proceed to Checkout */}

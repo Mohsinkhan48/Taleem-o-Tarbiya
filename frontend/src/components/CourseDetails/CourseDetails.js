@@ -52,12 +52,12 @@ const CourseDetails = () => {
             <div className="space-y-3">
               <p><strong>Duration:</strong> {courseDetails.duration}</p>
               <p><strong>Category:</strong> {courseDetails.category}</p>
-              <p><strong>Price:</strong> Rs {courseDetails.price}</p>
+              <p><strong>Price:</strong> $ {courseDetails.price}</p>
             </div>
           </div>
           <div className="relative animate__animated animate__fadeInRight md:w-1/3">
             <img
-              src={courseDetails.image}
+              src={`http://localhost:8080${courseDetails.image}`}
               alt={courseDetails.title}
               className="rounded-lg shadow-lg w-full object-cover transition-transform duration-500 hover:scale-105"
             />
@@ -88,7 +88,7 @@ const CourseDetails = () => {
           <ul className="space-y-2 text-gray-700">
             <li><strong>Duration:</strong> {courseDetails.duration}</li>
             <li><strong>Category:</strong> {courseDetails.category}</li>
-            <li><strong>Price:</strong> Rs {courseDetails.price}</li>
+            <li><strong>Price:</strong> $ {courseDetails.price}</li>
           </ul>
 
           {isEnrolled && (
