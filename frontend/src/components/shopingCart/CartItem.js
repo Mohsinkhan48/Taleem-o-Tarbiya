@@ -10,7 +10,7 @@ const CartItem = ({ course }) => {
             {/* Course Image */}
             <div className="w-full md:w-48 h-32 flex-shrink-0 mb-4 md:mb-0">
                 <img
-                    src={course.image}
+                    src={`http://localhost:8080${course.image}`}
                     alt={course.title}
                     className="w-full h-full object-cover rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300"
                 />
@@ -60,7 +60,7 @@ const CartItem = ({ course }) => {
 
             {/* Price */}
             <div className="w-full md:w-24 flex-shrink-0 mt-4 md:mt-0">
-                <p className="text-xl font-bold text-gray-900">Rs: {course.price}</p>
+                <p className="text-xl font-bold text-gray-900">Price: {course.price}$</p>
             </div>
         </div>
     );

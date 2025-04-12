@@ -66,7 +66,7 @@ const SecondHome = () => {
               >
                 {/* Course Image */}
                 <img
-                  src={course.image}
+                  src={`http://localhost:8080${course.image}`}
                   alt={course.title}
                   className="w-full md:w-1/2 h-64 object-cover"
                 />
