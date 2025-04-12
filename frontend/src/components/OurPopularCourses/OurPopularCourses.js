@@ -36,7 +36,7 @@ const OurPopularCourses = ({ secondHeading, heading }) => {
                 className="animate__animated animate__fadeInUp rounded-xl shadow-md overflow-hidden bg-white cursor-pointer transition-transform transform hover:scale-105 hover:shadow-xl"
               >
                 <img
-                  src={course.image}
+                  src={`http://localhost:8080${course.image}`}
                   alt={course.title}
                   className="w-full h-48 object-cover rounded-t-xl transition-transform duration-300 hover:scale-110"
                 />

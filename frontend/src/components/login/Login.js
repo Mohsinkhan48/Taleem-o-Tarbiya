@@ -43,7 +43,10 @@ function Login() {
         localStorage.setItem('token', jwtToken);
         localStorage.setItem('loggedInUser', name);
         localStorage.setItem('userRole', role);
-        localStorage.setItem('user', id);
+        // localStorage.setItem('user', id);
+        // localStorage.setItem("user", JSON.stringify({ id: response.id, name: response.name }));
+        localStorage.setItem("user", JSON.stringify({ id: id, name: name }));
+
         
 
         setTimeout(() => {
