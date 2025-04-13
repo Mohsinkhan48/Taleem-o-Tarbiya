@@ -2,8 +2,7 @@ const express = require("express");
 const router = express.Router();
 const courseController = require("../Controllers/CourseController");
 const { isAuthenticated, isInstructor } = require("../Middlewares/CourseMiddleware");
-// const { upload } = require("../Controllers/CourseController"); 
-const {upload} = require('../Controllers/CourseController')
+const { upload } = require('../Controllers/CourseController');
 
 // ✅ Public Routes
 router.get("/courses", courseController.getAllCourses);

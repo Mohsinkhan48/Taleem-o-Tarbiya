@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 
 const Checkout = () => {
     const cart = useSelector((state) => Array.isArray(state.cart.courses) ? state.cart.courses : []);
+    const courseId = cart[0]?._id; // Assuming cart always has at least one course
     const [paymentMethod, setPaymentMethod] = useState("card"); // Default payment method
     const [cardDetails, setCardDetails] = useState({
         cardNumber: "",
@@ -140,12 +141,19 @@ const Checkout = () => {
                         </div>
 
                         {/* Pay Button */}
-                        <button
+                        {/* <button
                                 onClick={() => navigate("/course-content")}
                             className="w-full bg-primaryColor text-white py-3 rounded-lg hover:bg-primaryColor/80 transition-all duration-300"
                         >
                             Pay Now
-                        </button>
+                        </button> */}
+                       <Link
+  to={`/course/${courseId}/modules`}
+   className="w-full bg-primaryColor text-white py-3 rounded-lg hover:bg-primaryColor/80 transition-all duration-300"
+>
+Pay Now
+</Link>
+
 
                         {/* Money-Back Guarantee */}
                         <div className="text-center text-sm text-gray-600">
