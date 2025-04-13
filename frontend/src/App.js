@@ -19,6 +19,7 @@ import Checkout from "./checkout/Checkout";
 import CourseContent from "./components/CourseContent";
 import CreateCourse from "./components/createcourse/CreateCourse";
 import CourseModulesWrapper from "./components/CourseModulesWrapper";
+import InstructorCourses from "./instructorAdmin/Dashboard/InstructorCourses";
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -96,6 +97,10 @@ function App() {
   path="/course/:courseId/modules"
   element={<PrivateRoute element={<CourseModulesWrapper />} />}
 />
+<Route
+    path="/instructor/courses"
+    element={<PrivateRoute element={<InstructorCourses />} />}
+  />
         </Routes>
       )}
 

@@ -1,7 +1,12 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
 
 const Dashboard = () => {
+  const navigate = useNavigate();
+  const handleViewCourses = () => {
+    navigate('/instructor/courses');
+};
   return (
     <div className="min-h-screen bg-gray-100 p-6">
       {/* Dashboard Header */}
@@ -67,12 +72,13 @@ const Dashboard = () => {
 
         {/* View All Courses */}
         <Link
-          to="/courses"
-          className="bg-gray-800 text-white p-6 rounded-lg shadow-lg hover:bg-[#231F20] transform hover:scale-105 transition-all duration-300 flex items-center justify-between"
-        >
-          <span className="text-xl">View All Courses</span>
-          <span className="text-2xl">→</span>
-        </Link>
+  to="/instructor/courses"
+  className="bg-gray-800 text-white p-6 rounded-lg shadow-lg hover:bg-[#231F20] transform hover:scale-105 transition-all duration-300 flex items-center justify-between"
+>
+  <span className="text-xl">View All Courses</span>
+  <span className="text-2xl">→</span>
+</Link>
+       
 
         {/* Access Support/FAQs */}
         <Link

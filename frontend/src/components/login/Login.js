@@ -4,6 +4,7 @@ import { ToastContainer } from 'react-toastify';
 import { handleError, handleSuccess } from '../../utils';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGoogle, faFacebook, faLinkedin } from '@fortawesome/free-brands-svg-icons';
+import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import 'animate.css';
 import images from '../../images';
 
@@ -12,6 +13,10 @@ function Login() {
     email: '',
     password: '',
   });
+  const [showPassword, setShowPassword] = useState(false);
+  const togglePasswordVisibility = () => {
+    setShowPassword(prev => !prev);
+  };
 
   const navigate = useNavigate();
 
@@ -36,18 +41,14 @@ function Login() {
         body: JSON.stringify(loginInfo),
       });
       const result = await response.json();
-      const { success, message, jwtToken, name, role,id, error } = result;
+      const { success, message, jwtToken, name, role, id, error } = result;
 
       if (success) {
         handleSuccess(message);
         localStorage.setItem('token', jwtToken);
         localStorage.setItem('loggedInUser', name);
         localStorage.setItem('userRole', role);
-        // localStorage.setItem('user', id);
-        // localStorage.setItem("user", JSON.stringify({ id: response.id, name: response.name }));
-        localStorage.setItem("user", JSON.stringify({ id: id, name: name }));
-
-        
+        localStorage.setItem('user', JSON.stringify({ id: id, name: name }));
 
         setTimeout(() => {
           if (role === 'learner') {
@@ -82,7 +83,7 @@ function Login() {
         </div>
 
         {/* Right: Login Form Section */}
-        <div className="flex flex-col justify-center items-center">
+        <div className="flex flex-col justify-center items-center p-8">
           <h1 className="text-2xl font-bold text-royal-blue text-center mb-6">Login</h1>
           <form onSubmit={handleLogin} className="space-y-4 w-full max-w-sm">
             <div>
@@ -98,19 +99,28 @@ function Login() {
                 className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-green"
               />
             </div>
-            <div>
+
+            <div className="relative">
               <label htmlFor="password" className="block text-charcoal-gray font-semibold mb-2">
                 Password
               </label>
               <input
                 onChange={handleChange}
-                type="password"
+                type={showPassword ? 'text' : 'password'}
                 name="password"
                 placeholder="Enter your password..."
                 value={loginInfo.password}
-                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-green"
+                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-green pr-10"
               />
+              <button
+                type="button"
+                onClick={togglePasswordVisibility}
+                className="absolute right-3 top-12 transform -translate-y-1/2 text-gray-500 hover:text-royal-blue"
+              >
+                <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
+              </button>
             </div>
+
             <button
               type="submit"
               className="w-full py-2 bg-sunset-orange text-white font-semibold rounded-md hover:bg-royal-blue transition-colors animate__animated animate__pulse"
@@ -120,7 +130,7 @@ function Login() {
           </form>
 
           {/* Social Media Login */}
-          <div className="mt-6">
+          {/* <div className="mt-6">
             <p className="text-center text-charcoal-gray mb-4">Or login with</p>
             <div className="flex justify-center space-x-4">
               <button className="flex items-center justify-center w-10 h-10 bg-white shadow-md rounded-full hover:bg-red-500 transition-colors">
@@ -133,7 +143,7 @@ function Login() {
                 <FontAwesomeIcon icon={faLinkedin} className="text-emerald-green text-lg" />
               </button>
             </div>
-          </div>
+          </div> */}
 
           <p className="mt-4 text-center text-charcoal-gray">
             Don&apos;t have an account?{' '}

@@ -23,6 +23,7 @@ const storage = multer.diskStorage({
 // ✅ Multer upload middleware
 const upload = multer({ storage });
 
+
 // ✅ Create a new course (with image upload)
 const createCourse = async (req, res) => {
     try {
@@ -82,6 +83,21 @@ const createCourse = async (req, res) => {
         res.status(500).json({ success: false, message: "Internal Server Error" });
     }
 };
+// ✅ Get courses created by logged-in instructor
+// ✅ Get courses by instructor
+const getCoursesByInstructor = async (req, res) => {
+    try {
+        const instructorId = req.userId; // Set by isAuthenticated middleware
+        const courses = await CourseModel.find({ instructor: instructorId });
+
+        res.status(200).json({ success: true, courses });
+    } catch (error) {
+        console.error("Error fetching instructor courses:", error);
+        res.status(500).json({ success: false, message: "Internal Server Error" });
+    }
+};
+
+
 
 
 // ✅ Get all courses
@@ -167,5 +183,6 @@ module.exports = {
     getAllCourses,
     getCourseById,
     updateCourse,
-    deleteCourse
+    deleteCourse,
+    getCoursesByInstructor
 };
