@@ -1,0 +1,13 @@
+{
+  "login": "Iniciar sesión",
+  "signup": "Regístrate",
+  "dont_have_account": "¿No tienes una cuenta? Regístrate",
+  "already_registered": "¿Ya estás registrado? Inicia sesión",
+  "copyright": "© 2024 . Todos los derechos reservados.",
+  "email": "Correo electrónico",
+  "password": "Contraseña",
+  "full_name": "Nombre completo",
+  "forgot_password?": "¿Olvidaste tu contraseña?",
+  "forgot_password": "Olvidé mi contraseña",
+  "reset_password": "Restablecer contraseña"
+}

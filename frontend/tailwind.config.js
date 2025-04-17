@@ -1,26 +1,53 @@
-module.exports = {
-  content: ['./src/**/*.{js,jsx,ts,tsx}'],
+/** @type {import('tailwindcss').Config} */
+export default {
+  content: [
+    "./index.html",
+    "./src/**/*.{js,ts,jsx,tsx}",
+  ],
   theme: {
     extend: {
       colors: {
-        'primaryColor': '#DB7C26',
-        'lightBackground': '#F2E8CF',
-        'textColor': '#231F20',
-        'secondaryColor': '#0EB1D2',
-        'deep-blue': '#1A2A6C',
-        'sunset-orange': '#FF6F61',
-        'emerald-green': '#2ECC71',
-        'soft-yellow': '#FFD700',
-        'charcoal-gray': '#333333',
-        'ivory-white': '#F8F8F8',
-        'mint-green': '#98FF98',
-        'golden-yellow': '#FFD700',
-        'black': '#000000',
-        'light-gray': '#F5F5F5',
-        'bright-white': '#FFFFFF',
-        'secondary-gray': '#D3D3D3',
+        /* Base */
+        'background': 'var(--color-background)',
+        'text': 'var(--color-text)',
+
+        /* Primary UI */
+        'primary': 'var(--color-primary)',
+        'secondary': 'var(--color-secondary)',
+        'accent': 'var(--color-accent)',
+
+        /* Cards */
+        'card': 'var(--color-card)',
+        'card-border': 'var(--color-card-border)',
+
+        /* Buttons */
+        'button-primary': 'var(--color-button-primary)',
+        'button-secondary': 'var(--color-button-secondary)',
+        'button-hover-primary': 'var(--color-button-hover-primary)',
+        'button-hover-secondary': 'var(--color-button-hover-secondary)',
+        'button-border-primary': 'var(--color-button-border-primary)',
+        'button-border-secondary': 'var(--color-button-border-secondary)',
+        'button-text': 'var(--color-button-text)',
+
+        /* Forms */
+        'input-background': 'var(--color-input-background)',
+        'input-border': 'var(--color-input-border)',
+        'input-focus': 'var(--color-input-focus)',
+
+        /* Borders */
+        'border': 'var(--color-border)',
+
+        /* Links */
+        'link': 'var(--color-link)',
+        'link-hover': 'var(--color-link-hover)',
+
+        /* Status */
+        'success': 'var(--color-success)',
+        'warning': 'var(--color-warning)',
+        'error': 'var(--color-error)',
+        'info': 'var(--color-info)',
       },
     },
   },
   plugins: [],
-};
+}
