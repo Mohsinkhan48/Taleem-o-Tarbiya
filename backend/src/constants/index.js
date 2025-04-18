@@ -9,6 +9,11 @@ module.exports.AUTH = {
   OTP_LENGTH: "OTP must be of 6 digit.",
 };
 
+module.exports.CART = {
+  COURSE_ID_REQUIRED: "Course ID is required",
+  INVALID_COURSEID: "Invalid COurse ID"
+}
+
 module.exports.ALLOWED_OTP_TYPES = ["email_verification", "password_reset"];
 
 module.exports.OTP_TYPES = {

@@ -3,6 +3,8 @@ const { Router } = require("express");
 const router = Router();
 const authRoutes = require("./auth.routes");
 const courseRoutes = require("./course.routes");
+const enrollmentRoutes = require("./enrollment.routes");
+const cartRoutes = require("./cart.routes");
 
 const defaultRoutes = [
   {
@@ -12,6 +14,14 @@ const defaultRoutes = [
   {
     path: "/course",
     route: courseRoutes
+  },
+  {
+    path: "/enrollment",
+    route: enrollmentRoutes
+  },
+  {
+    path: "/cart",
+    route: cartRoutes
   }
 ];
 

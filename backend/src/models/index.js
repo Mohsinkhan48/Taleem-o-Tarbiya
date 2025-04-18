@@ -6,4 +6,6 @@ module.exports.Course = require("./course.model");
 module.exports.Module = require("./module.model");
 module.exports.Quiz = require("./quiz.model");
 module.exports.Resource = require("./resource.model");
-module.exports.studentProgress = require("./student-progress.model");
+module.exports.StudentProgress = require("./student-progress.model");
+module.exports.Enrollment = require("./enrollment.model");
+module.exports.Cart = require("./cart.model");
