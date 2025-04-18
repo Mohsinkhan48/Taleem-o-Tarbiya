@@ -1,46 +1,102 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { Course } from './CourseSlice';
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { addToast } from "./toasterSlice";
+import { CartService } from "../../service/cartService";
 
-// Define the Cart State type
 interface CartState {
-  courses: Course[];
+  cart: any[]; // you can strongly type this later
+  loading: boolean;
+  error: string | null;
+  success: boolean;
 }
 
-// Load cart data from localStorage
-const loadCartFromStorage = (): Course[] => {
-  const savedCart = localStorage.getItem('cart');
-  return savedCart ? JSON.parse(savedCart) : [];
-};
-
-// Initial State
 const initialState: CartState = {
-  courses: loadCartFromStorage(),
+  cart: [],
+  loading: false,
+  error: null,
+  success: false,
 };
 
-// Create Slice
+export const getCart = createAsyncThunk<any[], void, { rejectValue: string }>(
+  "cart/get",
+  async (_, { dispatch, rejectWithValue }) => {
+    try {
+      const res = await CartService.getCart();
+      return res.data.result.cartItems;
+    } catch (err: any) {
+      const msg = err.response?.data?.message || "Failed to fetch cart.";
+      dispatch(addToast({ message: msg, type: "error" }));
+      return rejectWithValue(msg);
+    }
+  }
+);
+
+export const addToCart = createAsyncThunk<any, string, { rejectValue: string }>(
+  "cart/add",
+  async (courseId, { dispatch, rejectWithValue }) => {
+    try {
+      const res = await CartService.addToCart({courseId});
+      dispatch(getCart()); // refetch cart
+      dispatch(addToast({ message: "Added to cart", type: "success" }));
+      return res.data;
+    } catch (err: any) {
+      const msg = err.response?.data?.message || "Add to cart failed.";
+      dispatch(addToast({ message: msg, type: "error" }));
+      return rejectWithValue(msg);
+    }
+  }
+);
+
+export const removeFromCart = createAsyncThunk<any, string, { rejectValue: string }>(
+  "cart/remove",
+  async (courseId, { dispatch, rejectWithValue }) => {
+    try {
+      const res = await CartService.removeFromCart({courseId});
+      dispatch(getCart()); // refetch cart
+      dispatch(addToast({ message: "Removed from cart", type: "success" }));
+      return res.data;
+    } catch (err: any) {
+      const msg = err.response?.data?.message || "Remove from cart failed.";
+      dispatch(addToast({ message: msg, type: "error" }));
+      return rejectWithValue(msg);
+    }
+  }
+);
+
+export const clearCart = createAsyncThunk<any, void, { rejectValue: string }>(
+  "cart/clear",
+  async (_, { dispatch, rejectWithValue }) => {
+    try {
+      const res = await CartService.clearCart();
+      dispatch(getCart());
+      dispatch(addToast({ message: "Cart cleared", type: "success" }));
+      return res.data;
+    } catch (err: any) {
+      const msg = err.response?.data?.message || "Clear cart failed.";
+      dispatch(addToast({ message: msg, type: "error" }));
+      return rejectWithValue(msg);
+    }
+  }
+);
+
 const cartSlice = createSlice({
-  name: 'cart',
+  name: "cart",
   initialState,
-  reducers: {
-    addCourse: (state, action: PayloadAction<Course>) => {
-      const course = action.payload;
-      const exists = state.courses.find(c => c._id === course._id);
-      if (!exists) {
-        state.courses.push(course);
-        localStorage.setItem('cart', JSON.stringify(state.courses));
-      }
-    },
-    removeCourse: (state, action: PayloadAction<string>) => {
-      state.courses = state.courses.filter(c => c._id !== action.payload);
-      localStorage.setItem('cart', JSON.stringify(state.courses));
-    },
-    clearCart: (state) => {
-      state.courses = [];
-      localStorage.removeItem('cart');
-    },
+  reducers: {},
+  extraReducers: (builder) => {
+    builder
+      .addCase(getCart.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(getCart.fulfilled, (state, action) => {
+        state.cart = action.payload;
+        state.loading = false;
+      })
+      .addCase(getCart.rejected, (state, action) => {
+        state.error = action.payload || "Cart fetch failed";
+        state.loading = false;
+      });
   },
 });
 
-// Export Actions & Reducer
-export const { addCourse, removeCourse, clearCart } = cartSlice.actions;
 export default cartSlice.reducer;

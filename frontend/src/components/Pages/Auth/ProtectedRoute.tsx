@@ -1,13 +1,14 @@
 import { Navigate } from 'react-router';
+import { useAuth } from '../../../hooks/useAuth';
 
 const ProtectedRoute = ({ children, allowedRoles }: { children: JSX.Element, allowedRoles: string[] }) => {
-  const user = JSON.parse(localStorage.getItem("user")!)
+  const {user, isAuthenticated} = useAuth()
 
-  if (!user) {
+  if (!isAuthenticated) {
     return <Navigate to="/login" />;
   }
 
-  if (!allowedRoles.includes(user.role.name)) {
+  if (user && !allowedRoles.includes(user.role.name)) {
     return <Navigate to="/unauthorized" />;
   }
 

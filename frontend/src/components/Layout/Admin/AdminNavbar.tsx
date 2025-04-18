@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router";
-import Button from "../Reusable/Button";
-import { useAuth } from "../../hooks/useAuth";
+import { useAuth } from "../../../hooks/useAuth";
+import Button from "../../Reusable/Button";
 
 const Navbar = () => {
   const [toggleMenu, setToggleMenu] = useState<boolean>(false);

@@ -15,12 +15,13 @@ import ProtectedRoute from "./components/Pages/Auth/ProtectedRoute";
 import TeacherDashboard from "./components/Pages/Teacher/Dashboard";
 import StudentDashboard from "./components/Pages/Student/Dashboard";
 import AdminDashboard from "./components/Pages/Admin/Dashboard";
-import AdminLayout from "./components/Layout/AdminLayout";
-import TeacherLayout from "./components/Layout/TeacherLayout";
-import StudentLayout from "./components/Layout/StudentLayout";
+import AdminLayout from "./components/Layout/Admin/AdminLayout";
+import TeacherLayout from "./components/Layout/Teacher/TeacherLayout";
+import StudentLayout from "./components/Layout/Student/StudentLayout";
 import TeacherCourses from "./components/Pages/Teacher/TeacherCourses";
 import CreateCourseForm from "./components/Pages/Teacher/CreateCourse/CreateCourseForm";
 import PageNotFound from "./components/Pages/PageNotFound";
+import Cart from "./components/Pages/Cart";
 
 function App() {
   return (
@@ -70,7 +71,8 @@ function App() {
             </ProtectedRoute>
           }
         >
-          <Route index element={<StudentDashboard />} />
+          <Route path="dashboard" element={<StudentDashboard />} />
+          <Route path="cart" element={<Cart />} />
         </Route>
       </Routes>
     </BrowserRouter>

@@ -1,23 +1,15 @@
-import React, { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
-;
-import { addCourse } from "../../redux/features/CartSlice";
-import { BACKEND_URL } from "../../constants";
+import { useEffect } from "react";
+import { useParams } from "react-router";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../redux/store";
+import { SERVER_URL } from "../../../constants/env.constants";
 
 const CourseDetails = () => {
   const { id } = useParams();
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const allCourses = useSelector((state: RootState) => state.course.allCourses);
 
-  const allCourses = useSelector((state) => state.course.allCourses);
-  const cartCourses = useSelector((state) => state.cart.courses);
-  const isAuthenticated = Boolean(localStorage.getItem("token"));
-
-  const [showAuthPrompt, setShowAuthPrompt] = useState(false);
 
   const courseDetails = allCourses.find((course) => course._id === id);
-  const isEnrolled = cartCourses.some((course) => course._id === courseDetails?._id);
 
   useEffect(() => {
     if (!courseDetails) {
@@ -32,16 +24,6 @@ const CourseDetails = () => {
       </div>
     );
   }
-
-  const handleEnroll = () => {
-    if (!isAuthenticated) {
-      setShowAuthPrompt(true);
-      return;
-    }
-    if (!isEnrolled) {
-      dispatch(addCourse(courseDetails));
-    }
-  };
 
   return (
     <div className="bg-gray-100 min-h-screen py-10 animate__animated animate__fadeIn">
@@ -58,7 +40,7 @@ const CourseDetails = () => {
           </div>
           <div className="relative animate__animated animate__fadeInRight md:w-1/3">
             <img
-              src={`${BACKEND_URL}${courseDetails.image}`}
+              src={`${SERVER_URL}${courseDetails.image}`}
               alt={courseDetails.title}
               className="rounded-lg shadow-lg w-full object-cover transition-transform duration-500 hover:scale-105"
             />
@@ -75,19 +57,10 @@ const CourseDetails = () => {
             <li><strong>Price:</strong> $ {courseDetails.price}</li>
           </ul>
 
-          {isEnrolled && (
-            <div className="text-green-600 font-semibold mt-4">
-              ✅ Enrolled in this course
-            </div>
-          )}
-
           <button
-            onClick={isEnrolled ? () => navigate("/my-cart") : handleEnroll}
-            className={`w-full mt-6 py-3 rounded-lg transition-all ${
-              isEnrolled ? "bg-gray-400 text-white" : "bg-blue-600 text-white"
-            }`}
+            className={`w-full mt-6 py-3 rounded-lg transition-all bg-blue-600 text-white}`}
           >
-            {isEnrolled ? "Go to Cart" : "Enroll Now"}
+            Enroll Now
           </button>
         </div>
       </div>

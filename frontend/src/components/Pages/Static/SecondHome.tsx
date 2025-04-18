@@ -1,9 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import OurPopularCourses from "../Course/OurPopularCourses";
 import { SERVER_URL } from "../../../constants/env.constants";
 import { fetchAllCourses } from "../../../redux/slices/CourseSlice";
 import { AppDispatch, RootState } from "../../../redux/store";
+import { useAuth } from "../../../hooks/useAuth";
 
 interface Course {
   _id: string;
@@ -16,19 +17,17 @@ interface Course {
 }
 
 const SecondHome = () => {
-  const [loggedInUser, setLoggedInUser] = useState<{ fullName: string } | null>(null);
   const dispatch = useDispatch<AppDispatch>();
-
+  const { user } = useAuth();
   // Fetching course data from Redux state
-  const { allCourses: courseData, loading, error } = useSelector((state: RootState) => state.course);
+  const {
+    allCourses: courseData,
+    loading,
+    error,
+  } = useSelector((state: RootState) => state.course);
 
   useEffect(() => {
     dispatch(fetchAllCourses());
-
-    const user = JSON.parse(localStorage.getItem("user") || "{}");
-    if (user) {
-      setLoggedInUser(user);
-    }
   }, [dispatch]);
 
   return (
@@ -36,7 +35,7 @@ const SecondHome = () => {
       {/* Welcome Back Section */}
       <div className="flex flex-col items-center justify-center bg-gradient-to-r from-blue-500 to-green-500 text-white py-10 px-5 rounded-lg shadow-lg text-center">
         <h1 className="text-3xl md:text-5xl font-bold animate-pulse">
-          Welcome Back, {loggedInUser?.fullName || "User"}! 👋
+          Welcome Back, {user?.fullName || "User"}! 👋
         </h1>
         <p className="mt-2 text-lg md:text-xl text-gray-200">
           We're glad to see you again. Continue your learning journey today!
@@ -48,10 +47,14 @@ const SecondHome = () => {
 
       {/* Loader & Error Handling */}
       <section className="mt-12 mb-12 px-6 md:px-16">
-        <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">Our Top Picks for You</h2>
+        <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">
+          Our Top Picks for You
+        </h2>
 
         {loading && (
-          <p className="text-center text-gray-600 text-lg font-semibold">Loading courses...</p>
+          <p className="text-center text-gray-600 text-lg font-semibold">
+            Loading courses...
+          </p>
         )}
 
         {error && (
@@ -85,14 +88,18 @@ const SecondHome = () => {
 
                 {/* Course Content */}
                 <div className="p-6 flex flex-col justify-center md:w-1/2">
-                  <h3 className="text-2xl font-bold text-gray-900">{course.title}</h3>
+                  <h3 className="text-2xl font-bold text-gray-900">
+                    {course.title}
+                  </h3>
                   <p className="text-gray-700 mt-2">{course.content}</p>
                   <div className="mt-4 text-gray-600">
                     <p>
-                      <span className="font-semibold">Duration:</span> {course.duration}
+                      <span className="font-semibold">Duration:</span>{" "}
+                      {course.duration}
                     </p>
                     <p>
-                      <span className="font-semibold">Category:</span> {course.category}
+                      <span className="font-semibold">Category:</span>{" "}
+                      {course.category}
                     </p>
                     <p>
                       <span className="font-semibold">Price:</span>{" "}
