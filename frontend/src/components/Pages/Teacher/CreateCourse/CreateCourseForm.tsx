@@ -7,57 +7,7 @@ import { createCourse } from "../../../../redux/slices/createCourseSlice";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../../../redux/store";
 import Card from "../../../Reusable/Card";
-
-interface Course {
-  image: string;
-  title: string;
-  description: string;
-  content: string;
-  duration: string;
-  price: number;
-  level: string;
-  category: string;
-  isPaid: boolean;
-  modules: Module[];
-}
-
-interface Module {
-  title: string;
-  chapters: Chapter[];
-}
-
-interface Chapter {
-  title: string;
-  content: string;
-  videoUrl: string;
-  isPreview: boolean;
-  resources?: Resource[];
-  quiz?: Quiz;
-  assignment?: Assignment;
-}
-
-interface Resource {
-  name: string;
-  url: string;
-}
-
-interface Quiz {
-  title: string;
-  questions: Question[];
-}
-
-interface Question {
-  question: string;
-  options: string[];
-  correctAnswer: string;
-}
-
-interface Assignment {
-  title: string;
-  description: string;
-  dueDate: string;
-  submissionType: string;
-}
+import { Course, Module } from "../../../../types/course.types";
 
 const CreateCourseForm: React.FC = () => {
   const initialValues = {

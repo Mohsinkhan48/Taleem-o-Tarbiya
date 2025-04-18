@@ -4,44 +4,7 @@ import Card from '../../../Reusable/Card';
 import Input from '../../../Reusable/Input';
 import Button from '../../../Reusable/Button';
 import ChapterForm from './ChapterForm';
-
-interface Chapter {
-  title: string;
-  content: string;
-  videoUrl: string;
-  isPreview: boolean;
-  resources?: Resource[];
-  quiz?: Quiz;
-  assignment?: Assignment;
-}
-
-interface Resource {
-  name: string;
-  url: string;
-}
-
-interface Quiz {
-  title: string;
-  questions: Question[];
-}
-
-interface Question {
-  question: string;
-  options: string[];
-  correctAnswer: string;
-}
-
-interface Assignment {
-  title: string;
-  description: string;
-  dueDate: string;
-  submissionType: string;
-}
-
-interface Module {
-  title: string;
-  chapters: Chapter[];
-}
+import { Chapter, Module } from '../../../../types/course.types';
 
 interface Props {
   module: Module;

@@ -3,17 +3,7 @@ import React from 'react';
 import Input from '../../../Reusable/Input';
 import Button from '../../../Reusable/Button';
 import Card from '../../../Reusable/Card';
-
-interface Question {
-  question: string;
-  options: string[];
-  correctAnswer: string;
-}
-
-interface Quiz {
-  title: string;
-  questions: Question[];
-}
+import { Quiz } from '../../../../types/course.types';
 
 interface Props {
   quiz?: Quiz;

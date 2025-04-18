@@ -1,12 +1,11 @@
-import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { fetchAllCourses } from '../redux/features/CourseSlice';
+import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { motion, AnimatePresence } from 'framer-motion';
+import { fetchAllCourses } from '../../../redux/slices/CourseSlice';
 
 // Relevant imports remain the same
 
 const CourseContent = ({ courseId }) => {
-  const dispatch = useDispatch();
   const { allCourses, loading, error } = useSelector((state) => state.course);
 
   const [activeModule, setActiveModule] = useState(null);

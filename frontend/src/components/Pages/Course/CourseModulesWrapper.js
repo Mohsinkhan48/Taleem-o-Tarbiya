@@ -1,5 +1,5 @@
 // components/CourseDetails/CourseModulesWrapper.jsx
-import { useParams } from "react-router-dom";
+import { useParams } from "react-router";
 import CourseContent from "./CourseContent";
 
 const CourseModulesWrapper = () => {

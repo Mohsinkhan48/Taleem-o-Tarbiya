@@ -2,13 +2,7 @@
 import React from 'react';
 import Input from '../../../Reusable/Input';
 import Card from '../../../Reusable/Card';
-
-interface Assignment {
-  title: string;
-  description: string;
-  dueDate: string;
-  submissionType: string;
-}
+import { Assignment } from '../../../../types/course.types';
 
 interface Props {
   assignment?: Assignment;
