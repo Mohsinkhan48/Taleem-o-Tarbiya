@@ -5,7 +5,6 @@ import profileReducer from "./slices/profileSlice";
 import toasterReducer from "./slices/toasterSlice";
 import forgotPasswordReducer from "./slices/forgotPasswordSlice";
 import resetPasswordReducer from "./slices/resetPasswordSlice";
-import logoutReducer from "./slices/logoutSlice";
 import getCoursesReducer from "./slices/getCoursesSlice";
 import getCourseByIdReducer from "./slices/getCourseByIdSlice";
 import createCourseReducer from "./slices/createCourseSlice";
@@ -18,7 +17,6 @@ const store = configureStore({
     forgotPassword: forgotPasswordReducer,
     resetPassword: resetPasswordReducer,
     profile: profileReducer,
-    logout: logoutReducer,
     toaster: toasterReducer,
     courses: getCoursesReducer,
     course: getCourseByIdReducer,

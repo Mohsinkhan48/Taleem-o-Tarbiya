@@ -2,24 +2,22 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { useAuth } from "../../../hooks/useAuth";
 import Button from "../../Reusable/Button";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../../../redux/store";
+import { logoutUser } from "../../../redux/slices/authSlice";
 
 const TeacherNavbar = () => {
   const [toggleMenu, setToggleMenu] = useState<boolean>(false);
   const [dropdownVisible, setDropdownVisible] = useState<boolean>(false);
   const {user, isAuthenticated} = useAuth()
-  const navigate = useNavigate();
-
+  const dispatch = useDispatch<AppDispatch>()
+  const navigate = useNavigate()
   const handleToggle = () => {
     setToggleMenu(!toggleMenu);
   };
 
   const handleLogout = () => {
-    localStorage.removeItem("refreshToken");
-    localStorage.removeItem("user");
-    localStorage.removeItem("accessToken");
-    setTimeout(() => {
-      navigate("/");
-    }, 1000);
+    dispatch(logoutUser())
   };
 
   const handleDropdownToggle = () => {
@@ -87,13 +85,21 @@ const TeacherNavbar = () => {
                     </div>
                     <hr className="my-4 border-border" />
                     <ul className="space-y-2">
+                    <li className="cursor-pointer hover:text-link">
+                        <Button
+                          onClick={()=>{navigate("/teacher/dashboard")}}
+                          variant="primary"
+                        >
+                          Go to Dashboard
+                        </Button>
+                      </li>
                       <li className="cursor-pointer hover:text-link">
-                        <button
+                        <Button
                           onClick={handleLogout}
-                          className="w-full text-left"
+                          variant="danger"
                         >
                           Logout
-                        </button>
+                        </Button>
                       </li>
                     </ul>
                   </div>

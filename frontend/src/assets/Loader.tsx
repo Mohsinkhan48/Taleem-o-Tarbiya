@@ -5,6 +5,6 @@ type LoaderProps = ComponentProps<typeof BiLoaderAlt>;
 
 export const Loader = ({ className = "", ...rest }: LoaderProps) => {
   return (
-    <BiLoaderAlt className={`animate-spin ${className}`} {...rest} />
+    <BiLoaderAlt className={`animate-spin text-text ${className}`} {...rest} />
   );
 };

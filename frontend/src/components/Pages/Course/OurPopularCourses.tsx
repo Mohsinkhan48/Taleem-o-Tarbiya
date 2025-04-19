@@ -1,19 +1,26 @@
-import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router';
-import { AppDispatch, RootState } from '../../../redux/store';
-import { fetchAllCourses } from '../../../redux/slices/GetCoursesSlice';
-import { Course } from '../../../types/course.types';
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router";
+import { AppDispatch, RootState } from "../../../redux/store";
+import { fetchAllCourses } from "../../../redux/slices/getCoursesSlice";
+import { Course } from "../../../types/course.types";
+import Carousel from "../../Reusable/Carousel";
+import AddToCartButton from "../../Cart/AddToCartButton";
 
 interface OurPopularCoursesProps {
   secondHeading: string;
   heading: string;
 }
 
-const OurPopularCourses: React.FC<OurPopularCoursesProps> = ({ secondHeading, heading }) => {
+const OurPopularCourses: React.FC<OurPopularCoursesProps> = ({
+  secondHeading,
+  heading,
+}) => {
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
-  const allCourses = useSelector((state: RootState) => state.courses.allCourses);
+  const allCourses = useSelector(
+    (state: RootState) => state.courses.allCourses
+  );
 
   useEffect(() => {
     dispatch(fetchAllCourses());
@@ -25,48 +32,51 @@ const OurPopularCourses: React.FC<OurPopularCoursesProps> = ({ secondHeading, he
 
   return (
     <section className="bg-background py-24">
-      <div className="container mx-auto px-6 text-center">
-        <h2 className="text-4xl font-bold text-primary mb-6 animate__fadeInUp">
+      <div className="container mx-auto">
+        <h2 className="text-4xl font-bold text-primary mb-6">
           {secondHeading} {heading}
         </h2>
-        <p className="text-lg text-text opacity-80 mb-12 max-w-4xl mx-auto animate__fadeInUp animate__delay-1s">
-          Explore our wide range of courses tailored for students of all levels, offering in-depth knowledge on various topics.
+        <p className="text-lg text-text opacity-80 mb-12 max-w-4xl mx-auto">
+          Explore our wide range of courses tailored for students of all levels.
         </p>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
-          {allCourses && allCourses.length > 0 ? (
-            allCourses.map((course: Course) => (
+        {allCourses && allCourses.length > 0 ? (
+          <Carousel itemsToShow={3}>
+            {allCourses.map((course: Course) => (
               <div
                 key={course._id}
                 onClick={() => handleCourseClick(course._id)}
-                className="rounded-xl shadow-md overflow-hidden bg-card cursor-pointer transition-transform transform hover:scale-105 hover:shadow-xl"
+                className="rounded-lg overflow-hidden bg-card border border-card-border"
               >
                 <img
-                  src={`${course.image}`}
+                  src={course.image}
                   alt={course.title}
-                  className="w-full h-48 object-cover rounded-t-xl transition-transform duration-300 hover:scale-110"
+                  className="w-full h-32 object-cover rounded-t-xl transition-transform duration-300 hover:scale-110 text-center"
                 />
-                <div className="p-6">
-                  <h3 className="text-lg font-bold text-secondary">{course.title}</h3>
-                  <p className="text-sm text-gray-700 mt-2">{course.content}</p>
-                  <div className="mt-4">
-                    <p className="text-sm text-gray-600">
-                      <span className="font-medium text-gray-900">Duration:</span> {course.duration}
+                <div className="p-4">
+                  <h3 className="text-lg font-bold text-primary">
+                    {course.title}
+                  </h3>
+                  <p className="text-sm text-text mt-2">{course.content}</p>
+                  <div className="mt-4 text-left text-text">
+                    <p className="text-sm">
+                      <span className="font-medium">Duration:</span>{" "}
+                      {course.duration}
                     </p>
                   </div>
                   <div className="mt-4 flex items-center justify-between">
-                    <button className="bg-button-primary text-button-text px-3 py-2 rounded-lg text-sm font-semibold hover:bg-button-hover-primary">
-                      Enroll Now
-                    </button>
-                    <span className="text-sm font-semibold text-primary">${course.price}</span>
+                    <AddToCartButton courseId={course._id} />
+                    <span className="text-sm font-semibold text-primary">
+                      ${course.price}
+                    </span>
                   </div>
                 </div>
               </div>
-            ))
-          ) : (
-            <p className="text-lg text-gray-600">No courses available.</p>
-          )}
-        </div>
+            ))}
+          </Carousel>
+        ) : (
+          <p className="text-lg text-gray-600">No courses available.</p>
+        )}
       </div>
     </section>
   );
