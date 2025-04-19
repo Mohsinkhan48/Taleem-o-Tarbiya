@@ -93,12 +93,43 @@ const courseService = {
     }
   },
   getAllCourses: async () => {
-    return await Course.find().populate("instructor", "fullName email"); // optionally populate instructor details
+    return await Course.find()
+      .populate("instructor", "_id fullName email")
+      .populate({
+        path: "modules",
+        populate: {
+          path: "chapters",
+          select: "_id title content",
+        },
+      });
+  },
+  getCourseById: async (courseId) => {
+    return await Course.findById(courseId)
+      .populate("instructor", "_id fullName email")
+      .populate({
+        path: "modules",
+        populate: {
+          path: "chapters",
+          select: "_id title content",
+          populate: [
+            {
+              path: "quiz",
+              select: "_id title",
+            },
+            {
+              path: "assignment",
+              select: "_id title",
+            },
+          ],
+        },
+      });
   },
   getCoursesByInstructorId: async (instructorId) => {
-    return await Course.find({ instructor: instructorId })
-      .populate("instructor", "fullName email")
-  }  
+    return await Course.find({ instructor: instructorId }).populate(
+      "instructor",
+      "fullName email"
+    );
+  },
 };
 
 module.exports = courseService;

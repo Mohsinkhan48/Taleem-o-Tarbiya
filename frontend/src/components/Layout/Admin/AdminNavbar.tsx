@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router";
 import { useAuth } from "../../../hooks/useAuth";
 import Button from "../../Reusable/Button";
 
-const Navbar = () => {
+const AdminNavbar = () => {
   const [toggleMenu, setToggleMenu] = useState<boolean>(false);
   const [dropdownVisible, setDropdownVisible] = useState<boolean>(false);
   const {user, isAuthenticated} = useAuth()
@@ -122,4 +122,4 @@ const Navbar = () => {
   );
 };
 
-export default Navbar;
+export default AdminNavbar;

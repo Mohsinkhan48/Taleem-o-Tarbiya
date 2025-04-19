@@ -18,7 +18,7 @@ const ChapterForm: React.FC<Props> = ({ chapter, onChange, onRemove }) => {
   const updateAssignment = (assignment: Assignment) => onChange({ ...chapter, assignment });
 
   return (
-    <Card className="mb-3">
+    <Card className="p-4 rounded-lg mb-3">
       <Input
         label="Chapter Title"
         value={chapter.title}

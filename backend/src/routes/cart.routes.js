@@ -17,7 +17,7 @@ router.post(
 );
 
 router.delete(
-  "/remove",
+  "/remove/:courseId",
   validate(cartValidation.removeFromCart),
   isAuth,
   isMember,

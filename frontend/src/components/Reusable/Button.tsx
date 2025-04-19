@@ -1,4 +1,5 @@
 import { ButtonHTMLAttributes, ReactNode } from "react";
+import { Loader } from "../../assets/Loader";
 
 // Define the ButtonProps interface for prop types
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
@@ -50,7 +51,7 @@ const Button: React.FC<ButtonProps> = ({
       className={buttonClasses.trim()}
       disabled={isLoading || disabled}
     >
-      {isLoading ? "Loading..." : children}
+      {isLoading ? <Loader size={24} /> : children}
     </button>
   );
 };

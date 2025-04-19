@@ -46,7 +46,7 @@ export default function OtpInput({
   return (
     <div className="flex items-center justify-center m-12">
       <Card
-        className="w-full sm:w-3/4 md:w-2/3 lg:w-1/2 xl:w-1/3 2xl:w-1/4
+        className="rounded-lg w-full sm:w-3/4 md:w-2/3 lg:w-1/2 xl:w-1/3 2xl:w-1/4
       p-6"
       >
         <form onSubmit={handleSubmit} className="flex flex-col items-center">

@@ -20,7 +20,7 @@ const cartController = {
     const userId = req.user;
 
     const cart = await cartService.getCart(userId);
-    if (!cart || cart.items.length === 0)
+    if (!cart)
       return R4XX(res, 404, "Cart is empty");
 
     R2XX(res, "Fetched cart successfully", 200, { cart });
@@ -30,7 +30,6 @@ const cartController = {
   removeFromCart: catchAsync(async (req, res) => {
     const { courseId } = req.params;
     const userId = req.user;
-
     const updatedCart = await cartService.removeFromCart(userId, courseId);
 
     if (!updatedCart) return R4XX(res, 400, "Failed to remove course from cart");

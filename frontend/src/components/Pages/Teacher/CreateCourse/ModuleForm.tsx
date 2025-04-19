@@ -36,7 +36,7 @@ const ModuleForm: React.FC<Props> = ({ module, onChange, onRemove }) => {
   };
 
   return (
-    <Card className="mb-4">
+    <Card className="p-4 rounded-lg mb-4">
       <Input
         label="Module Title"
         value={module.title}
@@ -52,7 +52,7 @@ const ModuleForm: React.FC<Props> = ({ module, onChange, onRemove }) => {
         />
       ))}
 
-      <Card className="flex items-center gap-2 mt-2">
+      <Card className="p-4 rounded-lg flex items-center gap-2 mt-2">
         <Button onClick={addChapter} variant="secondary">+ Add Chapter</Button>
         <Button onClick={onRemove} variant="danger">Remove Module</Button>
       </Card>

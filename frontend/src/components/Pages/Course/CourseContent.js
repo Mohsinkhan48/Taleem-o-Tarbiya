@@ -6,7 +6,7 @@ import { fetchAllCourses } from '../../../redux/slices/CourseSlice';
 // Relevant imports remain the same
 
 const CourseContent = ({ courseId }) => {
-  const { allCourses, loading, error } = useSelector((state) => state.course);
+  const { allCourses, loading, error } = useSelector((state) => state.courses);
 
   const [activeModule, setActiveModule] = useState(null);
   const [activeChapter, setActiveChapter] = useState(null);

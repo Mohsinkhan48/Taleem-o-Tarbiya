@@ -2,11 +2,12 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { useAuth } from "../../../hooks/useAuth";
 import Button from "../../Reusable/Button";
+import CartButton from "./CartButton";
 
 const StudentNavbar = () => {
   const [toggleMenu, setToggleMenu] = useState<boolean>(false);
   const [dropdownVisible, setDropdownVisible] = useState<boolean>(false);
-  const {user, isAuthenticated} = useAuth()
+  const { user, isAuthenticated } = useAuth();
   const navigate = useNavigate();
 
   const handleToggle = () => {
@@ -56,7 +57,8 @@ const StudentNavbar = () => {
 
         <div className="flex items-center space-x-4">
           {isAuthenticated ? (
-            <>
+            <div className="flex items-center space-x-4">
+              <CartButton />
               <div className="relative">
                 <div
                   onClick={handleDropdownToggle}
@@ -99,7 +101,7 @@ const StudentNavbar = () => {
                   </div>
                 )}
               </div>
-            </>
+            </div>
           ) : (
             <div className="flex space-x-2">
               <Link to="/login">

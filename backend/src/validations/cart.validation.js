@@ -4,25 +4,19 @@ const { CART } = require("../constants");
 
 const addToCart = {
   body: Joi.object().keys({
-    courseId: Joi.string()
-      .required()
-      .custom(objectId)
-      .messages({
-        "any.required": CART.COURSE_ID_REQUIRED,
-        "any.invalid": CART.INVALID_COURSEID,
-      }),
+    courseId: Joi.string().required().custom(objectId).messages({
+      "any.required": CART.COURSE_ID_REQUIRED,
+      "any.invalid": CART.INVALID_COURSEID,
+    }),
   }),
 };
 
 const removeFromCart = {
-  body: Joi.object().keys({
-    courseId: Joi.string()
-      .required()
-      .custom(objectId)
-      .messages({
-        "any.required": CART.COURSE_ID_REQUIRED,
-        "any.invalid": CART.INVALID_COURSEID,
-      }),
+  params: Joi.object({
+    courseId: Joi.string().required().custom(objectId).messages({
+      "any.required": CART.COURSE_ID_REQUIRED,
+      "any.invalid": CART.INVALID_COURSEID,
+    }),
   }),
 };
 

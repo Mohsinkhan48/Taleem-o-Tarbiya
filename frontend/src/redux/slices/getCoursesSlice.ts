@@ -1,25 +1,7 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import { addToast } from './toasterSlice';
 import { CourseService } from '../../service/courseService';
-
-export interface Course {
-  _id: string;
-  image: string;
-  title: string;
-  description: string;
-  content: string;
-  duration: string;
-  price: number;
-  level: string;
-  instructor: string | null; // can be replaced with an object if populated
-  modules: string[]; // Array of module IDs
-  ratings: any[]; // Update if you have a specific type for ratings
-  category: string;
-  isPaid: boolean;
-  createdAt: string; // ISO string
-  updatedAt: string; // ISO string
-  __v: number;
-}
+import { Course } from '../../types/course.types';
 
 // State interface
 interface CourseState {

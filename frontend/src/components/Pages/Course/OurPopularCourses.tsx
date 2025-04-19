@@ -2,7 +2,8 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
 import { AppDispatch, RootState } from '../../../redux/store';
-import { Course, fetchAllCourses } from '../../../redux/slices/CourseSlice';
+import { fetchAllCourses } from '../../../redux/slices/GetCoursesSlice';
+import { Course } from '../../../types/course.types';
 
 interface OurPopularCoursesProps {
   secondHeading: string;
@@ -12,7 +13,7 @@ interface OurPopularCoursesProps {
 const OurPopularCourses: React.FC<OurPopularCoursesProps> = ({ secondHeading, heading }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
-  const allCourses = useSelector((state: RootState) => state.course.allCourses);
+  const allCourses = useSelector((state: RootState) => state.courses.allCourses);
 
   useEffect(() => {
     dispatch(fetchAllCourses());

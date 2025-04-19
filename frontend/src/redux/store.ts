@@ -6,7 +6,8 @@ import toasterReducer from "./slices/toasterSlice";
 import forgotPasswordReducer from "./slices/forgotPasswordSlice";
 import resetPasswordReducer from "./slices/resetPasswordSlice";
 import logoutReducer from "./slices/logoutSlice";
-import courseReducer from "./slices/CourseSlice";
+import getCoursesReducer from "./slices/getCoursesSlice";
+import getCourseByIdReducer from "./slices/getCourseByIdSlice";
 import createCourseReducer from "./slices/createCourseSlice";
 import cartReducer from "./slices/CartSlice";
 
@@ -19,7 +20,8 @@ const store = configureStore({
     profile: profileReducer,
     logout: logoutReducer,
     toaster: toasterReducer,
-    course: courseReducer,
+    courses: getCoursesReducer,
+    course: getCourseByIdReducer,
     createCourse: createCourseReducer,
     cart: cartReducer,
   },

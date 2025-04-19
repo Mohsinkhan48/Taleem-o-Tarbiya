@@ -65,11 +65,29 @@ export const loginUser = createAsyncThunk(
   }
 );
 
-// Logout User
-export const logoutUser = createAsyncThunk("auth/logout", async () => {
-  await AuthService.logout();
+// Logout thunk - if you want to make an API call
+export const logoutUser = createAsyncThunk("auth/logout", async (_, { dispatch }) => {
+  try {
+    await AuthService.logout(); // optional, backend device tracking
+  } catch (error) {
+    console.error("Logout error:", error);
+  }
+
+  // Clean up localStorage
+  localStorage.removeItem("refreshToken");
+  localStorage.removeItem("user");
+  localStorage.removeItem("accessToken");
+
+  dispatch(addToast({
+    message: "Logged out successfully",
+    type: "success",
+    duration: 3000,
+    position: "top-right",
+  }));
+
   return null;
 });
+
 
 // **Auth Slice**
 const authSlice = createSlice({
@@ -115,13 +133,15 @@ const authSlice = createSlice({
       state.loading = false;
       state.error = action.payload.reason;
     });
-
-    // Logout
+    // logout
     builder.addCase(logoutUser.fulfilled, (state) => {
       state.user = null;
       state.accessToken = null;
       state.refreshToken = null;
+      state.loading = false;
+      state.error = null;
     });
+    
   },
 });
 

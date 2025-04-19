@@ -14,7 +14,7 @@ const AssignmentForm: React.FC<Props> = ({
   onChange,
 }) => {
   return (
-    <Card className="mt-4 border-t pt-4">
+    <Card className="p-4 rounded-lg mt-4 border-t pt-4">
       <h4 className="text-lg font-semibold mb-2">Assignment</h4>
       <div className='grid grid-cols-2 gap-4'>
       <Input

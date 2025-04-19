@@ -47,7 +47,7 @@ const ForgotPassword: React.FC = () => {
   return (
     <div className="flex items-center justify-center m-12">
       {step === "email" && (
-        <Card className="w-full sm:w-3/4 md:w-2/3 lg:w-1/2 xl:w-1/3 2xl:w-1/4">
+        <Card className="p-4 rounded-lg w-full sm:w-3/4 md:w-2/3 lg:w-1/2 xl:w-1/3 2xl:w-1/4">
           <form onSubmit={handleEmailSubmit}>
             <div className="text-xl mb-2">{t("forgot_password")}</div>
             <Input
@@ -69,7 +69,7 @@ const ForgotPassword: React.FC = () => {
       )}
 
       {step === "reset" && (
-        <Card className="w-full sm:w-3/4 md:w-2/3 lg:w-1/2 xl:w-1/3 2xl:w-1/4">
+        <Card className="p-4 rounded-lg w-full sm:w-3/4 md:w-2/3 lg:w-1/2 xl:w-1/3 2xl:w-1/4">
           <form onSubmit={handleResetPassword}>
             <div className="text-xl mb-2">{t("reset_password")}</div>
             <Input

@@ -1,12 +1,12 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../../redux/store';
-import { fetchInstructorCourses } from '../../../redux/slices/CourseSlice';
 import { SERVER_URL } from '../../../constants/env.constants';
+import { fetchInstructorCourses } from '../../../redux/slices/GetCoursesSlice';
 
 const TeacherCourses = () => {
     const dispatch = useDispatch<AppDispatch>();
-    const { allCourses, loading, error } = useSelector((state: RootState) => state.course);
+    const { allCourses, loading, error } = useSelector((state: RootState) => state.courses);
 
     useEffect(() => {
         dispatch(fetchInstructorCourses());

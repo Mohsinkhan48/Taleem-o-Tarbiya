@@ -2,9 +2,9 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import OurPopularCourses from "../Course/OurPopularCourses";
 import { SERVER_URL } from "../../../constants/env.constants";
-import { fetchAllCourses } from "../../../redux/slices/CourseSlice";
 import { AppDispatch, RootState } from "../../../redux/store";
 import { useAuth } from "../../../hooks/useAuth";
+import { fetchAllCourses } from "../../../redux/slices/getCoursesSlice";
 
 interface Course {
   _id: string;
@@ -24,7 +24,7 @@ const SecondHome = () => {
     allCourses: courseData,
     loading,
     error,
-  } = useSelector((state: RootState) => state.course);
+  } = useSelector((state: RootState) => state.courses);
 
   useEffect(() => {
     dispatch(fetchAllCourses());
@@ -45,7 +45,6 @@ const SecondHome = () => {
       {/* Our Popular Courses Section */}
       <OurPopularCourses heading="" secondHeading="What to Learn Next" />
 
-      {/* Loader & Error Handling */}
       <section className="mt-12 mb-12 px-6 md:px-16">
         <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">
           Our Top Picks for You

@@ -27,6 +27,12 @@ router.get(
 );
 
 router.get(
+  "/:courseId",
+  validate(courseValidation.getCourseById),
+  courseController.getCourseById
+);
+
+router.get(
   "/instructor/courses",
   isAuth,
   courseController.getCoursesByInstructor

@@ -13,7 +13,17 @@ const courseController = {
     const courses = await courseService.getAllCourses();
     R2XX(res, "Fetched all courses successfully", 200, { courses });
   }),
-
+  getCourseById: catchAsync(async (req, res) => {
+    const { courseId } = req.params;
+  
+    const course = await courseService.getCourseById(courseId);
+  
+    if (!course) {
+      return R4XX(res, "Course not found", 404);
+    }
+  
+    R2XX(res, "Fetched course successfully", 200, { course });
+  }),  
   getCoursesByInstructor: catchAsync(async (req, res) => {
     const instructorId = req.params.instructorId || req.user; // either from route param or logged-in user
     console.log(req.user)

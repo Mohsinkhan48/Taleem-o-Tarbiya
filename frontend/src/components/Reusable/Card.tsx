@@ -1,13 +1,16 @@
-import { ReactNode } from "react";
+import React, { ReactNode } from "react";
 
-interface CardProps {
+interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
   children: ReactNode;
   className?: string;
 }
 
-const Card: React.FC<CardProps> = ({ children, className = "" }) => {
+const Card: React.FC<CardProps> = ({ children, className = "", ...rest }) => {
   return (
-    <div className={`border border-border rounded-lg p-4 bg-card shadow-sm text-text ${className}`}>
+    <div
+      className={`border border-border bg-card text-text ${className}`}
+      {...rest} // allows all native div props like onClick, id, style, etc.
+    >
       {children}
     </div>
   );

@@ -7,9 +7,21 @@ import { createCourse } from "../../../../redux/slices/createCourseSlice";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../../../redux/store";
 import Card from "../../../Reusable/Card";
-import { Course, Module } from "../../../../types/course.types";
+import { Module } from "../../../../types/course.types";
 
 const CreateCourseForm: React.FC = () => {
+  interface CreateCourse {
+    image: string;
+    title: string;
+    description: string;
+    content: string;
+    duration: string;
+    price: number;
+    level: string;
+    category: string;
+    isPaid: boolean;
+    modules: Module[];
+  }
   const initialValues = {
     image: "",
     title: "",
@@ -22,7 +34,7 @@ const CreateCourseForm: React.FC = () => {
     isPaid: true,
     modules: [],
   }
-  const [course, setCourse] = useState<Course>(initialValues);
+  const [course, setCourse] = useState<CreateCourse>(initialValues);
   const dispatch = useDispatch<AppDispatch>();
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -68,7 +80,7 @@ const CreateCourseForm: React.FC = () => {
   
 
   return (
-    <Card className="p-8 m-8">
+    <Card className="rounded-lg p-8 m-8">
       <h2 className="text-2xl font-bold mb-4">Create New Course</h2>
       <div className="grid grid-cols-2 gap-4">
         <Input

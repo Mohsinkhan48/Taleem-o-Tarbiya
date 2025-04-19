@@ -1,53 +1,52 @@
-import { FaFacebookF, FaTwitter, FaInstagram, FaLinkedinIn } from 'react-icons/fa';
-import { Link } from 'react-router'; 
+import { FaFacebookF, FaTwitter, FaInstagram, FaLinkedinIn } from "react-icons/fa";
+import { Link } from "react-router";
 
 const Footer = () => {
   return (
-    <footer className="bg-[#0E2431] text-[#F5F5F5] py-16 animate__animated animate__fadeInUp">
-      <div className="container mx-auto px-6">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
+    <footer className="bg-card text-text py-16">
+      <div className="container mx-auto px-4 md:px-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-10">
+
           {/* Logo and Tagline */}
-          <div className="flex flex-col items-center md:items-start text-center md:text-left">
-            <h1 className="text-3xl font-bold text-[#DB7C26] animate__animated animate__fadeInUp">Taleem-o-Tarbiya</h1>
-            <p className="text-xl text-[#E9C46A] mt-4 animate__animated animate__fadeInUp">
-              Empowering Education for All
-            </p>
+          <div className="text-center md:text-left">
+            <h1 className="text-3xl font-bold text-primary mb-3">Taleem-o-Tarbiya</h1>
+            <p className="text-secondary text-lg">Empowering Education for All</p>
           </div>
 
           {/* Quick Links */}
-          <div className="space-y-4 text-center md:text-left">
-            <h3 className="text-2xl font-semibold text-[#DB7C26] animate__animated animate__fadeInUp">Quick Links</h3>
+          <div className="text-center md:text-left">
+            <h3 className="text-xl font-semibold text-primary mb-4">Quick Links</h3>
             <ul className="space-y-2">
-              <li><Link to="/about-us" className="hover:text-[#E9C46A] transition duration-300">About Us</Link></li>
-              <li><Link to="/explore-courses" className="hover:text-[#E9C46A] transition duration-300">Our Courses</Link></li>
-              <li><Link to="/contact-us" className="hover:text-[#E9C46A] transition duration-300">Contact</Link></li>
-              <li><Link to="/faqs" className="hover:text-[#E9C46A] transition duration-300">FAQs</Link></li>
+              <li><Link to="/about-us" className="hover:text-accent transition">About Us</Link></li>
+              <li><Link to="/explore-courses" className="hover:text-accent transition">Our Courses</Link></li>
+              <li><Link to="/contact-us" className="hover:text-accent transition">Contact</Link></li>
+              <li><Link to="/faqs" className="hover:text-accent transition">FAQs</Link></li>
             </ul>
           </div>
 
-          {/* Contact Information */}
-          <div className="space-y-4 text-center md:text-left">
-            <h3 className="text-2xl font-semibold text-[#DB7C26] animate__animated animate__fadeInUp">Contact Us</h3>
-            <p className="text-lg text-[#F5F5F5]">Email: <a href="mailto:info@taleemotarbiya.com" className="hover:text-[#E9C46A] transition duration-300">info@taleemotarbiya.com</a></p>
-            <p className="text-lg text-[#F5F5F5]">Phone: +123 456 789</p>
-            <p className="text-lg text-[#F5F5F5]">Address: 123, Johar Town, Lahore, Pakistan</p>
+          {/* Contact Info */}
+          <div className="text-center md:text-left">
+            <h3 className="text-xl font-semibold text-primary mb-4">Contact Us</h3>
+            <p>Email: <a href="mailto:info@taleemotarbiya.com" className="hover:text-accent transition">info@taleemotarbiya.com</a></p>
+            <p>Phone: +123 456 789</p>
+            <p>Address: 123, Johar Town, Lahore, Pakistan</p>
           </div>
 
-          {/* Social Media Links */}
-          <div className="space-y-4 text-center md:text-left">
-            <h3 className="text-2xl font-semibold text-[#DB7C26] animate__animated animate__fadeInUp">Follow Us</h3>
-            <div className="flex space-x-6 justify-center md:justify-start">
-              <a href="https://facebook.com" className="text-[#F5F5F5] text-3xl hover:text-[#E9C46A] transition duration-300"><FaFacebookF /></a>
-              <a href="https://twitter.com" className="text-[#F5F5F5] text-3xl hover:text-[#E9C46A] transition duration-300"><FaTwitter /></a>
-              <a href="https://instagram.com" className="text-[#F5F5F5] text-3xl hover:text-[#E9C46A] transition duration-300"><FaInstagram /></a>
-              <a href="https://linkedin.com" className="text-[#F5F5F5] text-3xl hover:text-[#E9C46A] transition duration-300"><FaLinkedinIn /></a>
+          {/* Social Media */}
+          <div className="text-center md:text-left">
+            <h3 className="text-xl font-semibold text-primary mb-4">Follow Us</h3>
+            <div className="flex justify-center md:justify-start space-x-5">
+              <a href="https://facebook.com" className="text-2xl hover:text-accent transition"><FaFacebookF /></a>
+              <a href="https://twitter.com" className="text-2xl hover:text-accent transition"><FaTwitter /></a>
+              <a href="https://instagram.com" className="text-2xl hover:text-accent transition"><FaInstagram /></a>
+              <a href="https://linkedin.com" className="text-2xl hover:text-accent transition"><FaLinkedinIn /></a>
             </div>
           </div>
         </div>
 
-        {/* Bottom Bar */}
-        <div className="mt-12 text-center text-[#E9C46A] text-sm animate__animated animate__fadeInUp">
-          <p>© 2025 Taleem o Tarbiya. All Rights Reserved.</p>
+        {/* Divider */}
+        <div className="border-t border-border mt-12 pt-6 text-center text-sm text-secondary">
+          © 2025 Taleem-o-Tarbiya. All rights reserved.
         </div>
       </div>
     </footer>

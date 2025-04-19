@@ -1,6 +1,7 @@
 import axios from "axios";
 import { SERVER_URL } from "../constants/env.constants";
 import getDeviceId from "../utils/getDeviceId";
+import { logout } from "../redux/slices/logoutSlice";
 
 const API_BASE_URL = SERVER_URL;
 
@@ -57,10 +58,8 @@ apiClient.interceptors.response.use(
         return apiClient(originalRequest); // Retry the request with new token
       } catch (refreshError) {
         console.error("Token refresh error:", refreshError);
-        localStorage.removeItem("accessToken");
-        localStorage.removeItem("refreshToken");
-        localStorage.removeItem("user");
-        // Redirect to login or handle logout
+        const { default: store } = await import("../redux/store"); // ✅ Lazy import store
+        store.dispatch(logout()); // ✅ Dispatch logout action
         return Promise.reject(refreshError);
       }
     }

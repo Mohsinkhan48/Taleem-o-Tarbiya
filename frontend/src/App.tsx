@@ -1,7 +1,6 @@
 import { BrowserRouter, Route, Routes } from "react-router";
 import Layout from "./components/Layout/Layout";
 
-// Public Pages
 import Register from "./components/Pages/Auth/Register";
 import Login from "./components/Pages/Auth/Login";
 import LandingPage from "./components/Pages/Static/LandingPage";
@@ -22,12 +21,12 @@ import TeacherCourses from "./components/Pages/Teacher/TeacherCourses";
 import CreateCourseForm from "./components/Pages/Teacher/CreateCourse/CreateCourseForm";
 import PageNotFound from "./components/Pages/PageNotFound";
 import Cart from "./components/Pages/Cart";
+import CourseDetails from "./components/Pages/Course/CourseDetails";
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* Public Pages */}
         <Route path="/" element={<Layout />}>
           <Route index element={<LandingPage />} />
           <Route path="/about-us" element={<AboutUs />} />
@@ -37,6 +36,7 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/email-verification" element={<EmailVerification />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/course/:id" element={<CourseDetails />} />
           <Route path="*" element={<PageNotFound />} />
         </Route>
         <Route

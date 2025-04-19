@@ -3,15 +3,24 @@ const { Cart } = require("../models");
 const cartService = {
   // Get cart by user ID
   getCart: async (userId) => {
-    return await Cart.findOne({ user: userId }).populate("items.course");
+    let cart = await Cart.findOne({ student: userId }).populate("items.course");
+  
+    // If no cart exists, create an empty one and return it
+    if (!cart) {
+      cart = new Cart({ student: userId, items: [] });
+      await cart.save();
+      cart = await cart.populate("items.course");
+    }
+  
+    return cart;
   },
 
   // Add a course to cart
   addToCart: async (userId, courseId) => {
-    let cart = await Cart .findOne({ user: userId });
+    let cart = await Cart .findOne({ student: userId });
 
     if (!cart) {
-      cart = new Cart({ user: userId, items: [] });
+      cart = new Cart({ student: userId, items: [] });
     }
 
     const alreadyInCart = cart.items.some(
@@ -28,7 +37,7 @@ const cartService = {
 
   // Remove a course from cart
   removeFromCart: async (userId, courseId) => {
-    const cart = await Cart.findOne({ user: userId });
+    const cart = await Cart.findOne({ student: userId });
     if (!cart) return false;
 
     cart.items = cart.items.filter(
@@ -41,7 +50,7 @@ const cartService = {
 
   // Clear all items from cart
   clearCart: async (userId) => {
-    const cart = await Cart.findOne({ user: userId });
+    const cart = await Cart.findOne({ student: userId });
     if (!cart) return false;
 
     cart.items = [];

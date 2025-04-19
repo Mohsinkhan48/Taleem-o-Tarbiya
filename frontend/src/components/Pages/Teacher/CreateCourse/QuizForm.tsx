@@ -34,7 +34,7 @@ const QuizForm: React.FC<Props> = ({ quiz = { title: '', questions: [] }, onChan
   };
 
   return (
-    <Card className="mt-4 border-t pt-4">
+    <Card className="p-4 rounded-lg mt-4 border-t pt-4">
       <h4 className="text-lg font-semibold mb-2">Quiz</h4>
       <Input
         label="Quiz Title"
@@ -43,7 +43,7 @@ const QuizForm: React.FC<Props> = ({ quiz = { title: '', questions: [] }, onChan
       />
 
       {quiz.questions.map((q, index) => (
-        <Card key={index}>
+        <Card className='p-4 rounded-lg' key={index}>
           <Input
             label="Question"
             value={q.question}

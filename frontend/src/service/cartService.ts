@@ -12,14 +12,14 @@ export const CartService = {
   },
 
   removeFromCart: async (data: CartPayload) => {
-    return await apiClient.post(`${SERVER_URL}cart/remove`, data);
-  },
+    return await apiClient.delete(`${SERVER_URL}cart/remove/${data.courseId}`,);
+  },  
 
   getCart: async () => {
     return await apiClient.get(`${SERVER_URL}cart/get`);
   },
 
   clearCart: async () => {
-    return await apiClient.post(`${SERVER_URL}cart/clear`);
+    return await apiClient.delete(`${SERVER_URL}cart/clear`);
   },
 };
