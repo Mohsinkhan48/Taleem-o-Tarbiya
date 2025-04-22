@@ -9,6 +9,7 @@ import getCoursesReducer from "./slices/getCoursesSlice";
 import getCourseByIdReducer from "./slices/getCourseByIdSlice";
 import createCourseReducer from "./slices/createCourseSlice";
 import cartReducer from "./slices/CartSlice";
+import roleReducer from "./slices/roleSlice";
 
 const store = configureStore({
   reducer: {
@@ -22,6 +23,7 @@ const store = configureStore({
     course: getCourseByIdReducer,
     createCourse: createCourseReducer,
     cart: cartReducer,
+    role: roleReducer,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware({ serializableCheck: false }),
 });

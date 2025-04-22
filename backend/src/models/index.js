@@ -1,5 +1,6 @@
 module.exports.User = require("./user.model");
 module.exports.Otp = require("./otp.model");
+module.exports.Role = require("./role.model");
 module.exports.Assignment = require("./assignment.model");
 module.exports.Chapter = require("./chapter.model");
 module.exports.Course = require("./course.model");

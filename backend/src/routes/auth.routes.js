@@ -80,4 +80,6 @@ router.delete("/logout", isAuth, getDeviceId, authController.logout);
 
 router.get("/refresh", getDeviceId, authController.refresh);
 
+router.get("/roles", authController.getAllRoles);
+
 module.exports = router;

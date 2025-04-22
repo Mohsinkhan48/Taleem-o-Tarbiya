@@ -28,10 +28,10 @@ const ExploreCourses = () => {
 
         {loading ? (
           <div className="flex justify-center items-center">
-            <Loader size={30}/>
+            <Loader size={30} />
           </div>
         ) : (
-          <div className="flex flex-col gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 justify-center">
             {allCourses.length > 0 ? (
               allCourses.map((course) => (
                 <CourseCard

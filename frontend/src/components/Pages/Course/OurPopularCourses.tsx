@@ -31,7 +31,7 @@ const OurPopularCourses: React.FC<OurPopularCoursesProps> = ({
   };
 
   return (
-    <section className="bg-background py-24">
+    <section className="bg-background py-24 px-10">
       <div className="container mx-auto">
         <h2 className="text-4xl font-bold text-primary mb-6">
           {secondHeading} {heading}

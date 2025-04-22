@@ -2,6 +2,7 @@ export interface RegisterPayload {
   fullName: string;
   email: string;
   password: string;
+  role: string;
 }
 
 export interface LoginPayload {
@@ -22,6 +23,8 @@ export interface Role {
   _id: string;
   name: string;
   description: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export type OtpType = "password" | "email";

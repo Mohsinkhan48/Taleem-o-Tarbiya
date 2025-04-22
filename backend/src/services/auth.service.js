@@ -1,4 +1,4 @@
-const { User } = require("../models");
+const { User, Role } = require("../models");
 const userService = require("./user.service");
 
 const UserService = {
@@ -19,6 +19,9 @@ const UserService = {
     if (!user || !(await user.isPasswordMatch(password))) return false;
     return user;
   },
+  getRoles: async () => {
+    return await Role.find();
+  }
 };
 
 module.exports = UserService;
