@@ -25,14 +25,6 @@ export const fetchCourseById = createAsyncThunk<
 >('course/fetchCourseById', async (courseId, { rejectWithValue, dispatch }) => {
   try {
     const response = await CourseService.getCourseById(courseId);
-    dispatch(
-      addToast({
-        message: 'Course loaded successfully!',
-        type: 'success',
-        duration: 3000,
-        position: 'top-right',
-      })
-    );
     return response.data.course;
   } catch (error: any) {
     dispatch(

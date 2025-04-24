@@ -8,14 +8,13 @@ import { Link } from "react-router";
 import Card from "../../Reusable/Card";
 import { useLanguage } from "../../../context/LanguageContext";
 import SelectInput from "../../Reusable/SelectInput";
-import { Role } from "../../../types/auth.types";
-import { fetchAllRoles } from "../../../redux/slices/roleSlice";
+import { fetchAllRoles, Role } from "../../../redux/slices/fetch/fetchSlices";
 
 const Register: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { t } = useLanguage();
   const { loading, error } = useSelector((state: RootState) => state.auth);
-  const { allRoles } = useSelector((state: RootState) => state.role); // 👈 fetch roles from store
+  const { data } = useSelector((state: RootState) => state.role); // 👈 fetch roles from store
 
   useEffect(() => {
     dispatch(fetchAllRoles());
@@ -66,7 +65,7 @@ const Register: React.FC = () => {
             required
           />
           <SelectInput
-            options={allRoles.map((role: Role) => ({
+            options={data.map((role: Role) => ({
               label: role.name,
               value: role._id,
             }))}

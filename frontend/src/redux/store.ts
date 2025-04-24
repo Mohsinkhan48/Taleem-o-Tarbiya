@@ -9,7 +9,13 @@ import getCoursesReducer from "./slices/getCoursesSlice";
 import getCourseByIdReducer from "./slices/getCourseByIdSlice";
 import createCourseReducer from "./slices/createCourseSlice";
 import cartReducer from "./slices/CartSlice";
-import roleReducer from "./slices/roleSlice";
+
+import {
+  courseCategoryReducer,
+  courseTagReducer,
+  courseLevelReducer,
+  roleReducer,
+} from "./slices/fetch/fetchSlices";
 
 const store = configureStore({
   reducer: {
@@ -23,9 +29,15 @@ const store = configureStore({
     course: getCourseByIdReducer,
     createCourse: createCourseReducer,
     cart: cartReducer,
+    
+    // ✅ New meta reducers
+    courseCategories: courseCategoryReducer,
+    courseTags: courseTagReducer,
+    courseLevels: courseLevelReducer,
     role: roleReducer,
   },
-  middleware: (getDefaultMiddleware) => getDefaultMiddleware({ serializableCheck: false }),
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({ serializableCheck: false }),
 });
 
 // TypeScript Types

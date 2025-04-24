@@ -1,3 +1,4 @@
+const { CourseFilters } = require("../filters/course.filters");
 const { R2XX, R4XX } = require("../Responses");
 const { courseService } = require("../services");
 const { catchAsync } = require("../utils");
@@ -10,7 +11,8 @@ const courseController = {
     R2XX(res, "Course created successfully", 201, { course: newCourse });
   }),
   getAllCourses: catchAsync(async (req, res) => {
-    const courses = await courseService.getAllCourses();
+    const filters = CourseFilters(req.query);
+    const courses = await courseService.getAllCourses(filters);
     R2XX(res, "Fetched all courses successfully", 200, { courses });
   }),
   getCourseById: catchAsync(async (req, res) => {

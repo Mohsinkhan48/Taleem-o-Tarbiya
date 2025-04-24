@@ -9,8 +9,8 @@ const CourseSchema = new mongoose.Schema(
     duration: { type: String, required: true },
     price: { type: Number, required: true, min: 0 },
     level: {
-      type: String,
-      enum: ["Beginner", "Intermediate", "Advanced"],
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "course_levels",
       required: true,
     },
     instructor: {
@@ -25,7 +25,18 @@ const CourseSchema = new mongoose.Schema(
       },
     ],
     ratings: { type: [Number], default: [] },
-    category: { type: String, required: true, trim: true },
+    category: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "course_categories",
+      required: true,
+    },
+    tags: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "course_tags",
+        required: true,
+      },
+    ],
     isPaid: { type: Boolean, default: false },
   },
   { timestamps: true }

@@ -22,7 +22,7 @@ const CourseDetails = () => {
     }
   }, [courseDetails]);
 
-  if (!courseDetails) {
+  if (!loading && !courseDetails) {
     return (
       <div className="text-center text-red-500 py-10 animate__animated animate__fadeIn">
         Course not found. Please check the course ID.
@@ -36,7 +36,7 @@ const CourseDetails = () => {
           <Loader size={30}/>
         </div>
       ) : (
-        <CourseDetail course={courseDetails}/>
+        <CourseDetail course={courseDetails!}/>
       )}
     </div>
   );

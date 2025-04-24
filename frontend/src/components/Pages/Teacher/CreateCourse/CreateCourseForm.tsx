@@ -1,13 +1,17 @@
-// components/CreateCourseForm.tsx
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../../../redux/store";
+import { createCourse } from "../../../../redux/slices/createCourseSlice";
+
 import ModuleForm from "./ModuleForm";
 import Input from "../../../Reusable/Input";
+import SelectInput from "../../../Reusable/SelectInput";
+import MultiSelectInput from "../../../Reusable/MultiSelectInput";
 import Button from "../../../Reusable/Button";
-import { createCourse } from "../../../../redux/slices/createCourseSlice";
-import { useDispatch } from "react-redux";
-import { AppDispatch } from "../../../../redux/store";
 import Card from "../../../Reusable/Card";
 import { Module } from "../../../../types/course.types";
+import { fetchCourseCategories, fetchCourseLevels, fetchCourseTags } from "../../../../redux/slices/fetch/fetchSlices";
+import Checkbox from "../../../Reusable/Checkbox";
 
 const CreateCourseForm: React.FC = () => {
   interface CreateCourse {
@@ -19,10 +23,12 @@ const CreateCourseForm: React.FC = () => {
     price: number;
     level: string;
     category: string;
+    tags: string[];
     isPaid: boolean;
     modules: Module[];
   }
-  const initialValues = {
+
+  const initialValues: CreateCourse = {
     image: "",
     title: "",
     description: "",
@@ -31,117 +37,91 @@ const CreateCourseForm: React.FC = () => {
     price: 0,
     level: "",
     category: "",
-    isPaid: true,
+    tags: [],
+    isPaid: false,
     modules: [],
-  }
+  };
+
   const [course, setCourse] = useState<CreateCourse>(initialValues);
   const dispatch = useDispatch<AppDispatch>();
+
+  const { courseCategories, courseLevels, courseTags } = useSelector((state: RootState) => ({
+    courseCategories: state.courseCategories.data,
+    courseLevels: state.courseLevels.data,
+    courseTags: state.courseTags.data,
+  }));
+
+  useEffect(() => {
+    dispatch(fetchCourseCategories());
+    dispatch(fetchCourseLevels());
+    dispatch(fetchCourseTags());
+  }, [dispatch]);
+
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => {
     const target = e.target as HTMLInputElement;
     const { name, value, type } = target;
     const checked = type === "checkbox" ? target.checked : undefined;
+    console.log("checkbox: ", checked)
+    console.log("name: ", name)
+    console.log("value: ", value)
     setCourse((prev) => ({
       ...prev,
       [name]: type === "checkbox" ? checked : value,
     }));
   };
-
-  const addModule = () => {
-    setCourse((prev) => ({
-      ...prev,
-      modules: [...prev.modules, { title: "", chapters: [] }],
-    }));
-  };
-
-  const updateModule = (index: number, updatedModule: Module) => {
-    const modules = [...course.modules];
-    modules[index] = updatedModule;
-    setCourse((prev) => ({ ...prev, modules }));
-  };
-
-  const removeModule = (index: number) => {
-    const modules = [...course.modules];
-    modules.splice(index, 1);
-    setCourse((prev) => ({ ...prev, modules }));
-  };
-
+  console.log(course)
   const handleSubmit = async () => {
     const result = await dispatch(createCourse(course));
-  
     if (createCourse.fulfilled.match(result)) {
       console.log("Course created:", result.payload);
-      setCourse(initialValues)
+      setCourse(initialValues);
     } else if (createCourse.rejected.match(result)) {
       console.error("Error creating course:", result.payload);
     }
   };
-  
 
   return (
     <Card className="rounded-lg p-8 m-8">
       <h2 className="text-2xl font-bold mb-4">Create New Course</h2>
       <div className="grid grid-cols-2 gap-4">
-        <Input
-          label="Image URL"
-          name="image"
-          value={course.image}
-          onChange={handleChange}
-        />
-        <Input
-          label="Title"
-          name="title"
-          value={course.title}
-          onChange={handleChange}
-        />
-        <Input
-          label="Description"
-          name="description"
-          value={course.description}
-          onChange={handleChange}
-        />
-        <Input
-          label="Content"
-          name="content"
-          value={course.content}
-          onChange={handleChange}
-        />
-        <Input
-          label="Duration"
-          name="duration"
-          value={course.duration}
-          onChange={handleChange}
-        />
-        <Input
-          label="Price"
-          name="price"
-          type="number"
-          value={course.price}
-          onChange={handleChange}
-        />
-        <Input
+        <Input label="Image URL" name="image" value={course.image} onChange={handleChange} />
+        <Input label="Title" name="title" value={course.title} onChange={handleChange} />
+        <Input label="Description" name="description" value={course.description} onChange={handleChange} />
+        <Input label="Content" name="content" value={course.content} onChange={handleChange} />
+        <Input label="Duration" name="duration" value={course.duration} onChange={handleChange} />
+        <Input label="Price" name="price" type="number" value={course.price} onChange={handleChange} />
+
+        {/* ✅ Updated fields */}
+        <SelectInput
           label="Level"
           name="level"
           value={course.level}
           onChange={handleChange}
+          options={courseLevels.map((lvl: any) => ({ label: lvl.name, value: lvl._id }))}
         />
-        <Input
+        <SelectInput
           label="Category"
           name="category"
           value={course.category}
           onChange={handleChange}
+          options={courseCategories.map((cat: any) => ({ label: cat.name, value: cat._id }))}
         />
-        <div className="flex items-center">
-          <input
-            type="checkbox"
-            name="isPaid"
-            checked={course.isPaid}
-            onChange={handleChange}
-            className="mr-2"
-          />
-          <label htmlFor="isPaid">Is Paid</label>
-        </div>
+
+        <MultiSelectInput
+          label="Tags"
+          selectedValues={course.tags}
+          onChange={(selected) => setCourse(prev => ({ ...prev, tags: selected }))}
+          options={courseTags.map((tag: any) => ({ label: tag.name, value: tag._id }))}
+        />
+
+        <Checkbox
+          checked={course.isPaid}
+          name="isPaid"
+          label="Is Paid?"
+          onChange={handleChange}
+        />
       </div>
 
       <div className="mt-6">
@@ -150,11 +130,21 @@ const CreateCourseForm: React.FC = () => {
           <ModuleForm
             key={index}
             module={module}
-            onChange={(updatedModule) => updateModule(index, updatedModule)}
-            onRemove={() => removeModule(index)}
+            onChange={(updatedModule) => {
+              const modules = [...course.modules];
+              modules[index] = updatedModule;
+              setCourse((prev) => ({ ...prev, modules }));
+            }}
+            onRemove={() => {
+              const modules = [...course.modules];
+              modules.splice(index, 1);
+              setCourse((prev) => ({ ...prev, modules }));
+            }}
           />
         ))}
-        <Button variant="secondary" onClick={addModule} className="mt-2">
+        <Button variant="secondary" onClick={() =>
+          setCourse(prev => ({ ...prev, modules: [...prev.modules, { title: "", chapters: [] }] }))
+        }>
           Add Module
         </Button>
       </div>

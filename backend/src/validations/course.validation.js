@@ -11,10 +11,9 @@ const courseValidation = {
       content: Joi.string().required(),
       duration: Joi.string().required(),
       price: Joi.number().min(0).required(),
-      level: Joi.string()
-        .valid("Beginner", "Intermediate", "Advanced")
-        .required(),
-      category: Joi.string().trim().required(),
+      level: Joi.custom(objectId).required(),
+      category: Joi.custom(objectId).required(),
+      tags: Joi.array().items(Joi.custom(objectId)).min(0).required(),
       isPaid: Joi.boolean().default(true),
       modules: Joi.array()
         .items(

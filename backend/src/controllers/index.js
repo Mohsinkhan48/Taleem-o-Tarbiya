@@ -1,4 +1,7 @@
 module.exports.authController = require("./auth.controller");
+module.exports.staticController = require("./static.controller");
 module.exports.courseController = require("./course.controller");
 module.exports.enrollmentController = require("./enrollment.controller");
 module.exports.cartController = require("./cart.controller");
+module.exports.paymentController = require("./payment.controller");
+module.exports.stripeController = require("./stripe.controller");

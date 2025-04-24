@@ -23,11 +23,27 @@ const initialState: AuthState = {
 
 export const registerUser = createAsyncThunk(
   "auth/register",
-  async (data: RegisterPayload, { rejectWithValue }) => {
+  async (data: RegisterPayload, { dispatch, rejectWithValue }) => {
     try {
       const response = await AuthService.register(data);
+      dispatch(
+        addToast({
+          message: response.data.message,
+          type: response.data.success ? "success" : "error",
+          duration: 3000,
+          position: "top-right",
+        })
+      );
       return response.data;
     } catch (error: any) {
+      dispatch(
+        addToast({
+          message: error.response?.data?.reason || "Error logging in!",
+          type: "error",
+          duration: 3000,
+          position: "top-right",
+        })
+      );
       return rejectWithValue(error);
     }
   }

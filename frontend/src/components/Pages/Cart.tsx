@@ -6,11 +6,15 @@ import { Loader } from "../../assets/Loader";
 import RemoveFromCartButton from "../Cart/RemoveFromCartButton";
 import Button from "../Reusable/Button";
 import { useNavigate } from "react-router";
+import CheckoutButton from "./Stripe/CheckoutButton";
+import { STRIPE_PUBLISHABLE_KEY } from "../../constants/env.constants";
 
 const Cart: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
-  const { cart, loading } = useSelector((state: RootState) => state.cart);
+  const { cart, loading, clearLoading } = useSelector(
+    (state: RootState) => state.cart
+  );
 
   useEffect(() => {
     dispatch(getCart());
@@ -19,7 +23,7 @@ const Cart: React.FC = () => {
   const handleClear = () => {
     dispatch(clearCart());
   };
-
+  console.log("Stripe pub key", STRIPE_PUBLISHABLE_KEY)
   const totalPrice = cart.reduce((total, item) => total + item.course.price, 0);
 
   return (
@@ -82,9 +86,16 @@ const Cart: React.FC = () => {
                 ${totalPrice.toFixed(2)}
               </span>
             </div>
-            <Button onClick={handleClear} variant="danger">
+            <Button
+              onClick={handleClear}
+              variant="danger"
+              isLoading={clearLoading}
+            >
               Clear Cart
             </Button>
+          </div>
+          <div className="mt-10">
+            <CheckoutButton cartItems={cart} isLoading={loading} />
           </div>
         </>
       )}

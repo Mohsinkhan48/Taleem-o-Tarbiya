@@ -2,6 +2,9 @@ const mongoose = require("mongoose");
 const app = require("../index");
 const { envConfig, mongoConfig } = require("../config/");
 const seedRoles = require("../seeders/role.seeder");
+const seedCourseCategories = require("../seeders/course-category.seeder");
+const seedCourseTags = require("../seeders/course-tag.seeder");
+const seedCourseLevels = require("../seeders/course-level.seeder");
 // ---------------------------------------------------------------------------->>
 let server = null;
 
@@ -10,6 +13,9 @@ mongoose
   .then(() => {
     console.log("Connected to MongoDB");
     seedRoles();
+    seedCourseCategories();
+    seedCourseTags();
+    seedCourseLevels();
     server = app.listen(envConfig.PORT, () => {
       console.log(`Listening to port ${server.address().port}`);
     });
