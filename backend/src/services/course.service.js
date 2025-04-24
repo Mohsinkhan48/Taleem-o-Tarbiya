@@ -15,6 +15,7 @@ const courseService = {
         category,
         isPaid,
         modules,
+        tags
       } = courseData;
 
       const createdModules = [];
@@ -30,6 +31,7 @@ const courseService = {
         instructor: instructor_id,
         level,
         category,
+        tags,
         isPaid,
         modules: [], // Initially empty modules array
       });
@@ -92,9 +94,12 @@ const courseService = {
       throw new Error("Failed to create course. Please try again later.");
     }
   },
-  getAllCourses: async () => {
-    return await Course.find()
+  getAllCourses: async (filters = {}) => {
+    return await Course.find(filters)
       .populate("instructor", "_id fullName email")
+      .populate("tags")
+      .populate("category")
+      .populate("level")
       .populate({
         path: "modules",
         populate: {
@@ -106,6 +111,9 @@ const courseService = {
   getCourseById: async (courseId) => {
     return await Course.findById(courseId)
       .populate("instructor", "_id fullName email")
+      .populate("tags")
+      .populate("category")      
+      .populate("level")      
       .populate({
         path: "modules",
         populate: {

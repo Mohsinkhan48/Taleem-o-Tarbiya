@@ -245,11 +245,6 @@ const AuthController = {
       next(error);
     }
   }),
-  getAllRoles: catchAsync(async (req, res) => {
-    const roles = await authService.getRoles();
-    if (!roles) return R4XX(res, 404, "No roles found");
-    R2XX(res, "Roles fetched successfully", 200, { roles });
-  }),
 };
 
 module.exports = AuthController;

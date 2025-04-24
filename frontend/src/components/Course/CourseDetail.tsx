@@ -1,4 +1,3 @@
-// components/Course/CourseDetail.tsx
 import React from "react";
 import { Course } from "../../types/course.types";
 import RatingStars from "./RatingStars";
@@ -7,50 +6,78 @@ import Button from "../Reusable/Button";
 import CourseIncludes from "./CourseIncludes";
 import AddToCartButton from "../Cart/AddToCartButton";
 import { timeAgo } from "../../utils/dateFormat";
+import TagList from "./Tags";
 
 interface CourseDetailProps {
   course: Course;
 }
 
 const CourseDetail: React.FC<CourseDetailProps> = ({ course }) => {
-  const total_quizes = course.modules.reduce((quizCount, module) => {
-    return (
+  const total_quizes = course.modules.reduce(
+    (quizCount, module) =>
       quizCount +
       module.chapters.reduce(
         (count, chapter) => (chapter.quiz ? count + 1 : count),
         0
-      )
-    );
-  }, 0);
+      ),
+    0
+  );
 
-  const total_assignments = course.modules.reduce((assignmentCount, module) => {
-    return (
+  const total_assignments = course.modules.reduce(
+    (assignmentCount, module) =>
       assignmentCount +
       module.chapters.reduce(
         (count, chapter) => (chapter.assignment ? count + 1 : count),
         0
-      )
-    );
-  }, 0);
+      ),
+    0
+  );
 
   return (
     <div className="max-w-5xl mx-auto p-6">
+      {/* Header */}
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
         <h1 className="text-4xl font-bold mb-1 text-text">{course.title}</h1>
-        <AddToCartButton courseId={course._id}/>
+        <div className="mb-6 p-4 border border-card-border rounded-lg bg-card flex flex-col">
+          <img
+            className="w-full max-h-[350px] object-cover rounded mb-6"
+            src={course.image}
+            alt={course.title}
+          />
+          <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
+            <p className="text-2xl font-bold text-text">
+              {course.isPaid ? `$${course.price}` : "Free"}
+            </p>
+            <AddToCartButton courseId={course._id} />
+          </div>
+        </div>
       </div>
+
+      {/* Instructor */}
       {course.instructor && (
-        <div className="flex items-center mb-4">
+        <div className="flex items-center mb-4 gap-2">
           <p className="text-md text-text">Created by</p>
           <Button variant="link">{course.instructor.fullName}</Button>
         </div>
       )}
-      <img
-        className="w-full max-h-[350px] object-cover rounded mb-6"
-        src={course.image}
-        alt={course.title}
-      />
 
+      {/* Info Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+        <div className="bg-card border border-card-border p-4 rounded-lg text-center">
+          <p className="text-sm text-primary">Level</p>
+          <p className="text-lg font-semibold text-text">{course.level.name}</p>
+        </div>
+        <div className="bg-card border border-card-border p-4 rounded-lg text-center">
+          <p className="text-sm text-primary">Category</p>
+          <p className="text-lg font-semibold text-text">
+            {course.category.name}
+          </p>
+        </div>
+      </div>
+
+      {course.tags.length > 0 && <TagList tags={course.tags} />}
+
+      {/* Ratings & Update */}
       <div className="mb-6 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
         <RatingStars ratings={course.ratings} />
         <p className="text-sm text-text">
@@ -58,6 +85,8 @@ const CourseDetail: React.FC<CourseDetailProps> = ({ course }) => {
           <span className="font-medium">{timeAgo(course.updatedAt)}</span>
         </p>
       </div>
+
+      {/* Course Includes */}
       <CourseIncludes
         courseSummary={{
           total_quizes,
@@ -65,6 +94,8 @@ const CourseDetail: React.FC<CourseDetailProps> = ({ course }) => {
           duration: course.duration || "Self-paced",
         }}
       />
+
+      {/* What you will learn */}
       <div className="mb-6">
         <h2 className="text-2xl font-semibold mb-2 text-text">
           What You Will Learn
@@ -72,6 +103,7 @@ const CourseDetail: React.FC<CourseDetailProps> = ({ course }) => {
         <p className="text-text">{course.content}</p>
       </div>
 
+      {/* Modules */}
       <div className="mb-8">
         <h2 className="text-2xl font-semibold mb-4 text-text">Modules</h2>
         <div className="bg-card border border-card-border rounded-lg">
@@ -80,14 +112,12 @@ const CourseDetail: React.FC<CourseDetailProps> = ({ course }) => {
               <ModuleCard key={module._id} module={module} />
             ))
           ) : (
-            <p
-              className={`p-4 cursor-pointer flex justify-between items-center`}
-            >
-              No modules available.
-            </p>
+            <p className="p-4 text-text">No modules available.</p>
           )}
         </div>
       </div>
+
+      {/* Description */}
       <h2 className="text-lg font-semibold mb-1 text-text">Description</h2>
       <p className="text-lg text-text mb-6">{course.description}</p>
     </div>

@@ -6,8 +6,8 @@ const enrollmentService = {
     if (existing) return null;
 
     const newEnrollment = await Enrollment.create({
-      courseId,
-      studentId,
+      course: courseId,
+      student: studentId,
     });
     return newEnrollment;
   }

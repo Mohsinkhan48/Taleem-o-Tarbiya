@@ -4,12 +4,12 @@ const cartItemSchema = new mongoose.Schema({
   course: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "courses",
-    required: true
+    required: true,
   },
   addedAt: {
     type: Date,
-    default: Date.now
-  }
+    default: Date.now,
+  },
 });
 
 const cartSchema = new mongoose.Schema(
@@ -18,12 +18,12 @@ const cartSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "users",
       required: true,
-      unique: true // one cart per student
+      unique: true,
     },
-    items: [cartItemSchema]
+    items: [cartItemSchema],
   },
   {
-    timestamps: true
+    timestamps: true,
   }
 );
 

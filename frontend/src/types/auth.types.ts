@@ -1,3 +1,5 @@
+import { Role } from "../redux/slices/fetch/fetchSlices";
+
 export interface RegisterPayload {
   fullName: string;
   email: string;
@@ -17,14 +19,6 @@ export interface User {
   email: string;
   isEmailVerified: boolean;
   role: Role;
-}
-
-export interface Role {
-  _id: string;
-  name: string;
-  description: string;
-  createdAt: string;
-  updatedAt: string;
 }
 
 export type OtpType = "password" | "email";

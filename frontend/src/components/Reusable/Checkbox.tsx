@@ -28,7 +28,7 @@ const Checkbox: React.FC<CheckboxProps> = ({
           checked={checked}
           onChange={onChange}
           disabled={disabled}
-          className={`form-checkbox text-input-focus focus:ring-input-focus focus:ring-2 transition duration-200 ${
+          className={`${
             disabled ? "opacity-50 cursor-not-allowed" : ""
           } ${className || ""}`}
           {...rest}

@@ -7,7 +7,7 @@ import AddToCartButton from "../Cart/AddToCartButton";
 
 interface CourseCardProps {
   course: Course;
-  onClick: () => void;
+  onClick?: () => void;
 }
 
 const CourseCard: React.FC<CourseCardProps> = ({ course, onClick }) => {
@@ -29,7 +29,7 @@ const CourseCard: React.FC<CourseCardProps> = ({ course, onClick }) => {
       <div className="flex-1 px-2 py-2">
         <h2 className="text-primary font-bold text-xl mb-2">{course.title}</h2>
         <p className="text-text text-base mb-2 line-clamp-3">{course.description}</p>
-        <p className="text-sm text-text">Level: {course.level}</p>
+        <p className="text-sm text-text">Level: {course.level.name}</p>
         <p className="text-sm text-text">Duration: {course.duration}</p>
         <p className="text-sm font-semibold text-secondary mb-2">
           Price: ${course.price}

@@ -1,4 +1,4 @@
-const { Cart } = require("../models");
+const { Cart, Enrollment } = require("../models");
 
 const cartService = {
   // Get cart by user ID
@@ -17,7 +17,12 @@ const cartService = {
 
   // Add a course to cart
   addToCart: async (userId, courseId) => {
-    let cart = await Cart .findOne({ student: userId });
+    const isEnrolled = await Enrollment.findOne({ student: userId, course: courseId });
+
+    if (isEnrolled) {
+      return null;
+    }
+    let cart = await Cart.findOne({ student: userId });
 
     if (!cart) {
       cart = new Cart({ student: userId, items: [] });

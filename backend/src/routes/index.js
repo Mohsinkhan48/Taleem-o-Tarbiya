@@ -2,9 +2,12 @@ const { Router } = require("express");
 
 const router = Router();
 const authRoutes = require("./auth.routes");
+const staticRoutes = require("./static.routes");
 const courseRoutes = require("./course.routes");
 const enrollmentRoutes = require("./enrollment.routes");
 const cartRoutes = require("./cart.routes");
+const paymentRoutes = require("./payment.routes");
+const stripeRoutes = require("./stripe.routes");
 
 const defaultRoutes = [
   {
@@ -13,15 +16,23 @@ const defaultRoutes = [
   },
   {
     path: "/course",
-    route: courseRoutes
+    route: courseRoutes,
   },
   {
     path: "/enrollment",
-    route: enrollmentRoutes
+    route: enrollmentRoutes,
   },
   {
     path: "/cart",
-    route: cartRoutes
+    route: cartRoutes,
+  },
+  {
+    path: "/payment",
+    route: paymentRoutes,
+  },
+  {
+    path: "/static",
+    route: staticRoutes,
   }
 ];
 

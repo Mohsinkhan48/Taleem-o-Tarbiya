@@ -17,22 +17,13 @@ const initialState: CourseState = {
   error: null,
 };
 
-// ✅ Fetch All Courses
 export const fetchAllCourses = createAsyncThunk<
-  Course[], // return type
-  void, // argument type
+  Course[],
+  Record<string, string | undefined>,
   { rejectValue: string }
->('course/fetchAllCourses', async (_, { rejectWithValue, dispatch }) => {
+>('course/fetchAllCourses', async (filters, { rejectWithValue, dispatch }) => {
   try {
-    const response = await CourseService.getAllCourses();
-    dispatch(
-      addToast({
-        message: 'Courses loaded successfully!',
-        type: 'success',
-        duration: 3000,
-        position: 'top-right',
-      })
-    );
+    const response = await CourseService.getAllCourses(filters || {});
     return response.data.courses;
   } catch (error: any) {
     dispatch(
@@ -47,6 +38,7 @@ export const fetchAllCourses = createAsyncThunk<
   }
 });
 
+
 // ✅ Fetch Instructor Courses
 export const fetchInstructorCourses = createAsyncThunk<
   Course[], // return type
@@ -55,14 +47,6 @@ export const fetchInstructorCourses = createAsyncThunk<
 >('course/fetchInstructorCourses', async (_, { rejectWithValue, dispatch }) => {
   try {
     const response = await CourseService.getInstructorCourses();
-    dispatch(
-      addToast({
-        message: 'Instructor courses loaded!',
-        type: 'success',
-        duration: 3000,
-        position: 'top-right',
-      })
-    );
     return response.data.courses;
   } catch (error: any) {
     dispatch(

@@ -22,6 +22,8 @@ import CreateCourseForm from "./components/Pages/Teacher/CreateCourse/CreateCour
 import PageNotFound from "./components/Pages/PageNotFound";
 import Cart from "./components/Pages/Cart";
 import CourseDetails from "./components/Pages/Course/CourseDetails";
+import Success from "./components/Pages/Stripe/Success";
+import Cancel from "./components/Pages/Stripe/Cancel";
 
 function App() {
   return (
@@ -73,6 +75,8 @@ function App() {
         >
           <Route path="dashboard" element={<StudentDashboard />} />
           <Route path="cart" element={<Cart />} />
+          <Route path="payment/success" element={<Success />} />
+          <Route path="payment/cancel" element={<Cancel />} />
         </Route>
       </Routes>
     </BrowserRouter>

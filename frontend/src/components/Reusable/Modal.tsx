@@ -22,7 +22,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
       onClick={handleOverlayClick}
     >
       <div
-        className="rounded-lg shadow-lg mx-auto relative text-text bg-background p-6"
+        className="rounded-lg shadow-lg mx-auto relative text-text bg-background p-6 min-h-72"
         onClick={(e) => e.stopPropagation()}
       >
         <button

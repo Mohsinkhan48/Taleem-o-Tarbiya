@@ -17,6 +17,8 @@ const envVarsSchema = Joi.object()
     EMAIL_USER: Joi.string().required(),
     EMAIL_PASS: Joi.string().required(),
     FRONTEND_URL: Joi.string().required(),
+    STRIPE_SECRET_KEY: Joi.string().required(),
+    STRIPE_WEBHOOK_SECRET_KEY: Joi.string().required(),
   })
   .unknown();
 
@@ -33,6 +35,8 @@ const SMTP_PORT = process.env.SMTP_PORT;
 const EMAIL_USER = process.env.EMAIL_USER;
 const EMAIL_PASS = process.env.EMAIL_PASS;
 const FRONTEND_URL = process.env.FRONTEND_URL;
+const STRIPE_SECRET_KEY = process.env.STRIPE_SECRET_KEY;
+const STRIPE_WEBHOOK_SECRET_KEY = process.env.STRIPE_WEBHOOK_SECRET_KEY;
 
 module.exports = {
   PORT,
@@ -42,4 +46,6 @@ module.exports = {
   EMAIL_USER,
   EMAIL_PASS,
   FRONTEND_URL,
+  STRIPE_SECRET_KEY,
+  STRIPE_WEBHOOK_SECRET_KEY
 };

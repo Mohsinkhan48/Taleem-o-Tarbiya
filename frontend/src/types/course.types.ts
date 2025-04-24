@@ -1,3 +1,4 @@
+import { CourseCategory, CourseLevel, CourseTag } from "../redux/slices/fetch/fetchSlices";
 import { User } from "./auth.types";
 
 export interface Course {
@@ -9,8 +10,9 @@ export interface Course {
   instructor: User;
   duration: string;
   price: number;
-  level: string;
-  category: string;
+  level: CourseLevel;
+  category: CourseCategory;
+  tags: CourseTag[];
   isPaid: boolean;
   modules: Module[];
   ratings: number[];
