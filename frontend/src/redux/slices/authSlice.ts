@@ -149,7 +149,11 @@ const authSlice = createSlice({
       state.loading = false;
       state.error = action.payload.reason;
     });
-    // logout
+    // Logout
+    builder.addCase(logoutUser.pending, (state) => {
+      state.loading = true;
+      state.error = null;
+    });
     builder.addCase(logoutUser.fulfilled, (state) => {
       state.user = null;
       state.accessToken = null;

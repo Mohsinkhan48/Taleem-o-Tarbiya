@@ -20,7 +20,7 @@ const ExploreCourses = () => {
   }, [dispatch, filters]);
 
   return (
-    <div className="bg-background min-h-screen p-12">
+    <div className="bg-background min-h-screen p-4 md:p-12">
       <div className="px-6">
         <h1 className="text-4xl font-bold text-text text-center">
           Explore Courses
@@ -30,8 +30,8 @@ const ExploreCourses = () => {
           needs.
         </p>
 
-        <div className="flex gap-8">
-          <div className="w-full md:w-1/4">
+        <div className="flex flex-col md:flex-row gap-4 md:gap-8">
+          <div className="w-full md:w-2/6">
             <FiltersSidebar
               onApply={(filters) =>
                 setFilters(
@@ -41,7 +41,7 @@ const ExploreCourses = () => {
             />
           </div>
 
-          <div className="w-full md:w-3/4">
+          <div className="w-full md:w-4/6">
             {loading ? (
               <div className="flex justify-center items-center h-32">
                 <Loader size={30} />

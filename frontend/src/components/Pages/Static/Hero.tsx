@@ -14,7 +14,7 @@ const Hero = () => {
       </div>
 
       {/* Hero Content */}
-      <div className="relative z-10 container mx-auto px-6 py-32 grid place-items-center">
+      <div className="relative container mx-auto px-6 py-32 grid place-items-center">
         <div className="text-center space-y-8 max-w-4xl animate-fadeInUp">
           <h1 className="text-4xl md:text-5xl font-extrabold text-white leading-tight">
             Empower Your Future with <br className="hidden md:block" /> Taleem-o-Tarbiya
