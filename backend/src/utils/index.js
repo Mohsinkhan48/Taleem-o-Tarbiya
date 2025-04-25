@@ -9,3 +9,4 @@ module.exports.bcryptUtils = require("./bcrypt.utils");
 module.exports.jwtUtils = require("./jwt.utils");
 module.exports.cryptoUtils = require("./crypto.utils");
 module.exports.otpUtils = require("./otp.utils");
+module.exports.getOptionalUserFromRequest = require("./getOptionalUserFromRequest.utils");

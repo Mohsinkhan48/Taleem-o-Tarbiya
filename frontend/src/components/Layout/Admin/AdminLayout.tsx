@@ -3,15 +3,15 @@ import { Outlet } from "react-router";
 import ThemeChooser from "../../ThemeChooser";
 import LanguageChooser from "../../LanguageChooser";
 import Footer from "../Footer";
-import AdminNavbar from "./AdminNavbar";
+import Navbar from "../Navbar";
 
 function AdminLayout() {
   return (
     <div>
-      <AdminNavbar/>
+      <Navbar />
       <div className="flex-1 overflow-hidden min-h-screen">
         <main>
-          <Outlet /> {/* Render nested routes here */}
+          <Outlet />
         </main>
       </div>
       <Footer />

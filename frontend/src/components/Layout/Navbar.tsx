@@ -1,29 +1,42 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router";
 import Button from "../Reusable/Button";
+import { AppDispatch, RootState } from "../../redux/store";
+import { useDispatch, useSelector } from "react-redux";
+import { logoutUser } from "../../redux/slices/authSlice";
 import { useAuth } from "../../hooks/useAuth";
+import CartButton from "./Student/CartButton";
 
 const Navbar = () => {
-  const [toggleMenu, setToggleMenu] = useState<boolean>(false);
-  const [dropdownVisible, setDropdownVisible] = useState<boolean>(false);
-  const {user, isAuthenticated} = useAuth()
+  const [toggleMenu, setToggleMenu] = useState(false);
+  const [dropdownVisible, setDropdownVisible] = useState(false);
+  const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
+  const { user, isAuthenticated } = useAuth();
 
-  const handleToggle = () => {
-    setToggleMenu(!toggleMenu);
+  const onLogout = () => dispatch(logoutUser());
+  const { loading } = useSelector((state: RootState) => state.auth);
+  const handleDashboardNavigation = () => {
+    switch (user?.role.name) {
+      case "admin":
+        navigate("/admin/dashboard");
+        break;
+      case "teacher":
+        navigate("/teacher/dashboard");
+        break;
+      case "student":
+        navigate("/student/dashboard");
+        break;
+      default:
+        navigate("/unauthorized");
+    }
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem("refreshToken");
-    localStorage.removeItem("user");
-    localStorage.removeItem("accessToken");
-    setTimeout(() => {
-      navigate("/");
-    }, 1000);
-  };
-
-  const handleDropdownToggle = () => {
-    setDropdownVisible(!dropdownVisible);
+  const renderButtons = () => {
+    if (user?.role.name === "student") {
+      return <CartButton />;
+    }
+    return null;
   };
 
   return (
@@ -39,7 +52,6 @@ const Navbar = () => {
               ? "md:flex flex-col md:flex-row w-full md:w-auto"
               : "hidden md:flex"
           }
-          id="menu"
         >
           <ul className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-6 text-text">
             <li className="cursor-pointer hover:text-link py-2 px-3">
@@ -57,9 +69,11 @@ const Navbar = () => {
         <div className="flex items-center space-x-4">
           {isAuthenticated ? (
             <>
+              {renderButtons()}
+
               <div className="relative">
                 <div
-                  onClick={handleDropdownToggle}
+                  onClick={() => setDropdownVisible(!dropdownVisible)}
                   className="cursor-pointer flex items-center space-x-2"
                 >
                   <div className="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center text-white">
@@ -69,7 +83,7 @@ const Navbar = () => {
                   </div>
                 </div>
                 {dropdownVisible && (
-                  <div className="absolute top-12 right-0 bg-card shadow-lg rounded-md w-64 py-4 px-6 z-10">
+                  <div className="absolute top-12 right-0 bg-card shadow-lg rounded-md w-64 py-4 px-6 z-20">
                     <div className="flex items-center space-x-3">
                       <div className="w-12 h-12 bg-gray-300 rounded-full flex items-center justify-center text-white">
                         <span className="text-xl font-bold">
@@ -88,12 +102,17 @@ const Navbar = () => {
                     <hr className="my-4 border-border" />
                     <ul className="space-y-2">
                       <li className="cursor-pointer hover:text-link">
-                        <button
-                          onClick={handleLogout}
-                          className="w-full text-left"
+                        <Button
+                          onClick={handleDashboardNavigation}
+                          variant="primary"
                         >
+                          Go to Dashboard
+                        </Button>
+                      </li>
+                      <li className="cursor-pointer hover:text-link">
+                        <Button onClick={onLogout} variant="danger" isLoading={loading}>
                           Logout
-                        </button>
+                        </Button>
                       </li>
                     </ul>
                   </div>
@@ -113,7 +132,10 @@ const Navbar = () => {
         </div>
 
         <div className="md:hidden cursor-pointer">
-          <button onClick={handleToggle} className="focus:outline-none">
+          <button
+            onClick={() => setToggleMenu(!toggleMenu)}
+            className="focus:outline-none"
+          >
             <span className="text-xl text-text">&#9776;</span>
           </button>
         </div>

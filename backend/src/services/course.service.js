@@ -1,5 +1,12 @@
 const { default: mongoose } = require("mongoose");
-const { Course, Module, Chapter, Quiz, Assignment } = require("../models");
+const {
+  Course,
+  Module,
+  Chapter,
+  Quiz,
+  Assignment,
+  Enrollment,
+} = require("../models");
 
 const courseService = {
   createCourse: async (courseData, instructor_id) => {
@@ -15,7 +22,7 @@ const courseService = {
         category,
         isPaid,
         modules,
-        tags
+        tags,
       } = courseData;
 
       const createdModules = [];
@@ -108,12 +115,33 @@ const courseService = {
         },
       });
   },
+  getCoursesNotEnrolledByStudent: async (studentId, filters = {}) => {
+    const enrolledCourseIds = await Enrollment.find({
+      student: studentId,
+    }).distinct("course");
+
+    return await Course.find({
+      ...filters,
+      _id: { $nin: enrolledCourseIds }, // exclude enrolled courses
+    })
+      .populate("instructor", "_id fullName email")
+      .populate("tags")
+      .populate("category")
+      .populate("level")
+      .populate({
+        path: "modules",
+        populate: {
+          path: "chapters",
+          select: "_id title content",
+        },
+      });
+  },
   getCourseById: async (courseId) => {
     return await Course.findById(courseId)
       .populate("instructor", "_id fullName email")
       .populate("tags")
-      .populate("category")      
-      .populate("level")      
+      .populate("category")
+      .populate("level")
       .populate({
         path: "modules",
         populate: {
@@ -137,6 +165,84 @@ const courseService = {
       "instructor",
       "fullName email"
     );
+  },
+  getCoursesByStudentId: async (studentId) => {
+    const enrollments = await Enrollment.find({ student: studentId }).populate({
+      path: "course",
+      populate: [
+        {
+          path: "instructor",
+          select: "_id fullName email",
+        },
+        {
+          path: "tags",
+        },
+        {
+          path: "category",
+        },
+        {
+          path: "level",
+        },
+        {
+          path: "modules",
+          populate: {
+            path: "chapters",
+            populate: [
+              {
+                path: "quiz",
+                select: "_id title questions",
+              },
+              {
+                path: "assignment",
+                select: "_id title description",
+              },
+            ],
+          },
+        },
+      ],
+    });
+
+    const courses = enrollments.map((enrollment) => enrollment.course);
+    return courses;
+  },
+  getStudentEnrolledCourse: async (studentId, courseId) => {
+    const enrollment = await Enrollment.findOne({
+      student: studentId,
+      course: courseId,
+    }).populate({
+      path: "course",
+      populate: [
+        {
+          path: "instructor",
+          select: "_id fullName email",
+        },
+        {
+          path: "tags",
+        },
+        {
+          path: "category",
+        },
+        {
+          path: "level",
+        },
+        {
+          path: "modules",
+          populate: {
+            path: "chapters",
+            populate: [
+              { path: "resources" },
+              { path: "quiz" },
+              { path: "assignment" },
+            ],
+          },
+        },
+      ],
+    });
+    if (!enrollment || !enrollment.course) {
+      return null;
+    }
+
+    return enrollment.course;
   },
 };
 

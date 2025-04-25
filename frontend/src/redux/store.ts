@@ -7,14 +7,17 @@ import forgotPasswordReducer from "./slices/forgotPasswordSlice";
 import resetPasswordReducer from "./slices/resetPasswordSlice";
 import getCoursesReducer from "./slices/getCoursesSlice";
 import getCourseByIdReducer from "./slices/getCourseByIdSlice";
+import getStudentEnrolledCourseReducer from "./slices/getStudentEnrolledCourseSlice";
 import createCourseReducer from "./slices/createCourseSlice";
 import cartReducer from "./slices/CartSlice";
+import selectedChapterReducer from "./slices/selectedChapter";
 
 import {
   courseCategoryReducer,
   courseTagReducer,
   courseLevelReducer,
   roleReducer,
+  studentCoursesReducer
 } from "./slices/fetch/fetchSlices";
 
 const store = configureStore({
@@ -27,14 +30,17 @@ const store = configureStore({
     toaster: toasterReducer,
     courses: getCoursesReducer,
     course: getCourseByIdReducer,
+    studentCourse: getStudentEnrolledCourseReducer,
     createCourse: createCourseReducer,
     cart: cartReducer,
+    selectedChapter: selectedChapterReducer,
     
     // ✅ New meta reducers
     courseCategories: courseCategoryReducer,
     courseTags: courseTagReducer,
     courseLevels: courseLevelReducer,
     role: roleReducer,
+    studentCourses: studentCoursesReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({ serializableCheck: false }),

@@ -35,7 +35,24 @@ router.get(
 router.get(
   "/instructor/courses",
   isAuth,
+  isMember,
   courseController.getCoursesByInstructor
 );
+
+router.get(
+  "/student/courses",
+  isAuth,
+  isMember,
+  hasRole([ROLES.STUDENT]),
+  courseController.getCoursesByStudent
+);
+
+router.get(
+  "/student/courses/:courseId",
+  isAuth,
+  isMember,
+  hasRole([ROLES.STUDENT]),
+  courseController.getStudentEnrolledCourse
+)
 
 module.exports = router;
