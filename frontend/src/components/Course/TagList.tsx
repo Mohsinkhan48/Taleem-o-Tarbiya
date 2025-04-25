@@ -18,7 +18,6 @@ const TagList: React.FC<TagListProps> = ({ tags }) => {
 
   return (
     <div className="mb-6">
-      <strong className="text-text block mb-2">Tags:</strong>
       <div className="flex flex-wrap gap-2">
         {visibleTags.map((tag) => (
           <Badge key={tag._id} className="bg-card text-primary">

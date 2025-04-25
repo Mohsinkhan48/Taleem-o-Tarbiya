@@ -16,8 +16,8 @@ export interface Course {
   isPaid: boolean;
   modules: Module[];
   ratings: number[];
-  createdAt: string;
-  updatedAt: string;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface Module {

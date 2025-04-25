@@ -24,6 +24,8 @@ import Cart from "./components/Pages/Cart";
 import CourseDetails from "./components/Pages/Course/CourseDetails";
 import Success from "./components/Pages/Stripe/Success";
 import Cancel from "./components/Pages/Stripe/Cancel";
+import StudentCourses from "./components/Pages/Student/StudentCourses";
+import CourseViewer from "./components/Pages/Student/CourseViewer/CourseViewer";
 
 function App() {
   return (
@@ -74,6 +76,8 @@ function App() {
           }
         >
           <Route path="dashboard" element={<StudentDashboard />} />
+          <Route path="courses" element={<StudentCourses />} />
+          <Route path="courses/:id" element={<CourseViewer />} />
           <Route path="cart" element={<Cart />} />
           <Route path="payment/success" element={<Success />} />
           <Route path="payment/cancel" element={<Cancel />} />

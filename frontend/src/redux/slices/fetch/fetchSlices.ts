@@ -1,4 +1,5 @@
 // src/store/slices/courseMetaSlice.ts
+import { Course } from "../../../types/course.types";
 import { createGenericSlice, createGenericThunk } from "./fetchGenericSlice";
 
 // ==================
@@ -48,6 +49,11 @@ export const fetchAllRoles = createGenericThunk<Role>(
   "/static/roles"
 );
 
+export const fetchStudentCourses = createGenericThunk<Course>(
+  "student-courses",
+  "/course/student/courses"
+);
+
 // ==================
 // Slices
 // ==================
@@ -71,3 +77,8 @@ export const {
   reducer: roleReducer,
   actions: roleActions,
 } = createGenericSlice<Role>("roles", fetchAllRoles);
+
+export const {
+  reducer: studentCoursesReducer,
+  actions: studentCoursesActions,
+} = createGenericSlice<Course>("student-courses", fetchStudentCourses);

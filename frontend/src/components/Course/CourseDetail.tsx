@@ -6,7 +6,7 @@ import Button from "../Reusable/Button";
 import CourseIncludes from "./CourseIncludes";
 import AddToCartButton from "../Cart/AddToCartButton";
 import { timeAgo } from "../../utils/dateFormat";
-import TagList from "./Tags";
+import TagList from "./TagList";
 
 interface CourseDetailProps {
   course: Course;
@@ -82,7 +82,7 @@ const CourseDetail: React.FC<CourseDetailProps> = ({ course }) => {
         <RatingStars ratings={course.ratings} />
         <p className="text-sm text-text">
           Last Updated:{" "}
-          <span className="font-medium">{timeAgo(course.updatedAt)}</span>
+          <span className="font-medium">{timeAgo(course.updatedAt!)}</span>
         </p>
       </div>
 

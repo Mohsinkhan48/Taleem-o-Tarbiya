@@ -5,13 +5,11 @@ import Footer from "../Footer";
 import { FiBook } from "react-icons/fi";
 import Sidebar, { SidebarItem } from "../Sidebar";
 import { RxDashboard } from "react-icons/rx";
-import { MdHowToReg } from "react-icons/md";
 import Navbar from "../Navbar";
 
 function StudentLayout() {
   const sidebarItems: SidebarItem[] = [
     { label: "Dashboard", icon: RxDashboard, path: "dashboard" },
-    { label: "Enroll Course", icon: MdHowToReg, path: "create-course" },
     { label: "My Courses", icon: FiBook, path: "courses" },
   ];
   return (
@@ -19,7 +17,7 @@ function StudentLayout() {
       <Navbar />
       <div className="flex-1 flex flex-row min-h-screen">
         <Sidebar items={sidebarItems} brand="Student Panel" />
-        <div className="flex-1 overflow-auto p-4">
+        <div className="flex-1 overflow-auto">
           <Outlet />
         </div>
       </div>
