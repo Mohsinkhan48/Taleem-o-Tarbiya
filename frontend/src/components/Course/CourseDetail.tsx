@@ -100,7 +100,12 @@ const CourseDetail: React.FC<CourseDetailProps> = ({ course }) => {
         <h2 className="text-2xl font-semibold mb-2 text-text">
           What You Will Learn
         </h2>
-        <p className="text-text">{course.content}</p>
+        <div className="bg-card border border-card-border px-4 py-2 rounded-lg">
+          <div
+            className="text-text space-y-2 leading-relaxed"
+            dangerouslySetInnerHTML={{ __html: course.content }}
+          />
+        </div>
       </div>
 
       {/* Modules */}

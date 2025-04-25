@@ -29,7 +29,7 @@ const SelectInput = forwardRef<HTMLSelectElement, SelectInputProps>(
     ref
   ) => {
     let selectStyles =
-      "w-full bg-input-background rounded border border-input-border focus:ring-input-focus focus:outline-none focus:ring-2 transition duration-200 ";
+      "w-full cursor-pointer bg-input-background rounded border border-input-border focus:ring-input-focus focus:outline-none focus:ring-2 transition duration-200 ";
 
     if (size === "sm") selectStyles += "p-1 text-sm ";
     else if (size === "md") selectStyles += "p-2 text-base ";

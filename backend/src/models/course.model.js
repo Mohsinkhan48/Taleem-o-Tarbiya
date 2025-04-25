@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const CourseSchema = new mongoose.Schema(
   {
-    image: { type: String, required: true },
+    image: { type: String, required: false },
     title: { type: String, required: true, trim: true },
     description: { type: String, required: true },
     content: { type: String, required: true },

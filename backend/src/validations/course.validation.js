@@ -5,7 +5,7 @@ const { CART } = require("../constants");
 const courseValidation = {
   createCourse: {
     body: Joi.object({
-      image: Joi.string().required(),
+      image: Joi.string().optional(),
       title: Joi.string().trim().required(),
       description: Joi.string().required(),
       content: Joi.string().required(),

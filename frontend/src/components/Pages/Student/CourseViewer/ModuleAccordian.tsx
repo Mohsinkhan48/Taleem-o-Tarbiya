@@ -20,7 +20,11 @@ const ModuleAccordion: React.FC<Props> = ({ modules }) => {
       </div>
     ),
   }));
-
+  if (modules.length === 0) {
+    return <div className="bg-card px-6 py-4 border border-border rounded-xl">
+      No Modules for this course.
+    </div>
+  }
   return (
     <div className="lg:block sticky max-h-[calc(100vh-12rem)] overflow-y-auto border border-border rounded-xl">
       <Accordion items={accordionItems} />

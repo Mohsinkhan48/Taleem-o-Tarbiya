@@ -1,4 +1,6 @@
+// components/MultiSelectInput.tsx
 import React, { useState, useRef, useEffect } from "react";
+import { FaCheckSquare, FaRegSquare } from "react-icons/fa";
 
 interface Option {
   label: string;
@@ -38,12 +40,18 @@ const MultiSelectInput: React.FC<MultiSelectInputProps> = ({
     const remaining = selectedLabels.length - 3;
 
     return (
-      <>
-        {topThree.join(", ")}
+      <div className="flex flex-wrap gap-1">
+        {topThree.map((label, idx) => (
+          <span key={idx} className="bg-card text-text px-2 py-1 rounded-full text-xs font-medium">
+            {label}
+          </span>
+        ))}
         {remaining > 0 && (
-          <span className="text-sm text-secondary"> +{remaining} more</span>
+          <span className="bg-card px-2 py-1 rounded-full text-xs text-secondary font-medium">
+            +{remaining} more
+          </span>
         )}
-      </>
+      </div>
     );
   };
 
@@ -64,11 +72,12 @@ const MultiSelectInput: React.FC<MultiSelectInputProps> = ({
           {label}
         </label>
       )}
+
       <div
         onClick={() => setIsOpen((prev) => !prev)}
-        className="w-full bg-input-background border border-input-border rounded p-2 cursor-pointer text-sm flex justify-between items-center hover:border-input-focus transition duration-150"
+        className="w-full p-2 cursor-pointer text-md flex justify-between items-center bg-input-background rounded border border-input-border focus:ring-input-focus focus:outline-none focus:ring-2 transition duration-200"
       >
-        <span className="truncate">
+        <span className="truncate w-full">
           {selectedValues.length ? displaySelected() : "Select tags..."}
         </span>
         <svg
@@ -85,21 +94,27 @@ const MultiSelectInput: React.FC<MultiSelectInputProps> = ({
 
       {isOpen && (
         <div className="absolute z-10 w-full bg-background border border-card-border rounded mt-1 max-h-60 overflow-auto text-text">
-          {options.map((opt) => (
-            <label
-              key={opt.value}
-              className="flex items-center px-3 py-2 cursor-pointer"
-            >
-              <input
-                type="checkbox"
-                value={opt.value}
-                checked={selectedValues.includes(opt.value)}
-                onChange={() => toggleValue(opt.value)}
-                className="mr-2 accent-primary"
-              />
-              <span>{opt.label}</span>
-            </label>
-          ))}
+          {options.map((opt) => {
+            const checked = selectedValues.includes(opt.value);
+            return (
+              <label
+                key={opt.value}
+                className="flex items-center px-3 py-2 cursor-pointer"
+              >
+                <div
+                  onClick={() => toggleValue(opt.value)}
+                  className="mr-2"
+                >
+                  {checked ? (
+                    <FaCheckSquare size={18} className="text-primary" />
+                  ) : (
+                    <FaRegSquare size={18} className="text-gray-400" />
+                  )}
+                </div>
+                <span>{opt.label}</span>
+              </label>
+            );
+          })}
         </div>
       )}
     </div>
