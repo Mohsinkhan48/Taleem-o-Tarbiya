@@ -14,6 +14,7 @@ export interface Course {
   category: CourseCategory;
   tags: CourseTag[];
   isPaid: boolean;
+  isPublished: boolean;
   modules: Module[];
   ratings: number[];
   createdAt?: string;

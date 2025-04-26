@@ -38,6 +38,7 @@ const CourseSchema = new mongoose.Schema(
       },
     ],
     isPaid: { type: Boolean, default: false },
+    isPublished: { type: Boolean, default: false },
   },
   { timestamps: true }
 );

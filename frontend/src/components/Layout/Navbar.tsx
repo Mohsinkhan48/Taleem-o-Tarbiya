@@ -6,18 +6,19 @@ import { useDispatch, useSelector } from "react-redux";
 import { logoutUser } from "../../redux/slices/authSlice";
 import { useAuth } from "../../hooks/useAuth";
 import CartButton from "./Student/CartButton";
+import DropdownMenu from "../Reusable/DropdownMenu";
 
 const Navbar = () => {
   const [toggleMenu, setToggleMenu] = useState(false);
-  const [dropdownVisible, setDropdownVisible] = useState(false);
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const { user, isAuthenticated } = useAuth();
 
   const onLogout = () => dispatch(logoutUser());
   const { loading } = useSelector((state: RootState) => state.auth);
+
   const handleDashboardNavigation = () => {
-    switch (user?.role.name) {
+    switch (user?.role?.name) {
       case "admin":
         navigate("/admin/dashboard");
         break;
@@ -33,7 +34,7 @@ const Navbar = () => {
   };
 
   const renderButtons = () => {
-    if (user?.role.name === "student") {
+    if (user?.role?.name === "student") {
       return <CartButton />;
     }
     return null;
@@ -71,53 +72,57 @@ const Navbar = () => {
             <>
               {renderButtons()}
 
-              <div className="relative">
-                <div
-                  onClick={() => setDropdownVisible(!dropdownVisible)}
-                  className="cursor-pointer flex items-center space-x-2"
-                >
-                  <div className="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center text-white">
-                    <span className="text-xl font-bold">
-                      {user?.fullName?.charAt(0) || "U"}
-                    </span>
+              {/* User Dropdown */}
+              <DropdownMenu
+                position="left-down"
+                button={
+                  <div className="cursor-pointer flex items-center space-x-2">
+                    <div className="w-10 h-10 bg-card rounded-full flex items-center justify-center text-text">
+                      <span className="text-xl font-bold">
+                        {user?.fullName?.charAt(0) || "U"}
+                      </span>
+                    </div>
+                  </div>
+                }
+              >
+                <div className="bg-background border border-border rounded-md p-2">
+                  <div className="flex items-center space-x-3 px-4 py-2">
+                    <div className="w-12 h-12 bg-card rounded-full flex items-center justify-center text-text">
+                      <span className="text-xl font-bold">
+                        {user?.fullName?.charAt(0) || "U"}
+                      </span>
+                    </div>
+                    <div className="flex flex-col">
+                      <span className="font-semibold text-text">
+                        {user?.fullName}
+                      </span>
+                      <span className="text-sm text-secondary">
+                        {user?.email}
+                      </span>
+                    </div>
+                  </div>
+
+                  <hr className="my-2 border-border" />
+
+                  <div className="px-4 py-2 space-y-2">
+                    <Button
+                      onClick={handleDashboardNavigation}
+                      variant="primary"
+                      className="w-full"
+                    >
+                      Go to Dashboard
+                    </Button>
+                    <Button
+                      onClick={onLogout}
+                      variant="danger"
+                      isLoading={loading}
+                      className="w-full"
+                    >
+                      Logout
+                    </Button>
                   </div>
                 </div>
-                {dropdownVisible && (
-                  <div className="absolute top-12 right-0 bg-card shadow-lg rounded-md w-64 py-4 px-6 z-20">
-                    <div className="flex items-center space-x-3">
-                      <div className="w-12 h-12 bg-gray-300 rounded-full flex items-center justify-center text-white">
-                        <span className="text-xl font-bold">
-                          {user?.fullName?.charAt(0) || "U"}
-                        </span>
-                      </div>
-                      <div className="flex flex-col">
-                        <span className="font-semibold text-text">
-                          {user?.fullName}
-                        </span>
-                        <span className="text-sm text-gray-500">
-                          {user?.email}
-                        </span>
-                      </div>
-                    </div>
-                    <hr className="my-4 border-border" />
-                    <ul className="space-y-2">
-                      <li className="cursor-pointer hover:text-link">
-                        <Button
-                          onClick={handleDashboardNavigation}
-                          variant="primary"
-                        >
-                          Go to Dashboard
-                        </Button>
-                      </li>
-                      <li className="cursor-pointer hover:text-link">
-                        <Button onClick={onLogout} variant="danger" isLoading={loading}>
-                          Logout
-                        </Button>
-                      </li>
-                    </ul>
-                  </div>
-                )}
-              </div>
+              </DropdownMenu>
             </>
           ) : (
             <div className="flex space-x-2">
@@ -131,6 +136,7 @@ const Navbar = () => {
           )}
         </div>
 
+        {/* Mobile Menu Button */}
         <div className="md:hidden cursor-pointer">
           <button
             onClick={() => setToggleMenu(!toggleMenu)}

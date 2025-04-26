@@ -1,9 +1,9 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../redux/store";
-import CourseCard from "../../Course/CourseCard";
 import { fetchInstructorCourses } from "../../../redux/slices/getCoursesSlice";
 import { Loader } from "../../../assets/Loader";
+import TeacherCourseCard from "./TeacherCourseCard";
 
 const TeacherCourses = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -30,7 +30,7 @@ const TeacherCourses = () => {
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
         {allCourses &&
           allCourses.map((course) => (
-            <CourseCard course={course} key={course._id} />
+            <TeacherCourseCard course={course} key={course._id} />
           ))}
       </div>
     </div>
