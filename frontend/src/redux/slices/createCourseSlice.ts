@@ -1,10 +1,11 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { CourseService } from "../../service/courseService"; // This service should handle your API requests
 import { addToast } from "./toasterSlice"; // Optional, to show success/error toast notifications
+import { Course } from "../../types/course.types";
 
 // Define the Course state type
 interface CourseState {
-  course: object | null;
+  course: Course | null;
   loading: boolean;
   error: string | null;
   success: boolean;
@@ -20,7 +21,7 @@ const initialState: CourseState = {
 
 // Async thunk for creating a course
 export const createCourse = createAsyncThunk<
-  object, // Return type
+  Course, // Return type
   object, // Argument type (the course data)
   { rejectValue: string }
 >("create-course/create", async (courseData, { dispatch, rejectWithValue }) => {
@@ -36,7 +37,7 @@ export const createCourse = createAsyncThunk<
           position: "top-right",
         })
       );
-      return response.data;
+      return response.data.course;
     } else {
       dispatch(
         addToast({

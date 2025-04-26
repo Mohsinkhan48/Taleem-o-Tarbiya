@@ -23,6 +23,7 @@ app.use("/backend/api", routes);
 
 // ✅ Public files if any
 app.use(express.static(__dirname + "/public"));
+app.use("/uploads", express.static(__dirname + "/uploads"));
 
 // ✅ Error catcher
 app.use((error, req, res, next) => {

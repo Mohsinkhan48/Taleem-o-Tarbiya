@@ -6,6 +6,7 @@ const {
   catchAsync,
   getOptionalUserFromRequest,
 } = require("../utils");
+const { getThumbnailUploader } = require("../utils/multer.utils");
 
 const courseController = {
   createCourse: catchAsync(async (req, res) => {
@@ -13,6 +14,32 @@ const courseController = {
     if (!newCourse) return R4XX(res, 400, "Failed to create course");
 
     R2XX(res, "Course created successfully", 201, { course: newCourse });
+  }),
+  uploadThumbnail: catchAsync(async (req, res, next) => {
+    const { courseId } = req.params;
+    const teacherId = req.user;
+    if (!teacherId || !courseId) {
+      return R4XX(res, 400, "Missing teacherId or courseId in query");
+    }
+  
+    const upload = getThumbnailUploader(teacherId, courseId);
+    const uploadSingle = upload.single("thumbnail");
+  
+    uploadSingle(req, res, async (err) => {
+      if (err) return R4XX(res, 400, err.message);
+  
+      const relativeUrl = `/uploads/${teacherId}/${courseId}/${req.file.filename}`;
+  
+      const updatedCourse = await courseService.updateThumbnail(courseId, relativeUrl);
+  
+      if (!updatedCourse) {
+        return R4XX(res, 404, "Course not found");
+      }
+  
+      R2XX(res, "Thumbnail uploaded successfully", 200, {
+        thumbnailUrl: relativeUrl,
+      });
+    });
   }),
   getAllCourses: catchAsync(async (req, res) => {
     const filters = CourseFilters(req.query);

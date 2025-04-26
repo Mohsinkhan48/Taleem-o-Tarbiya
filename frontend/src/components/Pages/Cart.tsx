@@ -7,7 +7,8 @@ import RemoveFromCartButton from "../Cart/RemoveFromCartButton";
 import Button from "../Reusable/Button";
 import { useNavigate } from "react-router";
 import CheckoutButton from "./Stripe/CheckoutButton";
-import { STRIPE_PUBLISHABLE_KEY } from "../../constants/env.constants";
+import { BACKEND_URL } from "../../constants/env.constants";
+import ImageContainer from "../Reusable/ImageContainer";
 
 const Cart: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -23,7 +24,6 @@ const Cart: React.FC = () => {
   const handleClear = () => {
     dispatch(clearCart());
   };
-  console.log("Stripe pub key", STRIPE_PUBLISHABLE_KEY)
   const totalPrice = cart.reduce((total, item) => total + item.course.price, 0);
 
   return (
@@ -49,10 +49,11 @@ const Cart: React.FC = () => {
                 className="border border-card-border bg-card rounded-lg p-4 flex flex-col sm:flex-row gap-4 items-center justify-between"
               >
                 <div className="flex items-center gap-4 w-full sm:w-auto">
-                  <img
-                    src={item.course.image}
+                  <ImageContainer
+                    src={`${BACKEND_URL}${item.course.image}`}
                     alt={item.course.title}
-                    className="w-24 h-24 object-cover rounded-md border border-card-border"
+                    width="w-24"
+                    height="h-24"
                   />
                   <div>
                     <h3

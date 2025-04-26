@@ -31,7 +31,7 @@ const ExploreCourses = () => {
         </p>
 
         <div className="flex flex-col md:flex-row gap-4 md:gap-8">
-          <div className="w-full md:w-2/6">
+          <div className="w-full md:w-1/4">
             <FiltersSidebar
               onApply={(filters) =>
                 setFilters(
@@ -41,7 +41,7 @@ const ExploreCourses = () => {
             />
           </div>
 
-          <div className="w-full md:w-4/6">
+          <div className="w-full md:w-3/4">
             {loading ? (
               <div className="flex justify-center items-center h-32">
                 <Loader size={30} />

@@ -17,6 +17,7 @@ import {
 import Checkbox from "../../../Reusable/Checkbox";
 import ImageUpload from "../../../Reusable/ImageUpload";
 import RichTextEditor from "../../../Reusable/RichTextEditor";
+import { uploadThumbnail } from "../../../../redux/slices/uploadThumbnailSlice";
 
 const CreateCourseForm: React.FC = () => {
   interface CreateCourse {
@@ -82,10 +83,20 @@ const CreateCourseForm: React.FC = () => {
       content: value,
     }));
   };
+  const { loading } = useSelector(
+    (state: RootState) => state.createCourse
+  );
   const handleSubmit = async () => {
     const result = await dispatch(createCourse(course));
     if (createCourse.fulfilled.match(result)) {
+      const createdCourse = result.payload;
+      if (thumbnail && typeof thumbnail !== "string" && createdCourse?._id) {
+        await dispatch(
+          uploadThumbnail({ courseId: createdCourse?._id, file: thumbnail })
+        );
+      }
       setCourse(initialValues);
+      setThumbnail(undefined);
     } else if (createCourse.rejected.match(result)) {
       console.error("Error creating course:", result.payload);
     }
@@ -93,9 +104,7 @@ const CreateCourseForm: React.FC = () => {
 
   return (
     <Card className="rounded-lg p-8 m-8">
-      <h2 className="text-3xl font-bold mb-6 text-center">
-        Create New Course
-      </h2>
+      <h2 className="text-3xl font-bold mb-6 text-center">Create New Course</h2>
 
       <div className="flex flex-col lg:flex-row gap-8">
         <div className="flex-1">
@@ -183,7 +192,11 @@ const CreateCourseForm: React.FC = () => {
             />
           </div>
           <div className="mt-6">
-            <Button variant="primary" onClick={handleSubmit}>
+            <Button
+              variant="primary"
+              onClick={handleSubmit}
+              isLoading={loading}
+            >
               Submit Course
             </Button>
           </div>
@@ -194,7 +207,9 @@ const CreateCourseForm: React.FC = () => {
           <ImageUpload
             label="Course Thumbnail"
             name="image"
-            onChange={(file) => setThumbnail(file)}
+            onChange={(file) => {
+              setThumbnail(file);
+            }}
             value={thumbnail}
           />
         </div>

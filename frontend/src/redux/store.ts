@@ -11,6 +11,7 @@ import getStudentEnrolledCourseReducer from "./slices/getStudentEnrolledCourseSl
 import createCourseReducer from "./slices/createCourseSlice";
 import cartReducer from "./slices/CartSlice";
 import selectedChapterReducer from "./slices/selectedChapter";
+import uploadThumbnailReducer from "./slices/uploadThumbnailSlice";
 
 import {
   courseCategoryReducer,
@@ -34,6 +35,7 @@ const store = configureStore({
     createCourse: createCourseReducer,
     cart: cartReducer,
     selectedChapter: selectedChapterReducer,
+    uploadThumbnail: uploadThumbnailReducer,
     
     // ✅ New meta reducers
     courseCategories: courseCategoryReducer,

@@ -245,6 +245,9 @@ const courseService = {
 
     return enrollment.course;
   },
+  updateThumbnail: async (courseId, thumbnailPath) => {
+    return await Course.findByIdAndUpdate(courseId, { image: thumbnailPath }, { new: true });
+  }
 };
 
 module.exports = courseService;

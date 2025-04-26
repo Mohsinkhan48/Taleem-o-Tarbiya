@@ -3,6 +3,8 @@ import { useNavigate } from "react-router";
 import { FaPlayCircle } from "react-icons/fa";
 import { Course } from "../../types/course.types";
 import Card from "../Reusable/Card";
+import { BACKEND_URL } from "../../constants/env.constants";
+import ImageContainer from "../Reusable/ImageContainer";
 
 interface CourseCardProps {
   course: Course;
@@ -22,10 +24,13 @@ const StudentCourseCard: React.FC<CourseCardProps> = ({ course }) => {
       onClick={() => navigate(`/courses/${course._id}`)}
     >
       <div className="relative h-60 md:h-60 w-full">
-        <img
-          src={course.image}
+        <ImageContainer
+          src={`${BACKEND_URL}${course.image}`}
           alt={course.title}
-          className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+          width="w-full"
+          height="h-full"
+          border={false}
+          className="transition-transform duration-300 group-hover:scale-105"
         />
 
         <div
@@ -38,8 +43,12 @@ const StudentCourseCard: React.FC<CourseCardProps> = ({ course }) => {
 
       {/* Course Info */}
       <div className="p-4 text-text">
-        <h3 className="text-xl font-semibold text-primary mb-1">{course.title}</h3>
-        <p className="text-text text-sm mb-2 line-clamp-2">{course.description}</p>
+        <h3 className="text-xl font-semibold text-primary mb-1">
+          {course.title}
+        </h3>
+        <p className="text-text text-sm mb-2 line-clamp-2">
+          {course.description}
+        </p>
         <div className="flex justify-between text-sm text-text">
           <span>Level: {course.level.name}</span>
           <span>Duration: {course.duration}</span>
