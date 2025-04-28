@@ -20,6 +20,17 @@ const CourseDetails: React.FC<Props> = ({ course }) => {
           <span className="font-medium">{timeAgo(course.updatedAt!)}</span>
         </p>
       </div>
+      <div>
+        <h2 className="text-2xl font-semibold mb-2 text-text">
+          What You Will Learn
+        </h2>
+        <div className="bg-card border border-card-border px-4 py-2 rounded-lg">
+          <div
+            className="text-text space-y-2 leading-relaxed"
+            dangerouslySetInnerHTML={{ __html: course.content }}
+          />
+        </div>
+      </div>
     </div>
   );
 };

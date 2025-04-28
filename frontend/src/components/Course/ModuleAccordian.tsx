@@ -1,8 +1,8 @@
 // ModuleAccordion.tsx
 import React from "react";
-import { Module } from "../../../../types/course.types";
 import ChapterCard from "./ChapterCard";
-import Accordion from "../../../Reusable/Accordian";
+import Accordion from "../Reusable/Accordian";
+import { Module } from "../../types/course.types";
 
 interface Props {
   modules: Module[];
@@ -26,7 +26,7 @@ const ModuleAccordion: React.FC<Props> = ({ modules }) => {
     </div>
   }
   return (
-    <div className="lg:block sticky max-h-[calc(100vh-12rem)] overflow-y-auto border border-border rounded-xl">
+    <div className="border border-border rounded-xl">
       <Accordion items={accordionItems} />
     </div>
   );

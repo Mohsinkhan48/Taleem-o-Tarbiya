@@ -10,7 +10,6 @@ const StudentCourses = () => {
   const { data, loading } = useSelector(
     (state: RootState) => state.studentCourses
   );
-  console.log(data);
   useEffect(() => {
     dispatch(fetchStudentCourses());
   }, [dispatch]);

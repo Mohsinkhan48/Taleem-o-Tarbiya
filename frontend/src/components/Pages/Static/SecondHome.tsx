@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import OurPopularCourses from "../Course/OurPopularCourses";
-import { SERVER_URL } from "../../../constants/env.constants";
+import { BACKEND_URL } from "../../../constants/env.constants";
 import { AppDispatch, RootState } from "../../../redux/store";
 import { useAuth } from "../../../hooks/useAuth";
 import { fetchAllCourses } from "../../../redux/slices/getCoursesSlice";
@@ -80,7 +80,7 @@ const SecondHome = () => {
               >
                 {/* Course Image */}
                 <img
-                  src={`${SERVER_URL}${course.image}`}
+                  src={`${BACKEND_URL}${course.image}`}
                   alt={course.title}
                   className="w-full md:w-1/2 h-64 object-cover"
                 />

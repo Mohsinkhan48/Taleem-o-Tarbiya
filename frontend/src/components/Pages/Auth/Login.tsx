@@ -67,7 +67,7 @@ const Login: React.FC = () => {
             {t("login")}
           </Button>
           <Button variant="link" type="button" className="mt-3">
-            <Link to={"/register"}>{t("already_registered")}</Link>
+            <Link to={"/register"}>{t("dont_have_account")}</Link>
           </Button>
           <Button
             variant="link"

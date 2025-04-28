@@ -18,7 +18,6 @@ const ChapterCard: React.FC<Props> = ({ chapter }) => {
   const selectedChapter = useSelector(
     (state: RootState) => state.selectedChapter?.selectedChapter
   );  
-  console.log(selectedChapter)
   return (
     <div className={`px-6 py-4 space-y-4 ${selectedChapter?._id === chapter._id ? "bg-card" : ""}`}>
       {/* Chapter Title */}

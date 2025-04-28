@@ -22,13 +22,10 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
       onClick={handleOverlayClick}
     >
       <div
-        className="rounded-lg shadow-lg mx-auto relative text-text bg-background p-6 min-h-72"
+        className="rounded-lg shadow-lg mx-auto relative text-text bg-background p-6 max-h-[90vh] overflow-y-auto"
         onClick={(e) => e.stopPropagation()}
       >
-        <button
-          onClick={onClose}
-          className="absolute top-3 right-3 text-text"
-        >
+        <button onClick={onClose} className="absolute top-3 right-3 text-text">
           ✖
         </button>
         {children}

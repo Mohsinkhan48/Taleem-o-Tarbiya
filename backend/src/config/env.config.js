@@ -6,7 +6,6 @@ const envFiles = {
 };
 const env = process.env.NODE_ENV || "development";
 const path = envFiles[env]
-console.log(path)
 require("dotenv").config({ path: envFiles.development });
 const envVarsSchema = Joi.object()
   .keys({

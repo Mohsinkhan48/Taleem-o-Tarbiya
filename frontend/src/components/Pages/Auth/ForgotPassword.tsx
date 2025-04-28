@@ -39,7 +39,6 @@ const ForgotPassword: React.FC = () => {
   // Step 3: Submit New Password
   const handleResetPassword = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log(form)
     const result = await dispatch(resetPassword({email: form.email, newPassword: form.newPassword})).unwrap();
     if (result) navigate("/");
   };

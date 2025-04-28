@@ -2,11 +2,7 @@ const { Router } = require("express");
 const { courseValidation } = require("../validations");
 const { courseController } = require("../controllers");
 
-const {
-  validate,
-  isMember,
-  isAuth,
-} = require("../middlewares");
+const { validate, isMember, isAuth } = require("../middlewares");
 const hasRole = require("../middlewares/hasRole.middleware");
 const { ROLES } = require("../constants");
 
@@ -21,10 +17,25 @@ router.post(
   courseController.createCourse
 );
 
-router.get(
-  "/",
-  courseController.getAllCourses
+router.put(
+  "/update",
+  validate(courseValidation.updateCourse),
+  isAuth,
+  isMember,
+  hasRole([ROLES.TEACHER]),
+  courseController.updateCourse
 );
+
+router.post(
+  "/upload-thumbnail/:courseId",
+  validate(courseValidation.getCourseById),
+  isAuth,
+  isMember,
+  hasRole([ROLES.TEACHER]),
+  courseController.uploadThumbnail
+);
+
+router.get("/", courseController.getAllCourses);
 
 router.get(
   "/:courseId",
@@ -53,6 +64,6 @@ router.get(
   isMember,
   hasRole([ROLES.STUDENT]),
   courseController.getStudentEnrolledCourse
-)
+);
 
 module.exports = router;

@@ -31,7 +31,6 @@ const Register: React.FC = () => {
     e.preventDefault();
     dispatch(registerUser(form));
   };
-  console.log(form);
   return (
     <div className="flex items-center justify-center m-12">
       <Card className="p-4 rounded-lg w-full sm:w-3/4 md:w-2/3 lg:w-1/2 xl:w-1/3 2xl:w-1/4">
@@ -83,9 +82,9 @@ const Register: React.FC = () => {
             variant="primary"
           >
             {t("signup")}
-          </Button>
+          </Button>          
           <Button variant="link" type="button" className="mt-3">
-            <Link to={"/login"}>{t("dont_have_account")}</Link>
+            <Link to={"/login"}>{t("already_registered")}</Link>
           </Button>
           {error && <p className="text-red-500">{error}</p>}
         </form>
