@@ -19,7 +19,7 @@ const ImageContainer: React.FC<FlexibleImageProps> = ({
   className = "",
   rounded = true,
   border = true,
-  fallbackSrc = "../assets/placeholder.png", // <-- default fallback
+  fallbackSrc = "/src/assets/placeholder.png",
 }) => {
   const [imgSrc, setImgSrc] = useState(src);
 

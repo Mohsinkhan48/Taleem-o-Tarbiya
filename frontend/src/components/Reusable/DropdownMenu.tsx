@@ -6,7 +6,15 @@ interface DropdownMenuProps {
   buttonClassName?: string;
   menuClassName?: string;
   children: React.ReactNode;
-  position?: "right-down" | "left-down" | "left-up" | "right-up" | "up" | "down" | "left" | "right";
+  position?:
+    | "right-down"
+    | "left-down"
+    | "left-up"
+    | "right-up"
+    | "up"
+    | "down"
+    | "left"
+    | "right";
 }
 
 const DropdownMenu: React.FC<DropdownMenuProps> = ({
@@ -44,7 +52,7 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
       const scrollX = window.scrollX;
       let styles: React.CSSProperties = {
         position: "absolute",
-        zIndex: 9999,
+        zIndex: 30,
       };
 
       switch (position) {
@@ -66,18 +74,22 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
           break;
         case "up":
           styles.top = rect.top + scrollY - menuRect.height;
-          styles.left = rect.left + scrollX + rect.width / 2 - menuRect.width / 2;
+          styles.left =
+            rect.left + scrollX + rect.width / 2 - menuRect.width / 2;
           break;
         case "down":
           styles.top = rect.bottom + scrollY;
-          styles.left = rect.left + scrollX + rect.width / 2 - menuRect.width / 2;
+          styles.left =
+            rect.left + scrollX + rect.width / 2 - menuRect.width / 2;
           break;
         case "left":
-          styles.top = rect.top + scrollY + rect.height / 2 - menuRect.height / 2;
+          styles.top =
+            rect.top + scrollY + rect.height / 2 - menuRect.height / 2;
           styles.left = rect.left + scrollX - menuRect.width;
           break;
         case "right":
-          styles.top = rect.top + scrollY + rect.height / 2 - menuRect.height / 2;
+          styles.top =
+            rect.top + scrollY + rect.height / 2 - menuRect.height / 2;
           styles.left = rect.right + scrollX;
           break;
         default:
@@ -105,11 +117,7 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
 
       {open &&
         createPortal(
-          <div
-            ref={menuRef}
-            style={menuStyles}
-            className={`${menuClassName}`}
-          >
+          <div ref={menuRef} style={menuStyles} className={`${menuClassName}`}>
             <div>{children}</div>
           </div>,
           document.body

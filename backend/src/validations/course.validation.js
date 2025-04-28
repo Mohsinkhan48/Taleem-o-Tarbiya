@@ -68,6 +68,23 @@ const courseValidation = {
         .required(),
     }),
   },
+  updateCourse: {
+    body: Joi.object({
+      courseId: Joi.string().required().custom(objectId).messages({
+        "any.required": CART.COURSE_ID_REQUIRED,
+        "any.invalid": CART.INVALID_COURSEID,
+      }),
+      title: Joi.string().trim().required(),
+      description: Joi.string().required(),
+      content: Joi.string().required(),
+      duration: Joi.string().required(),
+      price: Joi.number().min(0).required(),
+      level: Joi.custom(objectId).required(),
+      category: Joi.custom(objectId).required(),
+      tags: Joi.array().items(Joi.custom(objectId)).min(0).required(),
+      isPaid: Joi.boolean().default(true),
+    }),
+  },
   getCourseById: {
     params: Joi.object({
       courseId: Joi.string().required().custom(objectId).messages({

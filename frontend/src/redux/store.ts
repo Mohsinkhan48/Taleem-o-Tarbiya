@@ -9,6 +9,7 @@ import getCoursesReducer from "./slices/getCoursesSlice";
 import getCourseByIdReducer from "./slices/getCourseByIdSlice";
 import getStudentEnrolledCourseReducer from "./slices/getStudentEnrolledCourseSlice";
 import createCourseReducer from "./slices/createCourseSlice";
+import updateCourseReducer from "./slices/createCourseSlice";
 import cartReducer from "./slices/CartSlice";
 import selectedChapterReducer from "./slices/selectedChapter";
 import uploadThumbnailReducer from "./slices/uploadThumbnailSlice";
@@ -33,6 +34,7 @@ const store = configureStore({
     course: getCourseByIdReducer,
     studentCourse: getStudentEnrolledCourseReducer,
     createCourse: createCourseReducer,
+    updateCourse: updateCourseReducer,
     cart: cartReducer,
     selectedChapter: selectedChapterReducer,
     uploadThumbnail: uploadThumbnailReducer,

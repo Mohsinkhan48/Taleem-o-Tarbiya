@@ -1,7 +1,6 @@
 import React from "react";
 import { Course } from "../../types/course.types";
 import RatingStars from "./RatingStars";
-import ModuleCard from "./ModuleCard";
 import Button from "../Reusable/Button";
 import CourseIncludes from "./CourseIncludes";
 import AddToCartButton from "../Cart/AddToCartButton";
@@ -9,6 +8,7 @@ import { timeAgo } from "../../utils/dateFormat";
 import TagList from "./TagList";
 import { BACKEND_URL } from "../../constants/env.constants";
 import ImageContainer from "../Reusable/ImageContainer";
+import ModuleAccordion from "./ModuleAccordian";
 
 interface CourseDetailProps {
   course: Course;
@@ -125,15 +125,7 @@ const CourseDetail: React.FC<CourseDetailProps> = ({ course }) => {
       {/* Modules */}
       <div>
         <h2 className="text-2xl font-semibold mb-4 text-text">Modules</h2>
-        <div className="bg-card border border-card-border rounded-lg">
-          {course.modules.length > 0 ? (
-            course.modules.map((module) => (
-              <ModuleCard key={module._id} module={module} />
-            ))
-          ) : (
-            <p className="p-4 text-text">No modules available.</p>
-          )}
-        </div>
+        <ModuleAccordion modules={course.modules} />
       </div>
 
       {/* Description */}

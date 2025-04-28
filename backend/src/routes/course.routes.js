@@ -17,6 +17,15 @@ router.post(
   courseController.createCourse
 );
 
+router.put(
+  "/update",
+  validate(courseValidation.updateCourse),
+  isAuth,
+  isMember,
+  hasRole([ROLES.TEACHER]),
+  courseController.updateCourse
+);
+
 router.post(
   "/upload-thumbnail/:courseId",
   validate(courseValidation.getCourseById),

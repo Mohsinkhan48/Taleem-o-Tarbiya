@@ -44,51 +44,53 @@ const courseService = {
       });
 
       // Step 2: Loop through modules and create them with the course reference
-      for (const moduleData of modules) {
-        const createdChapters = [];
-
-        // Step 3: Create Module and associate it with the course
-        const module = await Module.create({
-          title: moduleData.title,
-          course: course._id, // Add course reference here
-        });
-
-        // Step 4: Loop through chapters and create them
-        for (const chapterData of moduleData.chapters) {
-          let quiz = null;
-          let assignment = null;
-
-          // Step 5: Create Quiz (if exists)
-          if (chapterData.quiz) {
-            quiz = await Quiz.create(chapterData.quiz);
-          }
-
-          // Step 6: Create Assignment (if exists)
-          if (chapterData.assignment) {
-            assignment = await Assignment.create(chapterData.assignment);
-          }
-
-          // Step 7: Create Chapter and associate it with the created module
-          const chapter = await Chapter.create({
-            title: chapterData.title,
-            content: chapterData.content,
-            videoUrl: chapterData.videoUrl,
-            isPreview: chapterData.isPreview || false,
-            resources: chapterData.resources || [],
-            quiz: quiz?._id,
-            assignment: assignment?._id,
-            module: module._id, // Associate chapter with module
+      if (modules) {
+        for (const moduleData of modules) {
+          const createdChapters = [];
+  
+          // Step 3: Create Module and associate it with the course
+          const module = await Module.create({
+            title: moduleData.title,
+            course: course._id, // Add course reference here
           });
-
-          createdChapters.push(chapter._id);
+  
+          // Step 4: Loop through chapters and create them
+          for (const chapterData of moduleData.chapters) {
+            let quiz = null;
+            let assignment = null;
+  
+            // Step 5: Create Quiz (if exists)
+            if (chapterData.quiz) {
+              quiz = await Quiz.create(chapterData.quiz);
+            }
+  
+            // Step 6: Create Assignment (if exists)
+            if (chapterData.assignment) {
+              assignment = await Assignment.create(chapterData.assignment);
+            }
+  
+            // Step 7: Create Chapter and associate it with the created module
+            const chapter = await Chapter.create({
+              title: chapterData.title,
+              content: chapterData.content,
+              videoUrl: chapterData.videoUrl,
+              isPreview: chapterData.isPreview || false,
+              resources: chapterData.resources || [],
+              quiz: quiz?._id,
+              assignment: assignment?._id,
+              module: module._id, // Associate chapter with module
+            });
+  
+            createdChapters.push(chapter._id);
+          }
+  
+          // Step 8: After creating chapters, update the module with the chapters
+          await Module.findByIdAndUpdate(module._id, {
+            chapters: createdChapters,
+          });
+  
+          createdModules.push(module._id);
         }
-
-        // Step 8: After creating chapters, update the module with the chapters
-        await Module.findByIdAndUpdate(module._id, {
-          chapters: createdChapters,
-        });
-
-        createdModules.push(module._id);
       }
 
       // Step 9: Now update the Course with the created module references
@@ -98,9 +100,47 @@ const courseService = {
 
       return updatedCourse;
     } catch (error) {
-      console.error(error)
+      console.error(error);
       throw new Error("Failed to create course. Please try again later.");
     }
+  },
+  updateCourse: async (courseData) => {
+    const {
+      courseId,
+      image,
+      title,
+      description,
+      content,
+      duration,
+      price,
+      level,
+      category,
+      isPaid,
+      tags,
+    } = courseData;
+
+    const course = await Course.findByIdAndUpdate(
+      courseId,
+      {
+        image,
+        title,
+        description,
+        content,
+        duration,
+        price,
+        level,
+        category,
+        tags,
+        isPaid,
+      },
+      { new: true }
+    );
+
+    if (!course) {
+      throw new Error("Course not found");
+    }
+
+    return course;
   },
   getAllCourses: async (filters = {}) => {
     return await Course.find(filters)
@@ -246,8 +286,12 @@ const courseService = {
     return enrollment.course;
   },
   updateThumbnail: async (courseId, thumbnailPath) => {
-    return await Course.findByIdAndUpdate(courseId, { image: thumbnailPath }, { new: true });
-  }
+    return await Course.findByIdAndUpdate(
+      courseId,
+      { image: thumbnailPath },
+      { new: true }
+    );
+  },
 };
 
 module.exports = courseService;

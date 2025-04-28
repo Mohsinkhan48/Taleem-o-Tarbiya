@@ -23,7 +23,7 @@ const Accordion: React.FC<AccordionProps> = ({ items, defaultOpenIds = [] }) => 
   };
 
   return (
-    <div className="overflow-hidden bg-background">
+    <div className="overflow-hidden bg-background rounded-xl">
       {items.map(({ id, header, content }, index) => (
         <div key={id} className={`${index !== 0 ? "border-t border-border" : ""}`}>
           <button

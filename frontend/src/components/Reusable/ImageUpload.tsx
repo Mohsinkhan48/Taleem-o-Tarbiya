@@ -1,6 +1,7 @@
 // src/components/Reusable/ImageUpload.tsx
 import React, { useRef, useState, useEffect } from "react";
 import { ImCross } from "react-icons/im";
+import ImageContainer from "./ImageContainer";
 
 interface ImageUploadProps {
   label?: string;
@@ -33,6 +34,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
+      handleRemoveImage();
       onChange(file);
       const reader = new FileReader();
       reader.onloadend = () => setPreview(reader.result as string);
@@ -49,7 +51,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
   };
 
   return (
-    <div className={`flex flex-col gap-2 ${className}`}>
+    <div className={`flex flex-col gap-2 text-text ${className}`}>
       {label && <label className="font-medium">{label}</label>}
       <div
         className="relative bg-background border border-dashed border-card-border p-4 rounded-lg cursor-pointer"
@@ -57,10 +59,9 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
       >
         {preview ? (
           <>
-            <img
+            <ImageContainer
               src={preview}
               alt="Preview"
-              className="h-full object-cover rounded-md w-full"
             />
             <button
               type="button"
@@ -70,7 +71,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
                 handleRemoveImage();
               }}
             >
-              <ImCross size={14} className="text-error" />
+              <ImCross size={14} className="text-text" />
             </button>
           </>
         ) : (

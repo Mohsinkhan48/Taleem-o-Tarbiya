@@ -12,8 +12,12 @@ const courseController = {
   createCourse: catchAsync(async (req, res) => {
     const newCourse = await courseService.createCourse(req.body, req.user);
     if (!newCourse) return R4XX(res, 400, "Failed to create course");
-
     R2XX(res, "Course created successfully", 201, { course: newCourse });
+  }),
+  updateCourse: catchAsync(async (req, res) => {
+    const newCourse = await courseService.updateCourse(req.body);
+    if (!newCourse) return R4XX(res, 400, "Failed to update course");
+    R2XX(res, "Course updated successfully", 201, { course: newCourse });
   }),
   uploadThumbnail: catchAsync(async (req, res, next) => {
     const { courseId } = req.params;
@@ -82,7 +86,6 @@ const courseController = {
   getStudentEnrolledCourse: catchAsync(async (req, res) => {
     const { courseId } = req.params;
     const studentId  = req.user;
-    console.log(courseId)
     const course = await courseService.getStudentEnrolledCourse(studentId, courseId);
 
     if (!course) {
