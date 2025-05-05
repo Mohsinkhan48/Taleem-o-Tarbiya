@@ -42,7 +42,7 @@ const QuizForm: React.FC<Props> = ({ quiz = { title: '', questions: [] }, onChan
         onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange({ ...quiz, title: e.target.value })}
       />
 
-      {quiz.questions.map((q, index) => (
+      {quiz.questions && quiz.questions.map((q, index) => (
         <Card className='p-4 rounded-lg' key={index}>
           <Input
             label="Question"

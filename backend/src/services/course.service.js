@@ -117,8 +117,10 @@ const courseService = {
       category,
       isPaid,
       tags,
+      modules, // <-- accept modules here
     } = courseData;
-
+  
+    // Step 1: Update the course basic info
     const course = await Course.findByIdAndUpdate(
       courseId,
       {
@@ -135,13 +137,84 @@ const courseService = {
       },
       { new: true }
     );
-
+  
     if (!course) {
       throw new Error("Course not found");
     }
-
-    return course;
-  },
+  
+    // Optional: Clean up old modules (and their children)
+    const oldModules = await Module.find({ course: courseId });
+    for (const mod of oldModules) {
+      const chapters = await Chapter.find({ module: mod._id });
+  
+      for (const chap of chapters) {
+        if (chap.quiz) await Quiz.findByIdAndDelete(chap.quiz);
+        if (chap.assignment) await Assignment.findByIdAndDelete(chap.assignment);
+        await Chapter.findByIdAndDelete(chap._id);
+      }
+  
+      await Module.findByIdAndDelete(mod._id);
+    }
+  
+    const createdModules = [];
+  
+    if (modules && modules.length > 0) {
+      for (const moduleData of modules) {
+        const createdChapters = [];
+  
+        const module = await Module.create({
+          title: moduleData.title,
+          course: courseId,
+        });
+  
+        for (const chapterData of moduleData.chapters) {
+          let quiz = null;
+          let assignment = null;
+  
+          if (chapterData.quiz) {
+            quiz = await Quiz.create(chapterData.quiz);
+          }
+  
+          if (chapterData.assignment) {
+            assignment = await Assignment.create(chapterData.assignment);
+          }
+  
+          const chapter = await Chapter.create({
+            title: chapterData.title,
+            content: chapterData.content,
+            videoUrl: chapterData.videoUrl,
+            isPreview: chapterData.isPreview || false,
+            resources: chapterData.resources || [],
+            quiz: quiz?._id,
+            assignment: assignment?._id,
+            module: module._id,
+          });
+  
+          createdChapters.push(chapter._id);
+        }
+  
+        await Module.findByIdAndUpdate(module._id, {
+          chapters: createdChapters,
+        });
+  
+        createdModules.push(module._id);
+      }
+  
+      await Course.findByIdAndUpdate(courseId, {
+        modules: createdModules,
+      });
+    }
+  
+    return await Course.findById(courseId)
+      .populate("modules")
+      .populate({
+        path: "modules",
+        populate: {
+          path: "chapters",
+          populate: ["quiz", "assignment"],
+        },
+      });
+  },  
   getAllCourses: async (filters = {}) => {
     return await Course.find(filters)
       .populate("instructor", "_id fullName email")
