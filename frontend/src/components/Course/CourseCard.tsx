@@ -17,32 +17,45 @@ const CourseCard: React.FC<CourseCardProps> = ({ course, onClick }) => {
 
   return (
     <Card
-      className="overflow-hidden rounded-lg p-4 flex flex-col md:flex-row items-center gap-4 h-64"
+      className="overflow-hidden rounded-lg p-0 flex flex-col h-full"
       onClick={onClick}
     >
-      {/* Course details */}
-      <div className="flex-1 px-2 py-2 h-full flex flex-col justify-between">
+      {/* Image at the top */}
+      <div className="w-full h-48">
+        <ImageContainer
+          src={`${BACKEND_URL}${course.image}`}
+          alt={course.title}
+          className="w-full h-full object-cover"
+        />
+      </div>
+
+      {/* Content below image */}
+      <div className="p-4 flex flex-col justify-between flex-1">
         <div>
-          <h2 className="text-primary font-bold text-xl mb-2">
+          <h2 className="text-primary font-bold text-xl mb-1">
             {course.title}
           </h2>
           <p className="text-text text-base mb-2 line-clamp-2">
             {course.description}
           </p>
         </div>
-        <div className="flex justify-between">
+
+        <div className="mt-auto flex justify-between items-end">
           <div>
-          <p className="text-sm text-text">Level: {course.level.name}</p>
-          <p className="text-sm text-text">Duration: {course.duration}</p>
-          <p className="text-sm font-semibold text-secondary mb-2">
-            Price: ${course.price}
-          </p>
+            <p className="text-sm text-text">Level: {course.level.name}</p>
+            <p className="text-sm text-text">Duration: {course.duration}</p>
+            <p className="text-sm font-semibold text-secondary">
+              Price: ${course.price}
+            </p>
           </div>
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-2 items-end">
             <Button
               variant="primary"
               className="text-sm"
-              onClick={() => navigate(`/course/${course._id}`)}
+              onClick={(e) => {
+                e.stopPropagation();
+                navigate(`/course/${course._id}`);
+              }}
             >
               View Details
             </Button>
@@ -50,13 +63,6 @@ const CourseCard: React.FC<CourseCardProps> = ({ course, onClick }) => {
           </div>
         </div>
       </div>
-      {/* Image Container */}
-      <ImageContainer
-        src={`${BACKEND_URL}${course.image}`}
-        alt={course.title}
-        width="w-1/3"
-        height="h-full"
-      />
     </Card>
   );
 };

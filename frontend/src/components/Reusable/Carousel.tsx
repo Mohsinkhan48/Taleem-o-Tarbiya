@@ -41,7 +41,7 @@ const Carousel: React.FC<CarouselProps> = ({ children, itemsToShow = 3 }) => {
         className="flex overflow-x-auto no-scrollbar space-x-4 scroll-smooth px-10 py-4"
       >
         {React.Children.map(children, (child) => (
-          <div className="flex-shrink-0 w-[calc(100%/1.1)] sm:w-[calc(100%/2.2)] md:w-[calc(100%/2.9)]">
+          <div className="flex-shrink-0 w-[calc(100%/1.1)] sm:w-[calc(100%/2.2)] md:w-[calc(100%/3.5)]">
             {child}
           </div>
         ))}

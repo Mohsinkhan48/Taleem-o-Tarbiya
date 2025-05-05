@@ -72,19 +72,20 @@ const Register: React.FC = () => {
           }
           required
         />
-
-        <Button
-          type="submit"
-          disabled={loading}
-          isLoading={loading}
-          variant="primary"
-        >
-          {t("signup")}
-        </Button>
-        <Button variant="link" type="button" className="mt-3">
-          <Link to={"/login"}>{t("already_registered")}</Link>
-        </Button>
-        {error && <p className="text-red-500">{error}</p>}
+        <div className="flex flex-col items-center justify-center">
+          <Button
+            type="submit"
+            disabled={loading}
+            isLoading={loading}
+            variant="primary"
+          >
+            {t("signup")}
+          </Button>
+          <Button variant="link" type="button" className="mt-3">
+            <Link to={"/login"}>{t("already_registered")}</Link>
+          </Button>
+          {error && <p className="text-red-500">{error}</p>}
+        </div>
       </form>
     </AuthLayout>
   );

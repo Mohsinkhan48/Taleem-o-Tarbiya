@@ -47,7 +47,7 @@ const ExploreCourses = () => {
                 <Loader size={30} />
               </div>
             ) : (
-              <div className="flex flex-col gap-6">
+              <div className="grid grid-cols-3 gap-6">
                 {allCourses.length > 0 ? (
                   allCourses.map((course) => (
                     <CourseCard key={course._id} course={course} />
