@@ -18,8 +18,10 @@ const ChapterCard: React.FC<Props> = ({ chapter }) => {
       <h4 className="text-lg font-semibold text-text flex items-center gap-2">
         <BsPlay className="text-accent" /> {chapter.title}
       </h4>
-      <p className="text-text mt-1">{chapter.content}</p>
-    </div>
+      <div
+              className="text-text space-y-2 leading-relaxed"
+              dangerouslySetInnerHTML={{ __html: chapter.content }}
+            />    </div>
 
     <div className="mt-2 flex flex-col sm:flex-row sm:items-center gap-4 text-sm text-text">
       {chapter.quiz ? (

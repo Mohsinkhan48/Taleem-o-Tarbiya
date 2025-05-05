@@ -27,6 +27,7 @@ import Cancel from "./components/Pages/Stripe/Cancel";
 import StudentCourses from "./components/Pages/Student/StudentCourses";
 import CourseViewer from "./components/Pages/Student/CourseViewer/CourseViewer";
 import EditCourse from "./components/Pages/Teacher/EditCourse/EditCourse";
+import EditModule from "./components/Pages/Teacher/EditCourse/EditModule/EditModule";
 
 function App() {
   return (
@@ -66,6 +67,7 @@ function App() {
           <Route path="dashboard" element={<TeacherDashboard />} />
           <Route path="create-course" element={<CreateCourseForm />} />
           <Route path="courses/:id" element={<EditCourse />} />
+          <Route path="courses/:id/modules" element={<EditModule />} />
           <Route path="courses" element={<TeacherCourses />} />
         </Route>
 
