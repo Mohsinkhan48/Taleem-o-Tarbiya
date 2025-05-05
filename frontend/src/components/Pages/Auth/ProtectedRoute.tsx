@@ -8,7 +8,7 @@ const ProtectedRoute = ({ children, allowedRoles }: { children: JSX.Element, all
     return <Navigate to="/login" />;
   }
 
-  if (user && !allowedRoles.includes(user.role.name)) {
+  if (user && !allowedRoles.includes(user.role?.name!)) {
     return <Navigate to="/unauthorized" />;
   }
 
