@@ -13,7 +13,6 @@ const ChapterCard = ({ chapter }: { chapter: Chapter }) => {
           <span>{chapter.title}</span>
           <DropdownMenu
             button={<BiEdit size={18} />}
-            position="left-down"
           >
             <div className="bg-card border border-card-border rounded-md p-1 text-text">
               <DropdownItem onClick={() => console.log("Edit Chapter")}>

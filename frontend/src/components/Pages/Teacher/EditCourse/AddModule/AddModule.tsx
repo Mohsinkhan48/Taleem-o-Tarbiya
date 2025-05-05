@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Module, Chapter } from "../../../../../types/course.types";
 import Input from "../../../../Reusable/Input";
 import Button from "../../../../Reusable/Button";
-import ChapterForm from "./ChapterForm";
+import ChapterForm from "../EditModule/ChapterForm";
 
 const AddModule = () => {
   const [module, setModule] = useState<Module>({

@@ -9,11 +9,11 @@ import Card from "../../../Reusable/Card";
 import ImageUpload from "../../../Reusable/ImageUpload";
 import { uploadThumbnail } from "../../../../redux/slices/uploadThumbnailSlice";
 
-import CourseDetailsForm, { CourseDetails } from "./CourseDetailsForm"; // imported the new reusable form
+import CourseDetailsForm, { CourseDetails } from "./CourseDetailsForm";
+import ModuleForm from "./ModuleForm";
+import { Module } from "../../../../types/course.types";
 
 const CreateCourseForm: React.FC = () => {
-
-
   const initialValues: CourseDetails = {
     title: "",
     description: "",
@@ -24,15 +24,12 @@ const CreateCourseForm: React.FC = () => {
     category: "",
     tags: [],
     isPaid: false,
-    modules: []
+    modules: [],
   };
 
   const [course, setCourse] = useState<CourseDetails>(initialValues);
   const [thumbnail, setThumbnail] = useState<File | string | undefined>();
   const dispatch = useDispatch<AppDispatch>();
-
-
-
   const { loading } = useSelector((state: RootState) => state.createCourse);
 
   const handleChange = (
@@ -53,6 +50,34 @@ const CreateCourseForm: React.FC = () => {
     setCourse((prev) => ({
       ...prev,
       content: value,
+    }));
+  };
+
+  const updateModule = (index: number, updatedModule: Module) => {
+    const updatedModules = [...course.modules];
+    updatedModules[index] = updatedModule;
+    setCourse((prev) => ({
+      ...prev,
+      modules: updatedModules,
+    }));
+  };
+
+  const addModule = () => {
+    setCourse((prev) => ({
+      ...prev,
+      modules: [
+        ...prev.modules,
+        { title: "", chapters: [] },
+      ],
+    }));
+  };
+
+  const removeModule = (index: number) => {
+    const updatedModules = [...course.modules];
+    updatedModules.splice(index, 1);
+    setCourse((prev) => ({
+      ...prev,
+      modules: updatedModules,
     }));
   };
 
@@ -85,6 +110,23 @@ const CreateCourseForm: React.FC = () => {
             handleChangeContent={handleChangeContent}
             setTags={(tags) => setCourse((prev) => ({ ...prev, tags }))}
           />
+
+          {/* Modules */}
+          <h3 className="text-xl font-semibold mt-8 mb-4">Modules</h3>
+          {course.modules.map((module, index) => (
+            <ModuleForm
+              key={index}
+              module={module}
+              onChange={(updatedModule) => updateModule(index, updatedModule)}
+              onRemove={() => removeModule(index)}
+            />
+          ))}
+
+          <div className="mb-6">
+            <Button variant="secondary" onClick={addModule}>
+              + Add Module
+            </Button>
+          </div>
 
           <div className="mt-6">
             <Button

@@ -5,10 +5,10 @@ import Card from "../../../../Reusable/Card";
 import Input from "../../../../Reusable/Input";
 import Modal from "../../../../Reusable/Modal";
 import QuizForm from "./QuizForm";
-import AssignmentForm from "./AssignmentForm";
 import { Assignment, Chapter, Quiz } from "../../../../../types/course.types";
 import RichTextEditor from "../../../../Reusable/RichTextEditor";
 import Checkbox from "../../../../Reusable/Checkbox";
+import AssignmentForm from "./AssignmentForm";
 
 interface Props {
   chapter: Chapter;
@@ -75,7 +75,7 @@ const ChapterForm: React.FC<Props> = ({ chapter, onChange, onRemove }) => {
         {chapter.quiz ? (
           <Card className="p-2 flex-1 mr-2">
             <div className="text-sm font-medium">{chapter.quiz.title || "Untitled Quiz"}</div>
-            <div className="text-xs text-text">{chapter.quiz.questions.length} Questions</div>
+            <div className="text-xs text-text">{chapter.quiz.questions && chapter.quiz.questions.length} Questions</div>
           </Card>
         ) : (
           <div className="flex-1 mr-2 text-text text-sm italic">

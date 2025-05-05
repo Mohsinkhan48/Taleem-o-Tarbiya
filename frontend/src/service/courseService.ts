@@ -12,6 +12,9 @@ export const CourseService = {
   updateCourse: (courseData: object) => {
     return apiClient.put(`${SERVER_URL}course/update`, courseData);
   },
+  addChapterToModule: (moduleId: string, chapter: object) => {
+    return apiClient.put(`${SERVER_URL}course/addChapterToModule`, {moduleId, chapter});
+  },
   uploadCourseThumbnail: (courseId: string, file: File) => {
     const formData = new FormData();
     formData.append("thumbnail", file);

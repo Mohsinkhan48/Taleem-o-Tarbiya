@@ -26,6 +26,15 @@ router.put(
   courseController.updateCourse
 );
 
+router.put(
+  "/addChapterToModule",
+  validate(courseValidation.addChapterToModule),
+  isAuth,
+  isMember,
+  hasRole([ROLES.TEACHER]),
+  courseController.addChapterToModule
+);
+
 router.post(
   "/upload-thumbnail/:courseId",
   validate(courseValidation.getCourseById),

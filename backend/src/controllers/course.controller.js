@@ -2,10 +2,7 @@ const { ROLES } = require("../constants");
 const { CourseFilters } = require("../filters/course.filters");
 const { R2XX, R4XX } = require("../Responses");
 const { courseService } = require("../services");
-const {
-  catchAsync,
-  getOptionalUserFromRequest,
-} = require("../utils");
+const { catchAsync, getOptionalUserFromRequest } = require("../utils");
 const { getThumbnailUploader } = require("../utils/multer.utils");
 
 const courseController = {
@@ -19,27 +16,36 @@ const courseController = {
     if (!newCourse) return R4XX(res, 400, "Failed to update course");
     R2XX(res, "Course updated successfully", 201, { course: newCourse });
   }),
+  addChapterToModule: catchAsync(async (req, res) => {
+    const { moduleId, chapter } = req.body;
+    const newModule = await courseService.addChapterToModule(moduleId, chapter);
+    if (!newModule) return R4XX(res, 400, "Failed to update module");
+    R2XX(res, "Module updated successfully", 201, { module: newModule });
+  }),
   uploadThumbnail: catchAsync(async (req, res, next) => {
     const { courseId } = req.params;
     const teacherId = req.user;
     if (!teacherId || !courseId) {
       return R4XX(res, 400, "Missing teacherId or courseId in query");
     }
-  
+
     const upload = getThumbnailUploader(teacherId, courseId);
     const uploadSingle = upload.single("thumbnail");
-  
+
     uploadSingle(req, res, async (err) => {
       if (err) return R4XX(res, 400, err.message);
-  
+
       const relativeUrl = `/uploads/${teacherId}/${courseId}/${req.file.filename}`;
-  
-      const updatedCourse = await courseService.updateThumbnail(courseId, relativeUrl);
-  
+
+      const updatedCourse = await courseService.updateThumbnail(
+        courseId,
+        relativeUrl
+      );
+
       if (!updatedCourse) {
         return R4XX(res, 404, "Course not found");
       }
-  
+
       R2XX(res, "Thumbnail uploaded successfully", 200, {
         thumbnailUrl: relativeUrl,
       });
@@ -85,14 +91,17 @@ const courseController = {
   }),
   getStudentEnrolledCourse: catchAsync(async (req, res) => {
     const { courseId } = req.params;
-    const studentId  = req.user;
-    const course = await courseService.getStudentEnrolledCourse(studentId, courseId);
+    const studentId = req.user;
+    const course = await courseService.getStudentEnrolledCourse(
+      studentId,
+      courseId
+    );
 
     if (!course) {
       return R4XX(res, 404, "Course not found");
     }
     R2XX(res, "Fetched course successfully", 200, { course });
   }),
-}
+};
 
 module.exports = courseController;

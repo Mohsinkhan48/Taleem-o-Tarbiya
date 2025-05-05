@@ -47,28 +47,28 @@ const courseService = {
       if (modules) {
         for (const moduleData of modules) {
           const createdChapters = [];
-  
+
           // Step 3: Create Module and associate it with the course
           const module = await Module.create({
             title: moduleData.title,
             course: course._id, // Add course reference here
           });
-  
+
           // Step 4: Loop through chapters and create them
           for (const chapterData of moduleData.chapters) {
             let quiz = null;
             let assignment = null;
-  
+
             // Step 5: Create Quiz (if exists)
             if (chapterData.quiz) {
               quiz = await Quiz.create(chapterData.quiz);
             }
-  
+
             // Step 6: Create Assignment (if exists)
             if (chapterData.assignment) {
               assignment = await Assignment.create(chapterData.assignment);
             }
-  
+
             // Step 7: Create Chapter and associate it with the created module
             const chapter = await Chapter.create({
               title: chapterData.title,
@@ -80,15 +80,15 @@ const courseService = {
               assignment: assignment?._id,
               module: module._id, // Associate chapter with module
             });
-  
+
             createdChapters.push(chapter._id);
           }
-  
+
           // Step 8: After creating chapters, update the module with the chapters
           await Module.findByIdAndUpdate(module._id, {
             chapters: createdChapters,
           });
-  
+
           createdModules.push(module._id);
         }
       }
@@ -291,6 +291,37 @@ const courseService = {
       { image: thumbnailPath },
       { new: true }
     );
+  },
+  addChapterToModule: async (moduleId, chapterData) => {
+    let quiz = null;
+    if (chapterData.quiz) {
+      quiz = await Quiz.create(chapterData.quiz);
+    }
+
+    // Step 2: Create assignment if present
+    let assignment = null;
+    if (chapterData.assignment) {
+      assignment = await Assignment.create(chapterData.assignment);
+    }
+
+    // Step 3: Create the chapter
+    const chapter = await Chapter.create({
+      title: chapterData.title,
+      content: chapterData.content,
+      videoUrl: chapterData.videoUrl,
+      isPreview: chapterData.isPreview || false,
+      resources: chapterData.resources || [],
+      quiz: quiz?._id,
+      assignment: assignment?._id,
+      module: moduleId,
+    });
+
+    // Step 4: Update the module to include this new chapter
+    await Module.findByIdAndUpdate(moduleId, {
+      $push: { chapters: chapter._id },
+    });
+
+    return chapter;
   },
 };
 

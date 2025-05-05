@@ -3,7 +3,7 @@ import React from 'react';
 import Card from '../../../../Reusable/Card';
 import Input from '../../../../Reusable/Input';
 import Button from '../../../../Reusable/Button';
-import ChapterForm from './ChapterForm';
+import ChapterForm from '../EditModule/ChapterForm';
 import { Chapter, Module } from '../../../../../types/course.types';
 
 interface Props {
