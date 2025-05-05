@@ -35,7 +35,7 @@ const OurPopularCourses: React.FC<OurPopularCoursesProps> = ({
         </p>
 
         {allCourses && allCourses.length > 0 ? (
-          <Carousel itemsToShow={3}>
+          <Carousel itemsToShow={4}>
             {allCourses.map((course: Course) => (
               <CourseCard key={course._id} course={course} />
             ))}

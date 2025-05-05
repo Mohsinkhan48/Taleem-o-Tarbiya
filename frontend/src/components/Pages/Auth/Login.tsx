@@ -56,25 +56,27 @@ const Login: React.FC = () => {
           }
           required
         />
-        <Button
-          type="submit"
-          disabled={loading}
-          isLoading={loading}
-          variant="primary"
-        >
-          {t("login")}
-        </Button>
-        <Button variant="link" type="button" className="mt-3">
-          <Link to={"/register"}>{t("dont_have_account")}</Link>
-        </Button>
-        <Button
-          variant="link"
-          type="button"
-          className="mt-3"
-          onClick={onForgotPasswordClick}
-        >
-          <span>{t("forgot_password?")}</span>
-        </Button>
+        <div className="flex flex-col items-center justify-center">
+          <Button
+            type="submit"
+            disabled={loading}
+            isLoading={loading}
+            variant="primary"
+          >
+            {t("login")}
+          </Button>
+          <Button variant="link" type="button" className="mt-3">
+            <Link to={"/register"}>{t("dont_have_account")}</Link>
+          </Button>
+          <Button
+            variant="link"
+            type="button"
+            className="mt-3"
+            onClick={onForgotPasswordClick}
+          >
+            <span>{t("forgot_password?")}</span>
+          </Button>
+        </div>
         {error && <p className="text-red-500">{error}</p>}
       </form>
     </AuthLayout>

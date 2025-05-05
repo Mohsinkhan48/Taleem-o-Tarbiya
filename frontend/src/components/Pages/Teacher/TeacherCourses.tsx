@@ -27,7 +27,7 @@ const TeacherCourses = () => {
     setModal(true);
   };
   return (
-    <div>
+    <div className="p-6">
       <h2 className="text-text text-3xl font-bold mb-6 text-center">
         My Courses
       </h2>

@@ -22,39 +22,53 @@ const TeacherCourseCard: React.FC<TeacherCourseCardProps> = ({
 
   return (
     <Card
-      className="overflow-hidden rounded-lg p-4 flex flex-col md:flex-row items-center gap-4 h-64"
+      className="overflow-hidden rounded-lg flex flex-col items-center gap-2 h-full w-full shadow-lg hover:shadow-xl transition-shadow duration-300"
       onClick={onClick}
     >
-      {/* Course Details */}
-      <div className="flex-1 px-2 py-2 h-full flex flex-col justify-between">
-        <div className="flex justify-between items-start">
-          <h2 className="text-primary font-bold text-xl mb-2">
-            {course.title}
-          </h2>
-        </div>
+      {/* Image at the top */}
+      <div className="w-full h-48 rounded-t-lg overflow-hidden">
+        <ImageContainer
+          src={`${BACKEND_URL}${course.image}`}
+          alt={course.title}
+          width="w-full"
+          height="h-full"
+          className="object-cover"
+        />
+      </div>
 
+      {/* Course Details */}
+      <div className="flex-1 w-full flex flex-col justify-between px-4 py-2">
+        <h2 className="text-primary font-bold text-2xl mb-2 line-clamp-1">
+          {course.title}
+        </h2>
+        
         <p className="text-text text-base mb-2 line-clamp-2">
           {course.description}
         </p>
-        <p className="text-sm text-text">Level: {course.level.name}</p>
-        <p className="text-sm text-text">Duration: {course.duration}</p>
-        <div className="flex justify-between">
+
+        <div className="flex justify-between items-center mb-2">
+          <p className="text-sm text-text">Level: {course.level.name}</p>
+          <p className="text-sm text-text">Duration: {course.duration}</p>
+        </div>
+
+        <div className="flex justify-between items-center">
           <div>
             <p className="text-sm font-semibold text-secondary mb-2">
               Price: ${course.price}
             </p>
             <p
               className={`text-sm font-semibold ${
-                course.isPublished ? "text-green-500" : "text-yellow-500"
+                course.isPublished ? "text-success" : "text-warning"
               }`}
             >
               {course.isPublished ? "Published" : "Draft"}
             </p>
           </div>
+
           {/* Dropdown Actions */}
           <DropdownMenu
             button={
-              <div className="flex items-center gap-2 px-3 py-2 bg-card border border-card-border rounded-md">
+              <div className="flex items-center gap-2 px-4 py-2 bg-card border border-card-border rounded-md cursor-pointer hover:bg-card-hover">
                 Manage
               </div>
             }
@@ -62,20 +76,20 @@ const TeacherCourseCard: React.FC<TeacherCourseCardProps> = ({
             <div className="bg-card border border-card-border rounded-md p-1">
               <DropdownItem
                 onClick={() => navigate(`/teacher/courses/${course._id}`)}
-                className="text-text"
+                className="text-text hover:text-primary"
               >
                 Edit Course
               </DropdownItem>
               <DropdownItem
                 onClick={() => navigate(`/course/${course._id}`)}
-                className="text-text"
+                className="text-text hover:text-primary"
               >
                 View as Student
               </DropdownItem>
               {!course.isPublished && (
                 <DropdownItem
                   onClick={() => onTogglePublish?.(course._id)}
-                  className="text-text"
+                  className="text-text hover:text-primary"
                 >
                   Publish
                 </DropdownItem>
@@ -84,14 +98,6 @@ const TeacherCourseCard: React.FC<TeacherCourseCardProps> = ({
           </DropdownMenu>
         </div>
       </div>
-
-      {/* Image Container */}
-      <ImageContainer
-        src={`${BACKEND_URL}${course.image}`}
-        alt={course.title}
-        width="w-1/3"
-        height="h-full"
-      />
     </Card>
   );
 };
