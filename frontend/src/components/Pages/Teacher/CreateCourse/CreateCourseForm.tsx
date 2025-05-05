@@ -1,19 +1,30 @@
 // CreateCourseForm.tsx
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../../redux/store";
 import { createCourse } from "../../../../redux/slices/createCourseSlice";
+import { updateCourse } from "../../../../redux/slices/updateCourseSlice"; // import your update action
+import { fetchCourseById } from "../../../../redux/slices/getCourseByIdSlice";
+import { useNavigate, useParams } from "react-router";
 
 import Button from "../../../Reusable/Button";
 import Card from "../../../Reusable/Card";
 import ImageUpload from "../../../Reusable/ImageUpload";
-import { uploadThumbnail } from "../../../../redux/slices/uploadThumbnailSlice";
-
 import CourseDetailsForm, { CourseDetails } from "./CourseDetailsForm";
 import ModuleForm from "./ModuleForm";
 import { Module } from "../../../../types/course.types";
+import { uploadThumbnail } from "../../../../redux/slices/uploadThumbnailSlice";
 
 const CreateCourseForm: React.FC = () => {
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const dispatch = useDispatch<AppDispatch>();
+
+  const { singleCourse } = useSelector(
+    (state: RootState) => state.course
+  );
+  const { loading: submitting } = useSelector((state: RootState) => state.createCourse);
+
   const initialValues: CourseDetails = {
     title: "",
     description: "",
@@ -29,17 +40,41 @@ const CreateCourseForm: React.FC = () => {
 
   const [course, setCourse] = useState<CourseDetails>(initialValues);
   const [thumbnail, setThumbnail] = useState<File | string | undefined>();
-  const dispatch = useDispatch<AppDispatch>();
-  const { loading } = useSelector((state: RootState) => state.createCourse);
+
+  // Fetch course if id is provided
+  useEffect(() => {
+    if (id) dispatch(fetchCourseById(id));
+  }, [id]);
+
+  // Populate form with existing course
+  useEffect(() => {
+    if (id && singleCourse) {
+      const transformed: CourseDetails = {
+        title: singleCourse.title,
+        description: singleCourse.description,
+        content: singleCourse.content,
+        duration: singleCourse.duration,
+        price: singleCourse.price,
+        level: singleCourse.level._id,
+        category: singleCourse.category._id,
+        tags: singleCourse.tags.map((tag)=> tag._id),
+        isPaid: singleCourse.isPaid,
+        modules: singleCourse.modules,
+      };
+  
+      setCourse(transformed);
+      setThumbnail(singleCourse.image);
+    }
+  }, [id, singleCourse]);
+  
 
   const handleChange = (
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-    >
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => {
-    const target = e.target as HTMLInputElement;
+    const target = e.target;
     const { name, value, type } = target;
-    const checked = type === "checkbox" ? target.checked : undefined;
+    const checked = type === "checkbox" ? (target as HTMLInputElement).checked : undefined;
+
     setCourse((prev) => ({
       ...prev,
       [name]: type === "checkbox" ? checked : value,
@@ -65,10 +100,7 @@ const CreateCourseForm: React.FC = () => {
   const addModule = () => {
     setCourse((prev) => ({
       ...prev,
-      modules: [
-        ...prev.modules,
-        { title: "", chapters: [] },
-      ],
+      modules: [...prev.modules, { title: "", chapters: [] }],
     }));
   };
 
@@ -82,27 +114,33 @@ const CreateCourseForm: React.FC = () => {
   };
 
   const handleSubmit = async () => {
-    const result = await dispatch(createCourse(course));
-    if (createCourse.fulfilled.match(result)) {
-      const createdCourse = result.payload;
-      if (thumbnail && typeof thumbnail !== "string" && createdCourse?._id) {
-        await dispatch(
-          uploadThumbnail({ courseId: createdCourse?._id, file: thumbnail })
-        );
+    const action = id
+      ? updateCourse({ ...course, courseId: id }) // assuming updateCourse accepts an object with id and updated course
+      : createCourse(course);
+
+    const result = await dispatch(action);
+
+    if ((id && updateCourse.fulfilled.match(result)) || (!id && createCourse.fulfilled.match(result))) {
+      const courseId = result.payload._id;
+
+      if (thumbnail && typeof thumbnail !== "string") {
+        await dispatch(uploadThumbnail({ courseId, file: thumbnail }));
       }
-      setCourse(initialValues);
-      setThumbnail(undefined);
-    } else if (createCourse.rejected.match(result)) {
-      console.error("Error creating course:", result.payload);
+
+      navigate("/courses"); // or wherever you'd like to go after save
+    } else {
+      console.error("Error saving course:", result.payload);
     }
   };
 
   return (
     <Card className="rounded-lg p-8 m-8">
-      <h2 className="text-3xl font-bold mb-6 text-center">Create New Course</h2>
+      <h2 className="text-3xl font-bold mb-6 text-center">
+        {id ? "Update Course" : "Create New Course"}
+      </h2>
 
       <div className="flex flex-col lg:flex-row gap-8">
-        {/* Left side: Course Details */}
+        {/* Left side */}
         <div className="flex-1">
           <CourseDetailsForm
             course={course}
@@ -111,7 +149,6 @@ const CreateCourseForm: React.FC = () => {
             setTags={(tags) => setCourse((prev) => ({ ...prev, tags }))}
           />
 
-          {/* Modules */}
           <h3 className="text-xl font-semibold mt-8 mb-4">Modules</h3>
           {course.modules.map((module, index) => (
             <ModuleForm
@@ -129,17 +166,13 @@ const CreateCourseForm: React.FC = () => {
           </div>
 
           <div className="mt-6">
-            <Button
-              variant="primary"
-              onClick={handleSubmit}
-              isLoading={loading}
-            >
-              Submit Course
+            <Button variant="primary" onClick={handleSubmit} isLoading={submitting}>
+              {id ? "Update Course" : "Submit Course"}
             </Button>
           </div>
         </div>
 
-        {/* Right side: Thumbnail Upload */}
+        {/* Right side */}
         <div className="w-full lg:w-[300px]">
           <ImageUpload
             label="Course Thumbnail"
