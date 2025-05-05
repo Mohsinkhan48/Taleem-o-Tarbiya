@@ -5,6 +5,7 @@ import { AppDispatch, RootState } from "../../../../../redux/store";
 import { fetchCourseById } from "../../../../../redux/slices/getCourseByIdSlice";
 import { Loader } from "../../../../../assets/Loader";
 import ModuleCard from "./ModuleCard";
+import Button from "../../../../Reusable/Button";
 
 const EditModule: React.FC = () => {
   const { id } = useParams();
@@ -35,6 +36,7 @@ const EditModule: React.FC = () => {
             <ModuleCard module={module}/>
           )
         })}
+        <Button variant="primary">Add Module</Button>
       </div>
     </div>
   );

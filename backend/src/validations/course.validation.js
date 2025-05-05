@@ -135,6 +135,52 @@ const courseValidation = {
         .min(0)
     }),
   },
+  addChapterToModule: {
+    body: Joi.object({
+      moduleId: Joi.string().required().custom(objectId).messages({
+        "any.required": "Module ID is required",
+        "any.invalid": "Invalid Module ID",
+      }),
+      chapter: Joi.object({
+        title: Joi.string().required(),
+        content: Joi.string().required(),
+        videoUrl: Joi.string().uri().optional(),
+        isPreview: Joi.boolean().default(false),
+        resources: Joi.array()
+          .items(
+            Joi.object({
+              name: Joi.string().required(),
+              url: Joi.string().uri().required(),
+            })
+          )
+          .optional(),
+        quiz: Joi.object({
+          title: Joi.string().required(),
+          questions: Joi.array()
+            .items(
+              Joi.object({
+                question: Joi.string().required(),
+                options: Joi.array()
+                  .items(Joi.string().required())
+                  .min(2)
+                  .required(),
+                correctAnswer: Joi.string().required(),
+              })
+            )
+            .min(1)
+            .required(),
+        }).optional(),
+        assignment: Joi.object({
+          title: Joi.string().required(),
+          description: Joi.string().required(),
+          dueDate: Joi.date().iso().required(),
+          submissionType: Joi.string()
+            .valid("file", "text", "link")
+            .required(),
+        }).optional(),
+      }).required(),
+    }),
+  },
   getCourseById: {
     params: Joi.object({
       courseId: Joi.string().required().custom(objectId).messages({
