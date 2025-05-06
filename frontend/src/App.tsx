@@ -66,6 +66,7 @@ function App() {
         >
           <Route path="dashboard" element={<TeacherDashboard />} />
           <Route path="create-course/:id?" element={<CreateCourseForm />} />
+          <Route path="edit-course/:id?" element={<CreateCourseForm />} />
           <Route path="courses/:id" element={<EditCourse />} />
           <Route path="courses/:id/modules" element={<EditModule />} />
           <Route path="courses" element={<TeacherCourses />} />

@@ -3,10 +3,10 @@ import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
 import images from '../../../utils/images';
 
 const FAQ = () => {
-  const [openIndex, setOpenIndex] = useState<Number>(0);
+  const [openIndex, setOpenIndex] = useState<number | null>(null);
 
-  const toggleAnswer = (index: Number) => {
-    setOpenIndex(openIndex === index ? 0 : index);
+  const toggleAnswer = (index: number) => {
+    setOpenIndex(openIndex === index ? null : index);
   };
 
   const faqData = [
@@ -40,45 +40,47 @@ const FAQ = () => {
   return (
     <section className="bg-card py-24">
       <div className="container mx-auto px-6">
-        <h2 className="text-4xl font-bold text-primary mb-8 text-center animate-fade-up">
+        {/* Header */}
+        <h2 className="text-4xl font-bold text-primary mb-16 text-center animate-fade-up">
           Frequently Asked Questions
         </h2>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-          {/* Left Section: Image */}
-          <div className="flex flex-col h-full">
+        {/* Layout */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
+          {/* FAQ Image */}
+          <div className="lg:col-span-5 flex items-center justify-center">
             <img
               src={images.FAQS}
               alt="FAQs"
-              className="w-full h-full object-cover rounded-lg shadow-xl transform transition duration-500 hover:scale-105 animate-fade-up"
+              className="w-full max-w-md rounded-xl shadow-xl transform transition hover:scale-105"
             />
           </div>
 
-          {/* Right Section: FAQ List */}
-          <div className="flex flex-col h-full space-y-6">
+          {/* FAQ Accordion */}
+          <div className="lg:col-span-7 space-y-6">
             {faqData.map((faq, index) => (
               <div
                 key={index}
-                className="bg-card rounded-lg shadow-lg overflow-hidden transform transition duration-300 hover:scale-105 animate-fade-up"
+                className="bg-input-background border border-border rounded-xl overflow-hidden shadow-md transition hover:shadow-lg"
               >
-                <div
+                <button
                   onClick={() => toggleAnswer(index)}
-                  className="flex justify-between items-center p-6 cursor-pointer hover:bg-input-background transition duration-300"
+                  className="w-full flex items-center justify-between p-5 text-left focus:outline-none transition duration-300 hover:bg-card"
                 >
-                  <h3 className="text-xl font-semibold text-text">{faq.question}</h3>
-                  <span>
-                    {openIndex === index ? (
-                      <FaChevronUp className="text-secondary text-2xl" />
-                    ) : (
-                      <FaChevronDown className="text-secondary text-2xl" />
-                    )}
-                  </span>
+                  <span className="text-lg font-semibold text-text">{faq.question}</span>
+                  {openIndex === index ? (
+                    <FaChevronUp className="text-secondary text-xl transition-transform duration-300 rotate-180" />
+                  ) : (
+                    <FaChevronDown className="text-secondary text-xl transition-transform duration-300" />
+                  )}
+                </button>
+                <div
+                  className={`text-text text-base transition-all duration-300 ease-in-out ${
+                    openIndex === index ? 'max-h-screen opacity-100 px-5 pb-4 ' : 'max-h-0 opacity-0 overflow-hidden'
+                  }`}
+                >
+                  {faq.answer}
                 </div>
-                {openIndex === index && (
-                  <div className="bg-input-background p-6 text-text text-lg border-t border-border">
-                    <p>{faq.answer}</p>
-                  </div>
-                )}
               </div>
             ))}
           </div>

@@ -30,7 +30,7 @@ const StudentCourseCard: React.FC<CourseCardProps> = ({ course }) => {
           width="w-full"
           height="h-full"
           border={false}
-          className="transition-transform duration-300 group-hover:scale-105"
+          className="object-cover transition-transform duration-300 group-hover:scale-105"
         />
 
         <div

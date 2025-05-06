@@ -75,7 +75,7 @@ const TeacherCourseCard: React.FC<TeacherCourseCardProps> = ({
           >
             <div className="bg-card border border-card-border rounded-md p-1">
               <DropdownItem
-                onClick={() => navigate(`/teacher/courses/${course._id}`)}
+                onClick={() => navigate(`/teacher/edit-course/${course._id}`)}
                 className="text-text hover:text-primary"
               >
                 Edit Course

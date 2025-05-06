@@ -274,6 +274,35 @@ const courseService = {
         },
       });
   },
+  getInstructorCourseById: async (courseId) => {
+    return await Course.findById(courseId)
+      .populate([
+        {
+          path: "instructor",
+          select: "_id fullName email",
+        },
+        {
+          path: "tags",
+        },
+        {
+          path: "category",
+        },
+        {
+          path: "level",
+        },
+        {
+          path: "modules",
+          populate: {
+            path: "chapters",
+            populate: [
+              { path: "resources" },
+              { path: "quiz" },
+              { path: "assignment" },
+            ],
+          },
+        },
+      ]);
+  },  
   getCoursesByInstructorId: async (instructorId) => {
     return await Course.find({ instructor: instructorId }).populate(
       "instructor",
