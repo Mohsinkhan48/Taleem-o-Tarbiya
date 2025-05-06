@@ -13,10 +13,10 @@ const LanguageChooser = () => {
   };
 
   return (
-    <div className="fixed bottom-16 right-4 z-50">
+    <div className="fixed bottom-16 right-4 z-50 ">
       <button
         onClick={toggleDropdown}
-        className="px-3 py-2 text-sm font-medium rounded-full border border-border bg-button-primary shadow-lg hover:bg-button-hover-primary transition"
+        className="px-3 py-2 text-sm font-medium rounded-full border border-border text-button-text bg-button-primary shadow-lg hover:bg-button-hover-primary transition"
       >
         {language.toUpperCase()}
       </button>
@@ -26,9 +26,9 @@ const LanguageChooser = () => {
           {languages.map((lang) => (
             <button
               key={lang}
-              className={`block w-full text-left px-2 py-1 text-sm rounded-md transition ${
+              className={`block w-full text-left px-2 py-1 text-sm rounded-md transition text-text ${
                 language === lang
-                  ? "bg-button-hover-primary text-white"
+                  ? "bg-button-hover-primary"
                   : "hover:bg-button-hover-primary"
               }`}
               onClick={() => selectLanguage(lang)}

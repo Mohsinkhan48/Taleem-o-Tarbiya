@@ -3,7 +3,7 @@ import { Outlet } from "react-router";
 import ThemeChooser from "../../ThemeChooser";
 import LanguageChooser from "../../LanguageChooser";
 import Footer from "../Footer";
-import { FiBook, FiUsers, FiPlus } from "react-icons/fi";
+import { FiBook, FiPlus } from "react-icons/fi";
 import Sidebar, { SidebarItem } from "../Sidebar";
 import { RxDashboard } from "react-icons/rx";
 import Navbar from "../Navbar";
@@ -13,7 +13,6 @@ function TeacherLayout() {
     { label: "Dashboard", icon: RxDashboard, path: "dashboard" },
     { label: "Create Course", icon: FiPlus, path: "create-course" },
     { label: "My Courses", icon: FiBook, path: "courses" },
-    { label: "Students", icon: FiUsers, path: "students" },
   ];
 
   return (

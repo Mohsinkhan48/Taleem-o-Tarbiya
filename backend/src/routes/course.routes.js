@@ -53,6 +53,15 @@ router.get(
 );
 
 router.get(
+  "/instructor/courses/:courseId",
+  isAuth,
+  isMember,
+  hasRole([ROLES.TEACHER]),
+  validate(courseValidation.getCourseById),
+  courseController.getInstructorCourseById
+);
+
+router.get(
   "/instructor/courses",
   isAuth,
   isMember,

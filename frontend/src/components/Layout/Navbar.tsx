@@ -41,7 +41,7 @@ const Navbar = () => {
   };
 
   return (
-    <header className="bg-navbar-background shadow-md relative z-50">
+    <header className="bg-navbar-background shadow-md relative z-10">
       <div className="px-4 py-2 flex justify-between items-center">
         <Link to="/">
           <h1 className="text-2xl font-bold text-navbar-text">Taleem-o-Tarbiya</h1>

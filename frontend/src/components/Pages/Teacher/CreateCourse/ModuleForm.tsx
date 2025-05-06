@@ -1,6 +1,5 @@
-// components/ModuleForm.tsx
 import React from 'react';
-import Card from '../../../Reusable/Card';
+import CollapsibleCard from '../../../Reusable/CollapsibleCard';
 import Input from '../../../Reusable/Input';
 import Button from '../../../Reusable/Button';
 import ChapterForm from './ChapterForm';
@@ -36,7 +35,7 @@ const ModuleForm: React.FC<Props> = ({ module, onChange, onRemove }) => {
   };
 
   return (
-    <Card className="p-4 rounded-lg mb-4">
+    <CollapsibleCard title={`Module: ${module.title || 'Untitled Module'}`}>
       <Input
         label="Module Title"
         value={module.title}
@@ -52,11 +51,11 @@ const ModuleForm: React.FC<Props> = ({ module, onChange, onRemove }) => {
         />
       ))}
 
-      <Card className="p-4 rounded-lg flex items-center gap-2 mt-2">
+      <div className="flex items-center gap-2">
         <Button onClick={addChapter} variant="secondary">+ Add Chapter</Button>
         <Button onClick={onRemove} variant="danger">Remove Module</Button>
-      </Card>
-    </Card>
+      </div>
+    </CollapsibleCard>
   );
 };
 

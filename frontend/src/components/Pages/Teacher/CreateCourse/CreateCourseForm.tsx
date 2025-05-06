@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../../redux/store";
 import { createCourse } from "../../../../redux/slices/createCourseSlice";
 import { updateCourse } from "../../../../redux/slices/updateCourseSlice"; // import your update action
-import { fetchCourseById } from "../../../../redux/slices/getCourseByIdSlice";
 import { useNavigate, useParams } from "react-router";
 
 import Button from "../../../Reusable/Button";
@@ -14,16 +13,23 @@ import CourseDetailsForm, { CourseDetails } from "./CourseDetailsForm";
 import ModuleForm from "./ModuleForm";
 import { Module } from "../../../../types/course.types";
 import { uploadThumbnail } from "../../../../redux/slices/uploadThumbnailSlice";
+import { fetchInstructoryCourseById } from "../../../../redux/slices/getInstructorCourseByIdSlice";
+import { Loader } from "../../../../assets/Loader";
 
 const CreateCourseForm: React.FC = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
 
-  const { singleCourse } = useSelector(
-    (state: RootState) => state.course
+  const { instructorCourse, loading: getting } = useSelector(
+    (state: RootState) => state.instructorCourse
   );
-  const { loading: submitting } = useSelector((state: RootState) => state.createCourse);
+  const { loading: submitting } = useSelector(
+    (state: RootState) => state.createCourse
+  );
+  const { loading: updating } = useSelector(
+    (state: RootState) => state.updateCourse
+  );
 
   const initialValues: CourseDetails = {
     title: "",
@@ -43,37 +49,69 @@ const CreateCourseForm: React.FC = () => {
 
   // Fetch course if id is provided
   useEffect(() => {
-    if (id) dispatch(fetchCourseById(id));
+    if (id) dispatch(fetchInstructoryCourseById(id));
   }, [id]);
 
   // Populate form with existing course
   useEffect(() => {
-    if (id && singleCourse) {
+    if (id && instructorCourse) {
       const transformed: CourseDetails = {
-        title: singleCourse.title,
-        description: singleCourse.description,
-        content: singleCourse.content,
-        duration: singleCourse.duration,
-        price: singleCourse.price,
-        level: singleCourse.level._id,
-        category: singleCourse.category._id,
-        tags: singleCourse.tags.map((tag)=> tag._id),
-        isPaid: singleCourse.isPaid,
-        modules: singleCourse.modules,
+        title: instructorCourse.title,
+        description: instructorCourse.description,
+        content: instructorCourse.content,
+        duration: instructorCourse.duration,
+        price: instructorCourse.price,
+        level: instructorCourse.level._id,
+        category: instructorCourse.category._id,
+        tags: instructorCourse.tags.map((tag) => tag._id),
+        isPaid: instructorCourse.isPaid,
+        modules: instructorCourse.modules.map((module) => ({
+          title: module.title,
+          chapters: module.chapters.map((chapter) => ({
+            title: chapter.title,
+            content: chapter.content,
+            videoUrl: chapter.videoUrl,
+            isPreview: chapter.isPreview,
+            resources: chapter.resources?.map((res) => ({
+              name: res.name,
+              url: res.url,
+            })),
+            quiz: chapter.quiz
+              ? {
+                  title: chapter.quiz.title,
+                  questions: chapter.quiz.questions.map((q) => ({
+                    question: q.question,
+                    options: q.options,
+                    correctAnswer: q.correctAnswer,
+                  })),
+                }
+              : undefined,
+            assignment: chapter.assignment
+              ? {
+                  title: chapter.assignment.title,
+                  description: chapter.assignment.description,
+                  dueDate: chapter.assignment.dueDate,
+                  submissionType: chapter.assignment.submissionType,
+                }
+              : undefined,
+          })),
+        })),
       };
-  
+
       setCourse(transformed);
-      setThumbnail(singleCourse.image);
+      setThumbnail(instructorCourse.image);
     }
-  }, [id, singleCourse]);
-  
+  }, [id, instructorCourse]);
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
   ) => {
     const target = e.target;
     const { name, value, type } = target;
-    const checked = type === "checkbox" ? (target as HTMLInputElement).checked : undefined;
+    const checked =
+      type === "checkbox" ? (target as HTMLInputElement).checked : undefined;
 
     setCourse((prev) => ({
       ...prev,
@@ -115,24 +153,33 @@ const CreateCourseForm: React.FC = () => {
 
   const handleSubmit = async () => {
     const action = id
-      ? updateCourse({ ...course, courseId: id }) // assuming updateCourse accepts an object with id and updated course
+      ? updateCourse({ ...course, courseId: id })
       : createCourse(course);
 
     const result = await dispatch(action);
 
-    if ((id && updateCourse.fulfilled.match(result)) || (!id && createCourse.fulfilled.match(result))) {
+    if (
+      (id && updateCourse.fulfilled.match(result)) ||
+      (!id && createCourse.fulfilled.match(result))
+    ) {
       const courseId = result.payload._id;
 
       if (thumbnail && typeof thumbnail !== "string") {
         await dispatch(uploadThumbnail({ courseId, file: thumbnail }));
       }
 
-      navigate("/courses"); // or wherever you'd like to go after save
+      navigate("/teacher/courses"); // or wherever you'd like to go after save
     } else {
       console.error("Error saving course:", result.payload);
     }
   };
-
+  if (getting) {
+    return (
+      <div className="flex justify-center items-center mt-20">
+        <Loader size={30} />
+      </div>
+    );
+  }
   return (
     <Card className="rounded-lg p-8 m-8">
       <h2 className="text-3xl font-bold mb-6 text-center">
@@ -166,7 +213,11 @@ const CreateCourseForm: React.FC = () => {
           </div>
 
           <div className="mt-6">
-            <Button variant="primary" onClick={handleSubmit} isLoading={submitting}>
+            <Button
+              variant="primary"
+              onClick={handleSubmit}
+              isLoading={submitting || updating}
+            >
               {id ? "Update Course" : "Submit Course"}
             </Button>
           </div>

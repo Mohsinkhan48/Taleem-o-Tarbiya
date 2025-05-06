@@ -1,6 +1,5 @@
-// components/ChapterForm.tsx
 import React from 'react';
-import Card from '../../../Reusable/Card';
+import CollapsibleCard from '../../../Reusable/CollapsibleCard';
 import Input from '../../../Reusable/Input';
 import Button from '../../../Reusable/Button';
 import QuizForm from './QuizForm';
@@ -18,7 +17,7 @@ const ChapterForm: React.FC<Props> = ({ chapter, onChange, onRemove }) => {
   const updateAssignment = (assignment: Assignment) => onChange({ ...chapter, assignment });
 
   return (
-    <Card className="p-4 rounded-lg mb-3">
+    <CollapsibleCard title={`Chapter: ${chapter.title || 'Untitled Chapter'}`}>
       <Input
         label="Chapter Title"
         value={chapter.title}
@@ -48,7 +47,7 @@ const ChapterForm: React.FC<Props> = ({ chapter, onChange, onRemove }) => {
       <AssignmentForm assignment={chapter.assignment} onChange={updateAssignment} />
 
       <Button onClick={onRemove} variant="danger" className="mt-2">Remove Chapter</Button>
-    </Card>
+    </CollapsibleCard>
   );
 };
 

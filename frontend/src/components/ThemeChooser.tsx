@@ -16,7 +16,7 @@ const ThemeChooser = () => {
     <div className="fixed bottom-4 right-4 z-50">
       <button
         onClick={toggleDropdown}
-        className="px-3 py-2 text-sm font-medium rounded-full border border-border bg-button-primary shadow-lg hover:bg-button-hover-primary transition"
+        className="px-3 py-2 text-sm font-medium rounded-full border border-border text-button-text bg-button-primary shadow-lg hover:bg-button-hover-primary transition"
       >
         {theme.charAt(0).toUpperCase() + theme.slice(1)}
       </button>
@@ -26,9 +26,9 @@ const ThemeChooser = () => {
           {themes.map((t) => (
             <button
               key={t}
-              className={`block w-full text-left px-2 py-1 text-sm rounded-md transition ${
+              className={`block w-full text-left px-2 py-1 text-sm rounded-md transition text-text ${
                 theme === t
-                  ? "bg-button-hover-primary text-white"
+                  ? "bg-button-hover-primary"
                   : "hover:bg-button-hover-primary"
               }`}
               onClick={() => selectTheme(t)}

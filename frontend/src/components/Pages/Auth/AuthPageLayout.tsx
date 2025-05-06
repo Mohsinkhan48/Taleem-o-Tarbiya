@@ -17,7 +17,7 @@ const AuthLayout: React.FC<AuthLayoutProps> = ({ title, subtitle, children }) =>
   }, [children, title]);
 
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center">
+    <div className="mt-10 bg-background flex items-center justify-center">
       <div
         className={`w-full max-w-5xl bg-card border border-card-border shadow-2xl rounded-2xl overflow-hidden grid grid-cols-1 md:grid-cols-2 transform transition-all duration-1000 ${
           animate ? "opacity-100 translate-x-0" : "opacity-0 translate-x-10"
