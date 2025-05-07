@@ -28,6 +28,8 @@ import StudentCourses from "./components/Pages/Student/StudentCourses";
 import CourseViewer from "./components/Pages/Student/CourseViewer/CourseViewer";
 import EditCourse from "./components/Pages/Teacher/EditCourse/EditCourse";
 import EditModule from "./components/Pages/Teacher/EditCourse/EditModule/EditModule";
+import CourseUploadPage from "./components/Pages/Teacher/CreateCourse/LectureUploadTemporary";
+import ManageLectures from "./components/Pages/Teacher/ManageLectures/ManageLectures";
 
 function App() {
   return (
@@ -70,6 +72,8 @@ function App() {
           <Route path="courses/:id" element={<EditCourse />} />
           <Route path="courses/:id/modules" element={<EditModule />} />
           <Route path="courses" element={<TeacherCourses />} />
+          <Route path="lecture-upload" element={<CourseUploadPage />} />
+          <Route path="manage-lectures/:id" element={<ManageLectures />} />
         </Route>
 
         <Route

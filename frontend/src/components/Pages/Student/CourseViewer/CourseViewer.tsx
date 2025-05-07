@@ -49,7 +49,7 @@ const CourseViewer: React.FC = () => {
   return (
     <div className="flex bg-background min-h-screen text-text gap-4 py-10 pl-10 pr-3">
       <main className="flex-1 space-y-6 overflow-y-auto">
-        {selectedChapter && <VideoPlayer videoUrl={selectedChapter.videoUrl} />}
+        {selectedChapter && <VideoPlayer videoUrl={selectedChapter?.lecture?.videoUrl!} lectureId="123" initialWatchedTime={0} />}
         <CourseDetails course={course} />
         <InstructorCard instructor={course.instructor} />
       </main>

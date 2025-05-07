@@ -70,7 +70,7 @@ const CreateCourseForm: React.FC = () => {
           chapters: module.chapters.map((chapter) => ({
             title: chapter.title,
             content: chapter.content,
-            videoUrl: chapter.videoUrl,
+            lecture: chapter.lecture,
             isPreview: chapter.isPreview,
             resources: chapter.resources?.map((res) => ({
               name: res.name,

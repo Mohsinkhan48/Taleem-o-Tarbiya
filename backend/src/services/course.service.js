@@ -73,9 +73,9 @@ const courseService = {
             const chapter = await Chapter.create({
               title: chapterData.title,
               content: chapterData.content,
-              videoUrl: chapterData.videoUrl,
+              lecture: chapterData?.lecture,
               isPreview: chapterData.isPreview || false,
-              resources: chapterData.resources || [],
+              resources: Data.resources || [],
               quiz: quiz?._id,
               assignment: assignment?._id,
               module: module._id, // Associate chapter with module
@@ -182,7 +182,7 @@ const courseService = {
           const chapter = await Chapter.create({
             title: chapterData.title,
             content: chapterData.content,
-            videoUrl: chapterData.videoUrl,
+            lecture: chapterData?.lecture,
             isPreview: chapterData.isPreview || false,
             resources: chapterData.resources || [],
             quiz: quiz?._id,
@@ -298,6 +298,7 @@ const courseService = {
               { path: "resources" },
               { path: "quiz" },
               { path: "assignment" },
+              { path: "lecture" },
             ],
           },
         },
@@ -374,6 +375,7 @@ const courseService = {
             path: "chapters",
             populate: [
               { path: "resources" },
+              { path: "lecture" },
               { path: "quiz" },
               { path: "assignment" },
             ],
@@ -410,7 +412,7 @@ const courseService = {
     const chapter = await Chapter.create({
       title: chapterData.title,
       content: chapterData.content,
-      videoUrl: chapterData.videoUrl,
+      lecture: chapterData?.lecture,
       isPreview: chapterData.isPreview || false,
       resources: chapterData.resources || [],
       quiz: quiz?._id,

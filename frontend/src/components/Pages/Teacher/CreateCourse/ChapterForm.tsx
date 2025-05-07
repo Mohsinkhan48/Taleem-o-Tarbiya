@@ -28,11 +28,6 @@ const ChapterForm: React.FC<Props> = ({ chapter, onChange, onRemove }) => {
         value={chapter.content}
         onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange({ ...chapter, content: e.target.value })}
       />
-      <Input
-        label="Video URL"
-        value={chapter.videoUrl}
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange({ ...chapter, videoUrl: e.target.value })}
-      />
       <div className="flex items-center mt-2">
         <input
           type="checkbox"

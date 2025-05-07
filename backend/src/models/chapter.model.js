@@ -4,7 +4,10 @@ const ChapterSchema = new mongoose.Schema(
   {
     title: { type: String, required: true },
     content: { type: String, required: true },
-    videoUrl: { type: String },
+    lecture: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "lectures",
+    },
     isPreview: { type: Boolean, default: false },
     module: {
       type: mongoose.Schema.Types.ObjectId,

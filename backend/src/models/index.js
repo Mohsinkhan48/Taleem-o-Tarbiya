@@ -3,6 +3,7 @@ module.exports.Otp = require("./otp.model");
 module.exports.Role = require("./role.model");
 module.exports.Assignment = require("./assignment.model");
 module.exports.Chapter = require("./chapter.model");
+module.exports.Lecture = require("./lecture.model");
 module.exports.Course = require("./course.model");
 module.exports.CourseCategory = require("./course-category.model");
 module.exports.CourseLevel = require("./course-level.model");

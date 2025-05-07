@@ -86,6 +86,12 @@ const TeacherCourseCard: React.FC<TeacherCourseCardProps> = ({
               >
                 View as Student
               </DropdownItem>
+              <DropdownItem
+                onClick={() => navigate(`/teacher/manage-lectures/${course._id}`)}
+                className="text-text hover:text-primary"
+              >
+                Manage Lectures
+              </DropdownItem>
               {!course.isPublished && (
                 <DropdownItem
                   onClick={() => onTogglePublish?.(course._id)}

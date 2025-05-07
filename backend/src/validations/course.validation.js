@@ -24,7 +24,7 @@ const courseValidation = {
                 Joi.object({
                   title: Joi.string().required(),
                   content: Joi.string().required(),
-                  videoUrl: Joi.string().uri().optional(),
+                  lecture: Joi.custom(objectId).optional(),
                   isPreview: Joi.boolean().default(false),
                   resources: Joi.array()
                     .items(
@@ -92,7 +92,7 @@ const courseValidation = {
                 Joi.object({
                   title: Joi.string().required(),
                   content: Joi.string().required(),
-                  videoUrl: Joi.string().uri().optional(),
+                  lecture: Joi.custom(objectId).optional(),
                   isPreview: Joi.boolean().default(false),
                   resources: Joi.array()
                     .items(
@@ -144,7 +144,7 @@ const courseValidation = {
       chapter: Joi.object({
         title: Joi.string().required(),
         content: Joi.string().required(),
-        videoUrl: Joi.string().uri().optional(),
+        lecture: Joi.custom(objectId).optional(),
         isPreview: Joi.boolean().default(false),
         resources: Joi.array()
           .items(
@@ -179,6 +179,17 @@ const courseValidation = {
             .required(),
         }).optional(),
       }).required(),
+    }),
+  },
+  uploadLectureVideo: {
+    body: Joi.object({
+      title: Joi.string().optional(),
+      description: Joi.string().optional(),
+    }),
+    params: Joi.object({
+      courseId: Joi.string().required().custom(objectId),
+      moduleId: Joi.string().required().custom(objectId),
+      chapterId: Joi.string().required().custom(objectId),
     }),
   },
   getCourseById: {

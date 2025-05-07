@@ -31,13 +31,25 @@ export interface Chapter {
   _id?: string;
   title: string;
   content: string;
-  videoUrl: string;
+  lecture?: Lecture;
   isPreview: boolean;
   resources?: Resource[];
   quiz?: Quiz;
   assignment?: Assignment;
 }
-
+export interface Lecture {
+  _id?: string;
+  title: string;
+  description?: string;
+  chapter: string;
+  videoUrl: string;
+  duration?: number;
+  resolution?: string;
+  size?: number;
+  format?: string;
+  createdAt?: Date;
+  updatedAt?: Date;
+}
 export interface Resource {
   name: string;
   url: string;

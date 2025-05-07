@@ -13,7 +13,6 @@ const ModuleCard = ({ module }: { module: Module }) => {
   const [newChapter, setNewChapter] = useState<Chapter>({
     title: "",
     content: "",
-    videoUrl: "",
     isPreview: false,
   });
 
@@ -29,7 +28,6 @@ const ModuleCard = ({ module }: { module: Module }) => {
     setNewChapter({
       title: "",
       content: "",
-      videoUrl: "",
       isPreview: false,
     });
   };

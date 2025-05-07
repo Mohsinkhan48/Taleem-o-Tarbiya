@@ -26,4 +26,23 @@ export const CourseService = {
       },
     });
   },
+  uploadLectureVideo: (
+    courseId: string,
+    moduleId: string,
+    chapterId: string,
+    title: string,
+    description: string,
+    file: File
+  ) => {
+    const formData = new FormData();
+    formData.append("title", title);
+    formData.append("description", description);
+    formData.append("video", file);
+
+    return apiClient.post(`${SERVER_URL}course/upload-lecture/${courseId}/${moduleId}/${chapterId}`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+  },
 };
