@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router";
 import Button from "../Reusable/Button";
 import { AppDispatch, RootState } from "../../redux/store";
@@ -6,16 +6,26 @@ import { useDispatch, useSelector } from "react-redux";
 import { logoutUser } from "../../redux/slices/authSlice";
 import { useAuth } from "../../hooks/useAuth";
 import CartButton from "./Student/CartButton";
+import { fetchCourseCategories } from "../../redux/slices/fetch/fetchSlices";
+import DropdownItem from "../Reusable/DropdownItem";
 
 const Navbar = () => {
   const [toggleMenu, setToggleMenu] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isCategoriesOpen, setIsCategoriesOpen] = useState(false);
+
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const { user, isAuthenticated } = useAuth();
 
-  const onLogout = () => dispatch(logoutUser());
+  const { data: categories } = useSelector((state: RootState) => state.courseCategories);
   const { loading } = useSelector((state: RootState) => state.auth);
+
+  useEffect(() => {
+    dispatch(fetchCourseCategories());
+  }, [dispatch]);
+
+  const onLogout = () => dispatch(logoutUser());
 
   const handleDashboardNavigation = () => {
     switch (user?.role?.name) {
@@ -64,6 +74,29 @@ const Navbar = () => {
             <li className="cursor-pointer hover:text-navbar-link-hover py-2 px-3">
               <Link to="/contact-us">Contact Us</Link>
             </li>
+            <li
+              className="relative cursor-pointer hover:text-navbar-link-hover py-2 px-3"
+              onMouseEnter={() => setIsCategoriesOpen(true)}
+              onMouseLeave={() => setIsCategoriesOpen(false)}
+            >
+              <span>Categories</span>
+              {isCategoriesOpen && (
+                <div className="p-1 absolute top-full left-0 bg-navbar-background border border-navbar-border rounded-md shadow-md w-48 z-50">
+                  {categories.length > 0 ? (
+                    categories.map((category) => (
+                      <DropdownItem
+                        key={category._id}
+                        onClick={() => navigate(`/explore-courses/?categoryId=${category._id}`)}
+                      >
+                        {category.name}
+                      </DropdownItem>
+                    ))
+                  ) : (
+                    <div className="px-4 py-2 text-sm text-gray-400">No categories</div>
+                  )}
+                </div>
+              )}
+            </li>
           </ul>
         </div>
 
@@ -71,8 +104,6 @@ const Navbar = () => {
           {isAuthenticated ? (
             <>
               {renderButtons()}
-
-              {/* Custom Dropdown on Hover */}
               <div
                 className="relative"
                 onMouseEnter={() => setIsDropdownOpen(true)}
