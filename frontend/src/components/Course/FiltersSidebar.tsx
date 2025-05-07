@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../redux/store";
 import {
-  fetchCourseCategories,
   fetchCourseLevels,
   fetchCourseTags,
 } from "../../redux/slices/fetch/fetchSlices";
@@ -14,7 +13,6 @@ import Card from "../Reusable/Card";
 
 export interface Filters {
   level: string;
-  category: string;
   tags: string[];
   isPaid: boolean;
 }
@@ -27,21 +25,18 @@ const FilterSidebar = ({
   const dispatch = useDispatch<AppDispatch>();
   const [filters, setFilters] = useState<Filters>({
     level: "",
-    category: "",
     tags: [],
     isPaid: true,
   });
 
-  const { courseCategories, courseLevels, courseTags } = useSelector(
+  const { courseLevels, courseTags } = useSelector(
     (state: RootState) => ({
-      courseCategories: state.courseCategories.data,
       courseLevels: state.courseLevels.data,
       courseTags: state.courseTags.data,
     })
   );
 
   useEffect(() => {
-    dispatch(fetchCourseCategories());
     dispatch(fetchCourseLevels());
     dispatch(fetchCourseTags());
   }, [dispatch]);
@@ -77,17 +72,6 @@ const FilterSidebar = ({
         options={courseLevels.map((lvl: any) => ({
           label: lvl.name,
           value: lvl._id,
-        }))}
-      />
-
-      <SelectInput
-        label="Category"
-        name="category"
-        value={filters.category}
-        onChange={handleChange}
-        options={courseCategories.map((cat: any) => ({
-          label: cat.name,
-          value: cat._id,
         }))}
       />
 
