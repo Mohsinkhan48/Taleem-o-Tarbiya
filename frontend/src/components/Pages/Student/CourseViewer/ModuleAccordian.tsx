@@ -6,16 +6,17 @@ import Accordion from "../../../Reusable/Accordian";
 
 interface Props {
   modules: Module[];
+  courseId: string;
 }
 
-const ModuleAccordion: React.FC<Props> = ({ modules }) => {
+const ModuleAccordion: React.FC<Props> = ({ courseId, modules }) => {
   const accordionItems = modules.map((module, index) => ({
     id: module._id || index,
     header: module.title,
     content: (
       <div className="space-y-4">
         {module.chapters.map((chapter, i) => (
-          <ChapterCard key={chapter._id || i} chapter={chapter} />
+          <ChapterCard key={chapter._id || i} chapter={chapter} courseId={courseId} moduleId={module._id!} />
         ))}
       </div>
     ),

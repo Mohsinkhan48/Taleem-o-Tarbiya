@@ -56,17 +56,20 @@ export interface Resource {
 }
 
 export interface Quiz {
+  _id?: string;
   title: string;
   questions: Question[];
 }
 
 export interface Question {
+  _id?: string;
   question: string;
   options: string[];
   correctAnswer: string;
 }
 
 export interface Assignment {
+  _id?: string;
   title: string;
   description: string;
   dueDate: string;

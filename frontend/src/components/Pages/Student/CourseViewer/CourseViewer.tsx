@@ -55,7 +55,7 @@ const CourseViewer: React.FC = () => {
       </main>
 
       <aside className="w-80 max-h-screen overflow-y-auto">
-        <ModuleAccordion modules={course.modules} />
+        <ModuleAccordion modules={course.modules} courseId={course._id} />
       </aside>
     </div>
   );
