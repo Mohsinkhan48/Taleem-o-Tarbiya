@@ -6,11 +6,14 @@ const progressController = {
   // Update lecture progress
   updateLectureProgress: catchAsync(async (req, res) => {
     const userId = req.user;
-    const { lectureId } = req.params;
+    const { lectureId, courseId, moduleId, chapterId } = req.params;
     const { currentTime, completed } = req.body;
 
     const progress = await progressService.updateLectureProgress(
       userId,
+      courseId,
+      moduleId,
+      chapterId,
       lectureId,
       currentTime,
       completed

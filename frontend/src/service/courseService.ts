@@ -77,10 +77,23 @@ export const CourseService = {
     courseId: string,
     moduleId: string,
     chapterId: string,
-    quizId: string,
+    quizId: string
   ) => {
     return apiClient.get(
       `${SERVER_URL}progress/quiz-progress/${courseId}/${moduleId}/${chapterId}/${quizId}`
+    );
+  },
+  updateLectureProgress: (
+    courseId: string,
+    moduleId: string,
+    chapterId: string,
+    lectureId: string,
+    currentTime: number,
+    completed: boolean
+  ) => {
+    return apiClient.post(
+      `${SERVER_URL}progress/lecture/${courseId}/${moduleId}/${chapterId}/${lectureId}`,
+      { currentTime, completed }
     );
   },
 };

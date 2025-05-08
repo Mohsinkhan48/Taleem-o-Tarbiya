@@ -3,6 +3,9 @@ const { objectId } = require("./custom.validation");
 
 const updateLectureProgress = {
   params: Joi.object().keys({
+    courseId: Joi.string().custom(objectId).required(),
+    moduleId: Joi.string().custom(objectId).required(),
+    chapterId: Joi.string().custom(objectId).required(),
     lectureId: Joi.string().custom(objectId).required(),
   }),
   body: Joi.object().keys({

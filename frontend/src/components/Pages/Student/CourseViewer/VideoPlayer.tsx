@@ -1,42 +1,70 @@
 import React, { useEffect, useRef, useState } from "react";
 import { BACKEND_URL } from "../../../../constants/env.constants";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../../redux/store";
+import { CourseService } from "../../../../service/courseService";
 
 interface Props {
+  courseId: string;
+  moduleId: string;
+  chapterId: string;
   lectureId: string;
   videoUrl: string;
   initialWatchedTime?: number; // seconds
 }
 
-const VideoPlayer: React.FC<Props> = ({ lectureId, videoUrl, initialWatchedTime = 0 }) => {
+const VideoPlayer: React.FC<Props> = ({
+  courseId,
+  moduleId,
+  chapterId,
+  lectureId,
+  videoUrl,
+  initialWatchedTime = 0,
+}) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(initialWatchedTime);
   const [duration, setDuration] = useState(0);
   const [progressSaved, setProgressSaved] = useState(false);
 
+  const user = useSelector((state: RootState) => state.auth.user); // assuming you store user in redux
+
   // Auto-resume
   useEffect(() => {
-    const video = videoRef.current;
-    if (video) {
-      video.currentTime = initialWatchedTime;
+    if (videoRef.current) {
+      videoRef.current.currentTime = initialWatchedTime;
     }
   }, [initialWatchedTime]);
 
   // Save progress every 10 seconds
   useEffect(() => {
     const interval = setInterval(() => {
-      if (videoRef.current && isPlaying) {
+      if (videoRef.current && isPlaying && duration > 0) {
         const current = videoRef.current.currentTime;
-        saveProgress(current);
+        const isCompleted = current >= duration - 5; // Allow 5s leeway
+        saveProgress(current, isCompleted);
       }
-    }, 10000);
+    }, 4000);
 
     return () => clearInterval(interval);
-  }, [isPlaying]);
+  }, [isPlaying, duration]);
 
-  const saveProgress = async (time: number) => {
+  const saveProgress = async (time: number, completed: boolean) => {
     try {
+      if (!user?._id) return;
+
+      await CourseService.updateLectureProgress(
+        courseId,
+        moduleId,
+        chapterId,
+        lectureId,
+        time,
+        completed
+      );
+
       setProgressSaved(true);
+
+      setTimeout(() => setProgressSaved(false), 3000); // Reset UI message
     } catch (err) {
       console.error("Progress save error:", err);
       setProgressSaved(false);
