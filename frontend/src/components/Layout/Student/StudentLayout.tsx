@@ -4,12 +4,10 @@ import LanguageChooser from "../../LanguageChooser";
 import Footer from "../Footer";
 import { FiBook } from "react-icons/fi";
 import Sidebar, { SidebarItem } from "../Sidebar";
-import { RxDashboard } from "react-icons/rx";
 import Navbar from "../Navbar";
 
 function StudentLayout() {
   const sidebarItems: SidebarItem[] = [
-    { label: "Dashboard", icon: RxDashboard, path: "dashboard" },
     { label: "My Courses", icon: FiBook, path: "courses" },
   ];
   return (

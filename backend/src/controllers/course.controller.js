@@ -151,7 +151,6 @@ const courseController = {
       });
     });
   }),
-
   getAllCourses: catchAsync(async (req, res) => {
     const filters = CourseFilters(req.query);
     const user = await getOptionalUserFromRequest(req);
@@ -168,7 +167,6 @@ const courseController = {
 
     R2XX(res, "Fetched all courses successfully", 200, { courses });
   }),
-
   getCourseById: catchAsync(async (req, res) => {
     const { courseId } = req.params;
 
@@ -213,6 +211,15 @@ const courseController = {
       return R4XX(res, 404, "Course not found");
     }
     R2XX(res, "Fetched course successfully", 200, { course });
+  }),
+  getTeacherDashboard: catchAsync(async (req, res) => {
+    const teacherId = req.user;
+    const teacherDashboardData = await courseService.getTeacherDashboard(
+      teacherId
+    );
+    R2XX(res, "Fetched teacher dashboard successfully", 200, {
+      data: teacherDashboardData,
+    });
   }),
 };
 

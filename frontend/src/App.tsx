@@ -91,6 +91,16 @@ function App() {
           <Route path="payment/success" element={<Success />} />
           <Route path="payment/cancel" element={<Cancel />} />
         </Route>
+        <Route
+          path="/admin"
+          element={
+            <ProtectedRoute allowedRoles={["admin"]}>
+              <AdminLayout />
+            </ProtectedRoute>
+          }
+        >
+          <Route path="dashboard" element={<AdminDashboard />} />
+        </Route>
       </Routes>
     </BrowserRouter>
   );

@@ -8,6 +8,7 @@ const {
   Enrollment,
   LectureProgress,
   CourseProgress,
+  Lecture,
 } = require("../models");
 
 const courseService = {
@@ -428,6 +429,74 @@ const courseService = {
 
     return course;
   },
+  getTeacherDashboard: async (teacherId) => {
+  const thirtyDaysAgo = new Date();
+  thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+
+  // 1. Get all courses by this teacher
+  const courses = await Course.find({ instructor: teacherId }).select("_id title ratings");
+
+  const courseIds = courses.map((course) => course._id);
+
+  // 2. Enrollments
+  const enrollmentsCount = await Enrollment.countDocuments({
+    course: { $in: courseIds },
+  });
+
+  const enrollmentsLast30Days = await Enrollment.countDocuments({
+    course: { $in: courseIds },
+    createdAt: { $gte: thirtyDaysAgo },
+  });
+
+  // 3. Count lectures and duration
+  const modules = await Module.find({ course: { $in: courseIds } }).select("_id");
+  const moduleIds = modules.map((m) => m._id);
+
+  const chapters = await Chapter.find({ module: { $in: moduleIds } }).select("lecture");
+  const lectureIds = chapters.map((c) => c.lecture).filter(Boolean);
+
+  const lecturesProgresses = await LectureProgress.find({ lecture: { $in: lectureIds } }).select("currentTime createdAt");
+  const lectureCount = lecturesProgresses.length;
+  const lectureCountLast30Days = lecturesProgresses.filter((l) => l.createdAt >= thirtyDaysAgo).length;
+
+  const totalLearningSeconds = lecturesProgresses.reduce((sum, lec) => sum + (lec.currentTime || 0), 0);
+  const totalLearningHours = +(totalLearningSeconds / 3600).toFixed(2);
+
+  const totalLearningSeconds30 = lecturesProgresses
+    .filter((l) => l.createdAt >= thirtyDaysAgo)
+    .reduce((sum, lec) => sum + (lec.currentTime || 0), 0);
+  const totalLearningHours30 = +(totalLearningSeconds30 / 3600).toFixed(2);
+
+  // 4. Course progress entries (lectures started by students)
+  const progressEntries = await LectureProgress.find({
+    course: { $in: courseIds },
+  }).select("createdAt");
+
+  const lecturesTaken = progressEntries.length;
+  const lecturesTaken30 = progressEntries.filter((p) => p.createdAt >= thirtyDaysAgo).length;
+
+  // 5. Average ratings per course (optional)
+  const averageRatings = courses.map((c) => {
+    const avg =
+      c.ratings.length > 0
+        ? +(c.ratings.reduce((sum, r) => sum + r, 0) / c.ratings.length).toFixed(2)
+        : null;
+    return { courseId: c._id, title: c.title, avgRating: avg };
+  });
+
+  return {
+    totalCourses: courses.length,
+    totalEnrollments: enrollmentsCount,
+    enrollmentsLast30Days,
+    totalLectures: lectureCount,
+    lecturesLast30Days: lectureCountLast30Days,
+    totalLearningHours,
+    learningHoursLast30Days: totalLearningHours30,
+    lecturesTaken,
+    lecturesTakenLast30Days: lecturesTaken30,
+    averageRatings,
+  };
+},
   updateThumbnail: async (courseId, thumbnailPath) => {
     return await Course.findByIdAndUpdate(
       courseId,

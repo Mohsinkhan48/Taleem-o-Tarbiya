@@ -22,7 +22,8 @@ import {
   courseTagReducer,
   courseLevelReducer,
   roleReducer,
-  studentCoursesReducer
+  studentCoursesReducer,
+  teacherDashboardReducer
 } from "./slices/fetch/fetchSlices";
 
 const store = configureStore({
@@ -51,6 +52,7 @@ const store = configureStore({
     courseLevels: courseLevelReducer,
     role: roleReducer,
     studentCourses: studentCoursesReducer,
+    teacherDashboard: teacherDashboardReducer
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({ serializableCheck: false }),

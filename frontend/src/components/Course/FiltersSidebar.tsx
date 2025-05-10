@@ -69,7 +69,7 @@ const FilterSidebar = ({
         name="level"
         value={filters.level}
         onChange={handleChange}
-        options={courseLevels.map((lvl: any) => ({
+        options={courseLevels?.map((lvl: any) => ({
           label: lvl.name,
           value: lvl._id,
         }))}
@@ -81,7 +81,7 @@ const FilterSidebar = ({
         onChange={(selected: string[]) =>
           setFilters((prev) => ({ ...prev, tags: selected }))
         }
-        options={courseTags.map((tag: any) => ({
+        options={courseTags?.map((tag: any) => ({
           label: tag.name,
           value: tag._id,
         }))}

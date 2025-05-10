@@ -93,4 +93,12 @@ router.get(
   courseController.getStudentEnrolledCourse
 );
 
+router.get(
+  "/teacher/dashboard",
+  isAuth,
+  isMember,
+  hasRole([ROLES.TEACHER]),
+  courseController.getTeacherDashboard
+);
+
 module.exports = router;

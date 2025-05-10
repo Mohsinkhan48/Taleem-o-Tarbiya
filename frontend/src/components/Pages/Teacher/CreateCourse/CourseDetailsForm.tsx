@@ -82,7 +82,7 @@ const CourseDetailsForm: React.FC<CourseDetailsFormProps> = ({
           name="level"
           value={course.level}
           onChange={handleChange}
-          options={courseLevels.map((lvl) => ({
+          options={courseLevels?.map((lvl) => ({
             label: lvl.name,
             value: lvl._id,
           }))}
@@ -92,7 +92,7 @@ const CourseDetailsForm: React.FC<CourseDetailsFormProps> = ({
           name="category"
           value={course.category}
           onChange={handleChange}
-          options={courseCategories.map((cat) => ({
+          options={courseCategories?.map((cat) => ({
             label: cat.name,
             value: cat._id,
           }))}
@@ -101,7 +101,7 @@ const CourseDetailsForm: React.FC<CourseDetailsFormProps> = ({
           label="Tags"
           selectedValues={course.tags}
           onChange={setTags}
-          options={courseTags.map((tag) => ({
+          options={courseTags?.map((tag) => ({
             label: tag.name,
             value: tag._id,
           }))}
