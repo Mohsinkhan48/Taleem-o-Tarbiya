@@ -1,20 +1,21 @@
+// src/store/slices/fetchGenericSlice.ts
 import { createSlice, createAsyncThunk, PayloadAction, Draft } from "@reduxjs/toolkit";
 import { fetchGenericService } from "../../../service/fetchGenericService";
 
 export interface GenericState<T> {
-    loading: boolean;
-    data: T[];
-    error: string | null;
-  }  
+  loading: boolean;
+  data: T | null;
+  error: string | null;
+}
 
 // Generic thunk factory
 export function createGenericThunk<T>(name: string, endpoint: string) {
-  return createAsyncThunk<T[], void, { rejectValue: string }>(
+  return createAsyncThunk<T, void, { rejectValue: string }>(
     `${name}/fetchAll`,
     async (_, { rejectWithValue }) => {
       try {
         const response = await fetchGenericService.fetchAll(endpoint);
-        return response.data.data;
+        return response.data.data as T;
       } catch (error: any) {
         return rejectWithValue(error.message);
       }
@@ -26,7 +27,7 @@ export function createGenericThunk<T>(name: string, endpoint: string) {
 export function createGenericSlice<T>(name: string, thunk: ReturnType<typeof createGenericThunk<T>>) {
   const initialState: GenericState<T> = {
     loading: false,
-    data: [],
+    data: null,
     error: null,
   };
 
@@ -35,7 +36,7 @@ export function createGenericSlice<T>(name: string, thunk: ReturnType<typeof cre
     initialState,
     reducers: {
       resetState: (state) => {
-        state.data = [];
+        state.data = null;
         state.loading = false;
         state.error = null;
       },
@@ -46,9 +47,9 @@ export function createGenericSlice<T>(name: string, thunk: ReturnType<typeof cre
           state.loading = true;
           state.error = null;
         })
-        .addCase(thunk.fulfilled, (state, action: PayloadAction<T[]>) => {
+        .addCase(thunk.fulfilled, (state, action: PayloadAction<T>) => {
           state.loading = false;
-          state.data = action.payload as Draft<T[]>;
+          state.data = action.payload as Draft<T>;
         })
         .addCase(thunk.rejected, (state, action) => {
           state.loading = false;

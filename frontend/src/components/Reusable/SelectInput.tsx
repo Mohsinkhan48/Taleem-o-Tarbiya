@@ -56,7 +56,7 @@ const SelectInput = forwardRef<HTMLSelectElement, SelectInputProps>(
           {...rest}
         >
           <option value="" disabled>Select...</option>
-          {options.map((opt: { label: string; value: string | number }) => (
+          {options && options.map((opt: { label: string; value: string | number }) => (
             <option key={opt.value} value={opt.value}>
               {opt.label}
             </option>

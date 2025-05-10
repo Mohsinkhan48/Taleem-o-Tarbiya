@@ -1,5 +1,6 @@
 // src/store/slices/courseMetaSlice.ts
 import { StudentCourse } from "../../../types/student.types";
+import { TeacherDashboardResponse } from "../../../types/teacher.types";
 import { createGenericSlice, createGenericThunk } from "./fetchGenericSlice";
 
 // ==================
@@ -29,29 +30,38 @@ export interface Role {
   description: string;
 }
 
-export const fetchCourseCategories = createGenericThunk<CourseCategory>(
+// ==================
+// Thunks
+// ==================
+
+export const fetchCourseCategories = createGenericThunk<CourseCategory[]>(
   "courseCategories",
   "/static/course-categories"
 );
 
-export const fetchCourseTags = createGenericThunk<CourseTag>(
+export const fetchCourseTags = createGenericThunk<CourseTag[]>(
   "courseTags",
   "/static/course-tags"
 );
 
-export const fetchCourseLevels = createGenericThunk<CourseLevel>(
+export const fetchCourseLevels = createGenericThunk<CourseLevel[]>(
   "courseLevels",
   "/static/course-levels"
 );
 
-export const fetchAllRoles = createGenericThunk<Role>(
+export const fetchAllRoles = createGenericThunk<Role[]>(
   "roles",
   "/static/roles"
 );
 
-export const fetchStudentCourses = createGenericThunk<StudentCourse>(
+export const fetchStudentCourses = createGenericThunk<StudentCourse[]>(
   "student-courses",
   "/course/student/courses"
+);
+
+export const fetchTeacherDashboard = createGenericThunk<TeacherDashboardResponse>(
+  "teacherDashboard",
+  "course/teacher/dashboard"
 );
 
 // ==================
@@ -61,24 +71,29 @@ export const fetchStudentCourses = createGenericThunk<StudentCourse>(
 export const {
   reducer: courseCategoryReducer,
   actions: courseCategoryActions,
-} = createGenericSlice<CourseCategory>("courseCategories", fetchCourseCategories);
+} = createGenericSlice<CourseCategory[]>("courseCategories", fetchCourseCategories);
 
 export const {
   reducer: courseTagReducer,
   actions: courseTagActions,
-} = createGenericSlice<CourseTag>("courseTags", fetchCourseTags);
+} = createGenericSlice<CourseTag[]>("courseTags", fetchCourseTags);
 
 export const {
   reducer: courseLevelReducer,
   actions: courseLevelActions,
-} = createGenericSlice<CourseLevel>("courseLevels", fetchCourseLevels);
+} = createGenericSlice<CourseLevel[]>("courseLevels", fetchCourseLevels);
 
 export const {
   reducer: roleReducer,
   actions: roleActions,
-} = createGenericSlice<Role>("roles", fetchAllRoles);
+} = createGenericSlice<Role[]>("roles", fetchAllRoles);
 
 export const {
   reducer: studentCoursesReducer,
   actions: studentCoursesActions,
-} = createGenericSlice<StudentCourse>("student-courses", fetchStudentCourses);
+} = createGenericSlice<StudentCourse[]>("student-courses", fetchStudentCourses);
+
+export const {
+  reducer: teacherDashboardReducer,
+  actions: teacherDashboardActions,
+} = createGenericSlice<TeacherDashboardResponse>("teacherDashboard", fetchTeacherDashboard);

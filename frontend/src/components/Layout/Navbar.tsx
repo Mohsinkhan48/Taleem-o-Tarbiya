@@ -36,7 +36,7 @@ const Navbar = () => {
         navigate("/teacher/dashboard");
         break;
       case "student":
-        navigate("/student/dashboard");
+        navigate("/student/courses");
         break;
       default:
         navigate("/unauthorized");
@@ -82,7 +82,7 @@ const Navbar = () => {
               <span>Categories</span>
               {isCategoriesOpen && (
                 <div className="p-1 absolute top-full left-0 bg-navbar-background border border-navbar-border rounded-md shadow-md w-48 z-50">
-                  {categories.length > 0 ? (
+                  {categories && categories.length > 0 ? (
                     categories.map((category) => (
                       <DropdownItem
                         key={category._id}

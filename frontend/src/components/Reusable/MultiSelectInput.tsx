@@ -9,7 +9,7 @@ interface Option {
 
 interface MultiSelectInputProps {
   label?: string;
-  options: Option[];
+  options: Option[] | undefined;
   selectedValues: string[];
   onChange: (values: string[]) => void;
 }
@@ -32,9 +32,9 @@ const MultiSelectInput: React.FC<MultiSelectInputProps> = ({
   };
 
   const displaySelected = () => {
-    const selectedLabels = options
+    const selectedLabels = (options && options
       .filter((opt) => selectedValues.includes(opt.value))
-      .map((opt) => opt.label);
+      .map((opt) => opt.label)) || [];
 
     const topThree = selectedLabels.slice(0, 3);
     const remaining = selectedLabels.length - 3;
@@ -94,7 +94,7 @@ const MultiSelectInput: React.FC<MultiSelectInputProps> = ({
 
       {isOpen && (
         <div className="absolute z-10 w-full bg-background border border-card-border rounded mt-1 max-h-60 overflow-auto text-text">
-          {options.map((opt) => {
+          {options && options.map((opt) => {
             const checked = selectedValues.includes(opt.value);
             return (
               <label
