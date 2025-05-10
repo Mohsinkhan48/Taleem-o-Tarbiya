@@ -17,7 +17,7 @@ const StudentCourses = () => {
   if (loading) {
     return (
       <div className="flex justify-center items-center mt-20">
-        <Loader size={30} />
+        <Loader className="text-text" size={30} />
       </div>
     );
   }

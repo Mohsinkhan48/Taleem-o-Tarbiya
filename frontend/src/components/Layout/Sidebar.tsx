@@ -19,7 +19,7 @@ const Sidebar = ({ items, brand }: SidebarProps) => {
 
   return (
     <aside
-      className={`relative bg-sidebar-bg text-sidebar-text border-r border-sidebar-border h-screen sticky top-0 transition-all duration-300 flex flex-col ${
+      className={`bg-sidebar-bg text-sidebar-text border-r border-sidebar-border h-screen sticky top-0 transition-all duration-300 flex flex-col ${
         collapsed ? "w-20" : "w-52"
       }`}
     >
@@ -34,7 +34,7 @@ const Sidebar = ({ items, brand }: SidebarProps) => {
           onClick={() => setCollapsed(!collapsed)}
           className={`
             w-7 h-7 flex items-center justify-center rounded-full 
-            bg-white border border-sidebar-border text-sidebar-icon 
+            bg-sidebar-border border border-sidebar-border text-sidebar-icon 
             shadow-md hover:bg-sidebar-hover transition-transform duration-300
             ${collapsed ? "rotate-180" : ""}
           `}

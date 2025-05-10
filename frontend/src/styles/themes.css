@@ -39,13 +39,13 @@
   --color-warning: rgb(251, 188, 5); /* Yellow */
   --color-error: rgb(234, 67, 53); /* Red */
   --color-info: rgb(156, 1, 156); /* Purple Info */
-    /* Sidebar */
-  --color-sidebar-bg: rgb(245, 243, 255);         /* Light purple tint */
-  --color-sidebar-border: rgb(222, 216, 255);     /* Subtle purple border */
-  --color-sidebar-hover: rgb(230, 225, 255);      /* Slightly darker on hover */
-  --color-sidebar-active: rgb(156, 1, 156);       /* Active purple */
-  --color-sidebar-icon: rgb(110, 0, 110);         /* Deep purple for icons */
-  --color-sidebar-text: rgb(60, 0, 60);  
+  /* Sidebar */
+  --color-sidebar-bg: rgb(245, 243, 255); /* Light purple tint */
+  --color-sidebar-border: rgb(222, 216, 255); /* Subtle purple border */
+  --color-sidebar-hover: rgb(230, 225, 255); /* Slightly darker on hover */
+  --color-sidebar-active: rgb(156, 1, 156); /* Active purple */
+  --color-sidebar-icon: rgb(110, 0, 110); /* Deep purple for icons */
+  --color-sidebar-text: rgb(60, 0, 60);
   /* Navbar*/
   --color-navbar-background: rgb(245, 243, 255); /* Dark background */
   --color-navbar-text: rgb(60, 0, 60); /* White text */
@@ -63,7 +63,7 @@
 
   /* Primary UI Elements */
   --color-primary: rgb(102, 178, 255); /* Light Blue */
-  --color-secondary: rgb(255, 221, 51); /* Soft Yellow */
+  --color-secondary: rgb(186, 186, 186); /* Soft Violet */
   --color-accent: rgb(255, 99, 71); /* Tomato */
 
   /* Card & Containers */
@@ -74,7 +74,7 @@
   --color-button-primary: rgb(0, 68, 136); /* Light Blue */
   --color-button-secondary: rgb(82, 82, 82); /* Medium Gray */
   --color-button-hover-primary: rgb(0, 85, 165); /* Darker Blue */
-  --color-button-hover-secondary: rgb(102, 102, 102); /* Darker Blue */
+  --color-button-hover-secondary: rgb(102, 102, 102); /* Darker Gray */
   --color-button-border-primary: rgb(0, 80, 209); /* Blue */
   --color-button-border-secondary: rgb(122, 122, 122); /* Gray */
   --color-button-text: #ffffff;
@@ -82,7 +82,7 @@
   /* Forms & Inputs */
   --color-input-background: rgb(40, 40, 40); /* Dark Input */
   --color-input-border: rgb(80, 80, 80); /* Dark Border */
-  --color-input-focus: rgb(83, 83, 83); /* Light Blue */
+  --color-input-focus: rgb(0, 122, 255); /* Focus Blue */
 
   /* Borders & Dividers */
   --color-border: rgb(60, 60, 60); /* Dark Gray */
@@ -95,7 +95,23 @@
   --color-success: rgb(102, 255, 102); /* Bright Green */
   --color-warning: rgb(255, 221, 51); /* Soft Yellow */
   --color-error: rgb(255, 99, 71); /* Tomato */
-  --color-info: rgb(102, 178, 255);
+  --color-info: rgb(102, 178, 255); /* Info Blue */
+
+  /* Sidebar */
+  --color-sidebar-bg: rgb(46, 45, 45); /* Darker background */
+  --color-sidebar-border: rgb(55, 55, 55); /* Subtle dark border */
+  --color-sidebar-hover: rgb(50, 50, 50); /* Hover effect */
+  --color-sidebar-active: rgb(102, 178, 255); /* Active Blue */
+  --color-sidebar-icon: rgb(160, 200, 255); /* Light icon */
+  --color-sidebar-text: rgb(220, 220, 220); /* Light text */
+
+  /* Navbar */
+  --color-navbar-background: rgb(45, 45, 45); /* Dark navbar */
+  --color-navbar-text: rgb(220, 220, 220); /* Light text */
+  --color-navbar-link-hover: rgb(102, 178, 255); /* Hover blue */
+  --color-navbar-card-border: rgb(80, 80, 80); /* Card border */
+  --color-navbar-border: rgb(55, 55, 55); /* Border */
+  --color-navbar-secondary: rgb(180, 180, 180); /* Secondary text */
 }
 
 /* Forest Theme */
