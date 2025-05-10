@@ -5,3 +5,4 @@ module.exports.enrollmentController = require("./enrollment.controller");
 module.exports.cartController = require("./cart.controller");
 module.exports.paymentController = require("./payment.controller");
 module.exports.stripeController = require("./stripe.controller");
+module.exports.progressController = require("./progress.controller");

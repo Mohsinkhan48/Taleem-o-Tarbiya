@@ -43,13 +43,6 @@ const ChapterForm: React.FC<Props> = ({ chapter, onChange, onRemove }) => {
             onChange({ ...chapter, title: e.target.value })
           }
         />
-        <Input
-          label="Video URL"
-          value={chapter.videoUrl}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-            onChange({ ...chapter, videoUrl: e.target.value })
-          }
-        />
       </div>
 
       {/* Content Editor */}

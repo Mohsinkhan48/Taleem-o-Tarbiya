@@ -70,11 +70,11 @@ const ChapterCard = ({ chapter }: { chapter: Chapter }) => {
         <div className="flex items-center gap-2">
           <BiVideo />
           <span>
-            {chapter.videoUrl ? "Lecture Video Uploaded" : "No Video Uploaded"}
+            {chapter.lecture?.videoUrl ? "Lecture Video Uploaded" : "No Video Uploaded"}
           </span>
           <button className="text-sm text-primary flex items-center gap-1 ml-4">
             <BiUpload />
-            {chapter.videoUrl ? "Change Video" : "Upload Video"}
+            {chapter.lecture?.videoUrl ? "Change Video" : "Upload Video"}
           </button>
         </div>
 

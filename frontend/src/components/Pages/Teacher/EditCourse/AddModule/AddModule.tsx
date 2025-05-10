@@ -20,7 +20,7 @@ const AddModule = () => {
       ...module,
       chapters: [
         ...module.chapters,
-        { title: "", content: "", videoUrl: "", isPreview: false },
+        { title: "", content: "", isPreview: false },
       ],
     });
   };

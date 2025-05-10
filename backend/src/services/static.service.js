@@ -1,3 +1,4 @@
+const { ROLES } = require("../constants");
 const { CourseCategory, Role, CourseLevel, CourseTag } = require("../models");
 
 const StaticService = {
@@ -14,8 +15,8 @@ const StaticService = {
   },
 
   getRoles: async () => {
-    return await Role.find();
-  },
+    return await Role.find({ name: { $ne: ROLES.ADMIN } });
+  }  
 };
 
 module.exports = StaticService;

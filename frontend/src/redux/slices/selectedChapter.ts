@@ -1,19 +1,34 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Chapter } from "../../types/course.types";
 
-const initialState : {selectedChapter: Chapter | null} = {
-  selectedChapter: null,
+interface SelectedChapterState {
+  courseId: string | null;
+  moduleId: string | null;
+  chapter: Chapter | null;
+}
+
+const initialState: SelectedChapterState = {
+  courseId: null,
+  moduleId: null,
+  chapter: null,
 };
 
 const selectedChapterSlice = createSlice({
   name: "selectedChapter",
   initialState,
   reducers: {
-    setSelectedChapter: (state, action) => {
-      state.selectedChapter = action.payload;
+    setSelectedChapter: (
+      state,
+      action: PayloadAction<SelectedChapterState>
+    ) => {
+      state.courseId = action.payload.courseId;
+      state.moduleId = action.payload.moduleId;
+      state.chapter = action.payload.chapter;
     },
     clearSelectedChapter: (state) => {
-      state.selectedChapter = null;
+      state.courseId = null;
+      state.moduleId = null;
+      state.chapter = null;
     },
   },
 });

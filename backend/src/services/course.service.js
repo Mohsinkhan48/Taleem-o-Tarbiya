@@ -6,6 +6,8 @@ const {
   Quiz,
   Assignment,
   Enrollment,
+  LectureProgress,
+  CourseProgress,
 } = require("../models");
 
 const courseService = {
@@ -73,9 +75,9 @@ const courseService = {
             const chapter = await Chapter.create({
               title: chapterData.title,
               content: chapterData.content,
-              videoUrl: chapterData.videoUrl,
+              lecture: chapterData?.lecture,
               isPreview: chapterData.isPreview || false,
-              resources: chapterData.resources || [],
+              resources: Data.resources || [],
               quiz: quiz?._id,
               assignment: assignment?._id,
               module: module._id, // Associate chapter with module
@@ -119,7 +121,7 @@ const courseService = {
       tags,
       modules, // <-- accept modules here
     } = courseData;
-  
+
     // Step 1: Update the course basic info
     const course = await Course.findByIdAndUpdate(
       courseId,
@@ -137,74 +139,75 @@ const courseService = {
       },
       { new: true }
     );
-  
+
     if (!course) {
       throw new Error("Course not found");
     }
-  
+
     // Optional: Clean up old modules (and their children)
     const oldModules = await Module.find({ course: courseId });
     for (const mod of oldModules) {
       const chapters = await Chapter.find({ module: mod._id });
-  
+
       for (const chap of chapters) {
         if (chap.quiz) await Quiz.findByIdAndDelete(chap.quiz);
-        if (chap.assignment) await Assignment.findByIdAndDelete(chap.assignment);
+        if (chap.assignment)
+          await Assignment.findByIdAndDelete(chap.assignment);
         await Chapter.findByIdAndDelete(chap._id);
       }
-  
+
       await Module.findByIdAndDelete(mod._id);
     }
-  
+
     const createdModules = [];
-  
+
     if (modules && modules.length > 0) {
       for (const moduleData of modules) {
         const createdChapters = [];
-  
+
         const module = await Module.create({
           title: moduleData.title,
           course: courseId,
         });
-  
+
         for (const chapterData of moduleData.chapters) {
           let quiz = null;
           let assignment = null;
-  
+
           if (chapterData.quiz) {
             quiz = await Quiz.create(chapterData.quiz);
           }
-  
+
           if (chapterData.assignment) {
             assignment = await Assignment.create(chapterData.assignment);
           }
-  
+
           const chapter = await Chapter.create({
             title: chapterData.title,
             content: chapterData.content,
-            videoUrl: chapterData.videoUrl,
+            lecture: chapterData?.lecture,
             isPreview: chapterData.isPreview || false,
             resources: chapterData.resources || [],
             quiz: quiz?._id,
             assignment: assignment?._id,
             module: module._id,
           });
-  
+
           createdChapters.push(chapter._id);
         }
-  
+
         await Module.findByIdAndUpdate(module._id, {
           chapters: createdChapters,
         });
-  
+
         createdModules.push(module._id);
       }
-  
+
       await Course.findByIdAndUpdate(courseId, {
         modules: createdModules,
       });
     }
-  
+
     return await Course.findById(courseId)
       .populate("modules")
       .populate({
@@ -214,7 +217,7 @@ const courseService = {
           populate: ["quiz", "assignment"],
         },
       });
-  },  
+  },
   getAllCourses: async (filters = {}) => {
     return await Course.find(filters)
       .populate("instructor", "_id fullName email")
@@ -275,34 +278,34 @@ const courseService = {
       });
   },
   getInstructorCourseById: async (courseId) => {
-    return await Course.findById(courseId)
-      .populate([
-        {
-          path: "instructor",
-          select: "_id fullName email",
+    return await Course.findById(courseId).populate([
+      {
+        path: "instructor",
+        select: "_id fullName email",
+      },
+      {
+        path: "tags",
+      },
+      {
+        path: "category",
+      },
+      {
+        path: "level",
+      },
+      {
+        path: "modules",
+        populate: {
+          path: "chapters",
+          populate: [
+            { path: "resources" },
+            { path: "quiz" },
+            { path: "assignment" },
+            { path: "lecture" },
+          ],
         },
-        {
-          path: "tags",
-        },
-        {
-          path: "category",
-        },
-        {
-          path: "level",
-        },
-        {
-          path: "modules",
-          populate: {
-            path: "chapters",
-            populate: [
-              { path: "resources" },
-              { path: "quiz" },
-              { path: "assignment" },
-            ],
-          },
-        },
-      ]);
-  },  
+      },
+    ]);
+  },
   getCoursesByInstructorId: async (instructorId) => {
     return await Course.find({ instructor: instructorId }).populate(
       "instructor",
@@ -313,40 +316,53 @@ const courseService = {
     const enrollments = await Enrollment.find({ student: studentId }).populate({
       path: "course",
       populate: [
-        {
-          path: "instructor",
-          select: "_id fullName email",
-        },
-        {
-          path: "tags",
-        },
-        {
-          path: "category",
-        },
-        {
-          path: "level",
-        },
+        { path: "instructor", select: "_id fullName email" },
+        { path: "tags" },
+        { path: "category" },
+        { path: "level" },
         {
           path: "modules",
           populate: {
             path: "chapters",
             populate: [
-              {
-                path: "quiz",
-                select: "_id title questions",
-              },
-              {
-                path: "assignment",
-                select: "_id title description",
-              },
+              { path: "quiz", select: "_id title questions" },
+              { path: "assignment", select: "_id title description" },
             ],
           },
         },
       ],
     });
-
+  
     const courses = enrollments.map((enrollment) => enrollment.course);
-    return courses;
+  
+    const updatedCourses = await Promise.all(
+      courses.map(async (course) => {
+        // ✅ Get total number of chapters across all modules
+        const totalChapters = course.modules.reduce((acc, module) => {
+          return acc + (module.chapters?.length || 0);
+        }, 0);
+  
+        const courseProgress = await CourseProgress.findOne({
+          user: studentId,
+          course: course._id,
+        });
+  
+        // ✅ Safe handling if no progress yet
+        const completedChaptersCount = courseProgress?.completedChapters?.length || 0;
+  
+        // ✅ Avoid divide by zero
+        const progressPercentage = totalChapters > 0
+          ? (completedChaptersCount / totalChapters) * 100
+          : 0;
+  
+        return {
+          ...course.toObject(),
+          progress: Math.round(progressPercentage), // optional: round percentage
+        };
+      })
+    );
+  
+    return updatedCourses;
   },
   getStudentEnrolledCourse: async (studentId, courseId) => {
     const enrollment = await Enrollment.findOne({
@@ -374,6 +390,7 @@ const courseService = {
             path: "chapters",
             populate: [
               { path: "resources" },
+              { path: "lecture" },
               { path: "quiz" },
               { path: "assignment" },
             ],
@@ -381,11 +398,35 @@ const courseService = {
         },
       ],
     });
+
     if (!enrollment || !enrollment.course) {
       return null;
     }
 
-    return enrollment.course;
+    const course = enrollment.course;
+
+    // Inject LectureProgress into each lecture
+    for (const module of course.modules) {
+      for (const chapter of module.chapters) {
+        if (chapter.lecture) {
+          const lectureProgress = await LectureProgress.findOne({
+            user: studentId,
+            lecture: chapter.lecture._id,
+            chapter: chapter._id,
+            course: courseId,
+            module: module._id,
+          });
+          // Append progress info directly into the lecture object
+          const lectureObj = chapter.lecture.toObject
+            ? chapter.lecture.toObject()
+            : chapter.lecture;
+          lectureObj.progress = lectureProgress || null;
+          chapter.lecture = lectureObj;
+        }
+      }
+    }
+
+    return course;
   },
   updateThumbnail: async (courseId, thumbnailPath) => {
     return await Course.findByIdAndUpdate(
@@ -410,7 +451,7 @@ const courseService = {
     const chapter = await Chapter.create({
       title: chapterData.title,
       content: chapterData.content,
-      videoUrl: chapterData.videoUrl,
+      lecture: chapterData?.lecture,
       isPreview: chapterData.isPreview || false,
       resources: chapterData.resources || [],
       quiz: quiz?._id,

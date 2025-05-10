@@ -8,6 +8,7 @@ const enrollmentRoutes = require("./enrollment.routes");
 const cartRoutes = require("./cart.routes");
 const paymentRoutes = require("./payment.routes");
 const stripeRoutes = require("./stripe.routes");
+const progressRoutes = require("./progress.routes");
 
 const defaultRoutes = [
   {
@@ -25,6 +26,10 @@ const defaultRoutes = [
   {
     path: "/cart",
     route: cartRoutes,
+  },
+  {
+    path: "/progress",
+    route: progressRoutes,
   },
   {
     path: "/payment",

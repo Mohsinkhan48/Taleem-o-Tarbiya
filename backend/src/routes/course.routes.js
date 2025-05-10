@@ -2,7 +2,7 @@ const { Router } = require("express");
 const { courseValidation } = require("../validations");
 const { courseController } = require("../controllers");
 
-const { validate, isMember, isAuth } = require("../middlewares");
+const { validate, isMember, isAuth, parseFormDataFields } = require("../middlewares");
 const hasRole = require("../middlewares/hasRole.middleware");
 const { ROLES } = require("../constants");
 
@@ -42,6 +42,15 @@ router.post(
   isMember,
   hasRole([ROLES.TEACHER]),
   courseController.uploadThumbnail
+);
+
+router.post(
+  "/upload-lecture/:courseId/:moduleId/:chapterId",
+  validate(courseValidation.uploadLectureVideo),
+  isAuth,
+  isMember,
+  hasRole([ROLES.TEACHER]),
+  courseController.uploadLectureVideo
 );
 
 router.get("/", courseController.getAllCourses);
