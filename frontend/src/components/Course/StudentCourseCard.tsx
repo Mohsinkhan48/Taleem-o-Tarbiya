@@ -1,13 +1,13 @@
 import React from "react";
 import { useNavigate } from "react-router";
 import { FaPlayCircle } from "react-icons/fa";
-import { Course } from "../../types/course.types";
 import Card from "../Reusable/Card";
 import { BACKEND_URL } from "../../constants/env.constants";
 import ImageContainer from "../Reusable/ImageContainer";
+import { StudentCourse } from "../../types/student.types";
 
 interface CourseCardProps {
-  course: Course;
+  course: StudentCourse;
 }
 
 const StudentCourseCard: React.FC<CourseCardProps> = ({ course }) => {
@@ -49,10 +49,26 @@ const StudentCourseCard: React.FC<CourseCardProps> = ({ course }) => {
         <p className="text-text text-sm mb-2 line-clamp-2">
           {course.description}
         </p>
-        <div className="flex justify-between text-sm text-text">
+        <div className="flex justify-between text-sm text-text mb-3">
           <span>Level: {course.level.name}</span>
           <span>Duration: {course.duration}</span>
         </div>
+
+        {/* Progress Bar */}
+        {"progress" in course && typeof course.progress === "number" && (
+          <div className="w-full">
+            <div className="flex justify-between text-xs mb-2">
+              <span>Progress</span>
+              <span>{Math.round(course.progress)}%</span>
+            </div>
+            <div className="w-full bg-background rounded-full h-2.5">
+              <div
+                className="bg-success h-2.5 rounded-full transition-all duration-300"
+                style={{ width: `${course.progress}%` }}
+              ></div>
+            </div>
+          </div>
+        )}
       </div>
     </Card>
   );

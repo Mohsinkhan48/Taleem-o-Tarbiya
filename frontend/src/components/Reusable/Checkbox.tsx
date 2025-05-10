@@ -26,7 +26,7 @@ const Checkbox: React.FC<CheckboxProps> = ({
   ...rest
 }) => {
   return (
-    <div className="text-text mb-4">
+    <div className="text-text">
       <label className={`inline-flex items-center gap-3 cursor-pointer ${disabled ? "opacity-50 cursor-not-allowed" : ""}`}>
         {/* Hidden native checkbox */}
         <input

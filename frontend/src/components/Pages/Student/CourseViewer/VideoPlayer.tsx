@@ -10,6 +10,7 @@ interface Props {
   chapterId: string;
   lectureId: string;
   videoUrl: string;
+  isCompleted: boolean;
   initialWatchedTime?: number; // seconds
 }
 
@@ -19,6 +20,7 @@ const VideoPlayer: React.FC<Props> = ({
   chapterId,
   lectureId,
   videoUrl,
+  isCompleted,
   initialWatchedTime = 0,
 }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -26,22 +28,16 @@ const VideoPlayer: React.FC<Props> = ({
   const [currentTime, setCurrentTime] = useState(initialWatchedTime);
   const [duration, setDuration] = useState(0);
   const [progressSaved, setProgressSaved] = useState(false);
+  const hasSeeked = useRef(false); // ensures seeking happens once
 
-  const user = useSelector((state: RootState) => state.auth.user); // assuming you store user in redux
+  const user = useSelector((state: RootState) => state.auth.user);
 
-  // Auto-resume
-  useEffect(() => {
-    if (videoRef.current) {
-      videoRef.current.currentTime = initialWatchedTime;
-    }
-  }, [initialWatchedTime]);
-
-  // Save progress every 10 seconds
+  // Save progress every 4 seconds
   useEffect(() => {
     const interval = setInterval(() => {
       if (videoRef.current && isPlaying && duration > 0) {
         const current = videoRef.current.currentTime;
-        const isCompleted = current >= duration - 5; // Allow 5s leeway
+        const isCompleted = current >= duration - 5;
         saveProgress(current, isCompleted);
       }
     }, 4000);
@@ -59,28 +55,14 @@ const VideoPlayer: React.FC<Props> = ({
         chapterId,
         lectureId,
         time,
-        completed
+        isCompleted ? true : completed
       );
 
       setProgressSaved(true);
-
-      setTimeout(() => setProgressSaved(false), 3000); // Reset UI message
+      setTimeout(() => setProgressSaved(false), 3000);
     } catch (err) {
       console.error("Progress save error:", err);
       setProgressSaved(false);
-    }
-  };
-
-  const handlePlayPause = () => {
-    const video = videoRef.current;
-    if (video) {
-      if (video.paused) {
-        video.play();
-        setIsPlaying(true);
-      } else {
-        video.pause();
-        setIsPlaying(false);
-      }
     }
   };
 
@@ -98,12 +80,17 @@ const VideoPlayer: React.FC<Props> = ({
           setCurrentTime(current);
         }}
         onLoadedMetadata={(e) => {
-          const duration = (e.target as HTMLVideoElement).duration;
-          setDuration(duration);
+          const video = e.target as HTMLVideoElement;
+          setDuration(video.duration);
+
+          // Seek to the initial watched time only once
+          if (!hasSeeked.current && initialWatchedTime > 0) {
+            video.currentTime = initialWatchedTime;
+            hasSeeked.current = true;
+          }
         }}
       />
 
-      {/* Optional UI overlay */}
       <div className="absolute bottom-2 right-4 text-xs text-gray-300 bg-black/60 px-2 py-1 rounded-md">
         {progressSaved ? "Progress saved ✅" : "Watching..."}
       </div>

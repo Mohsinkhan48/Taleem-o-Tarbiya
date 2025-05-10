@@ -21,7 +21,7 @@ const CourseViewer: React.FC = () => {
   const { singleCourse: course, loading } = useSelector(
     (state: RootState) => state.studentCourse
   );
-  const { selectedChapter } = useSelector(
+  const { chapter, courseId, moduleId } = useSelector(
     (state: RootState) => state.selectedChapter
   );
   useEffect(() => {
@@ -30,7 +30,13 @@ const CourseViewer: React.FC = () => {
       course.modules.length > 0 &&
       course.modules[0].chapters.length > 0
     ) {
-      dispatch(setSelectedChapter(course.modules[0].chapters[0]));
+      dispatch(
+        setSelectedChapter({
+          chapter: course.modules[0].chapters[0],
+          moduleId: course.modules[0]?._id!,
+          courseId: course._id,
+        })
+      );
     }
   }, [course]);
 
@@ -49,7 +55,17 @@ const CourseViewer: React.FC = () => {
   return (
     <div className="flex bg-background min-h-screen text-text gap-4 py-10 pl-10 pr-3">
       <main className="flex-1 space-y-6 overflow-y-auto">
-        {selectedChapter && <VideoPlayer videoUrl={selectedChapter?.lecture?.videoUrl!} lectureId="123" initialWatchedTime={0} />}
+        {chapter && (
+          <VideoPlayer
+            videoUrl={chapter?.lecture?.videoUrl!}
+            lectureId={chapter?.lecture?._id!}
+            isCompleted={chapter.lecture?.progress?.completed!}
+            initialWatchedTime={chapter.lecture?.progress?.currentTime || 0}
+            courseId={courseId!}
+            moduleId={moduleId!}
+            chapterId={chapter._id!}
+          />
+        )}
         <CourseDetails course={course} />
         <InstructorCard instructor={course.instructor} />
       </main>

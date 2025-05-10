@@ -1,8 +1,12 @@
-import { CourseCategory, CourseLevel, CourseTag } from "../redux/slices/fetch/fetchSlices";
+import {
+  CourseCategory,
+  CourseLevel,
+  CourseTag,
+} from "../redux/slices/fetch/fetchSlices";
 import { User } from "./auth.types";
 
 export interface Course {
-  _id: string,
+  _id: string;
   image: string;
   title: string;
   description: string;
@@ -47,9 +51,23 @@ export interface Lecture {
   resolution?: string;
   size?: number;
   format?: string;
+  progress?: LectureProgress;
   createdAt?: Date;
   updatedAt?: Date;
 }
+export interface LectureProgress {
+  _id: string;
+  user: string;
+  lecture: string;
+  chapter: string;
+  course: string;
+  module: string;
+  currentTime: number;
+  completed: boolean;
+  createdAt: string; // ISO date string
+  updatedAt: string; // ISO date string
+}
+
 export interface Resource {
   name: string;
   url: string;

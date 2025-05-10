@@ -63,6 +63,22 @@ const progressService = {
         chapterProgress.lectureCompleted = true;
       }
       await chapterProgress.save();
+      let courseProgress = await CourseProgress.findOne({
+        user: userId,
+        course: courseId,
+      });
+      if (!courseProgress) {
+        courseProgress = new CourseProgress({
+          user: userId,
+          course: courseId,
+          completedChapters: [chapterId]
+        });
+      } else {
+        if (!courseProgress.completedChapters.includes(chapterId)) {
+          courseProgress.completedChapters.push(chapterId);
+        }
+      }
+      await courseProgress.save();
     }
 
     return lectureProgress;

@@ -10,7 +10,7 @@ const { progressValidation } = require("../validations");
 
 const router = Router();
 
-router.put(
+router.post(
   "/lecture/:courseId/:moduleId/:chapterId/:lectureId",
   validate(progressValidation.updateLectureProgress),
   isAuth,

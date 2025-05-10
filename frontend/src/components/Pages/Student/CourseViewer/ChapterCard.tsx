@@ -2,33 +2,38 @@ import React, { useState } from "react";
 import { FaFileAlt } from "react-icons/fa";
 import { Chapter } from "../../../../types/course.types";
 import Badge from "../../../Reusable/Badge";
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "../../../../redux/store";
-import { setSelectedChapter } from "../../../../redux/slices/selectedChapter";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../../redux/store";
 import Modal from "../../../Reusable/Modal";
 import QuizAttempt from "./QuizAttempt";
 import AssignmentSection from "./AssignmentSection";
 import DropdownMenu from "../../../Reusable/DropdownMenu";
 import DropdownItem from "../../../Reusable/DropdownItem";
 import Button from "../../../Reusable/Button";
+import Checkbox from "../../../Reusable/Checkbox";
 
 interface Props {
   chapter: Chapter;
   courseId: string;
   moduleId: string;
+  onClick: (chapter: Chapter, moduleId: string) => void;
 }
 
-const ChapterCard: React.FC<Props> = ({ chapter, moduleId, courseId }) => {
-  const dispatch = useDispatch<AppDispatch>();
+const ChapterCard: React.FC<Props> = ({
+  chapter,
+  moduleId,
+  courseId,
+  onClick,
+}) => {
   const selectedChapter = useSelector(
-    (state: RootState) => state.selectedChapter?.selectedChapter
+    (state: RootState) => state.selectedChapter?.chapter
   );
 
   const [isQuizOpen, setIsQuizOpen] = useState(false);
   const [isAssignmentOpen, setIsAssignmentOpen] = useState(false);
 
   const handleChapterClick = () => {
-    dispatch(setSelectedChapter(chapter));
+    onClick(chapter, moduleId);
   };
 
   const handleQuizOpen = () => {
@@ -53,12 +58,15 @@ const ChapterCard: React.FC<Props> = ({ chapter, moduleId, courseId }) => {
         selectedChapter?._id === chapter._id ? "bg-card" : ""
       }`}
     >
-      <h3
-        className="text-md font-semibold text-primary cursor-pointer hover:underline"
-        onClick={handleChapterClick}
-      >
-        {chapter.title}
-      </h3>
+      <div className="flex items-center gap-2">
+        <Checkbox checked={chapter.lecture?.progress?.completed} />
+        <h3
+          className="text-md font-semibold text-primary cursor-pointer hover:underline"
+          onClick={handleChapterClick}
+        >
+          {chapter.title}
+        </h3>
+      </div>
 
       <div className="flex justify-between">
         {/* Resources Section */}
