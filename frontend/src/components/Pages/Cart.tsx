@@ -34,7 +34,7 @@ const Cart: React.FC = () => {
 
       {loading ? (
         <div className="flex justify-center items-center mt-20">
-          <Loader size={30} />
+          <Loader className="text-text" size={30} />
         </div>
       ) : cart.length === 0 ? (
         <p className="text-center text-secondary text-lg">

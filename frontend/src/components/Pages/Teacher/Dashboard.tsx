@@ -19,7 +19,7 @@ const TeacherDashboard: React.FC = () => {
   if (loading) {
     return (
       <div className="flex justify-center items-center mt-20">
-        <Loader size={40} />
+        <Loader className="text-text" size={40} />
       </div>
     );
   }

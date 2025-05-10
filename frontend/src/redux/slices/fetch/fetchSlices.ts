@@ -1,4 +1,7 @@
 // src/store/slices/courseMetaSlice.ts
+import { AdminDashboardResponse } from "../../../types/admin.types";
+import { User } from "../../../types/auth.types";
+import { Order } from "../../../types/course.types";
 import { StudentCourse } from "../../../types/student.types";
 import { TeacherDashboardResponse } from "../../../types/teacher.types";
 import { createGenericSlice, createGenericThunk } from "./fetchGenericSlice";
@@ -64,6 +67,25 @@ export const fetchTeacherDashboard = createGenericThunk<TeacherDashboardResponse
   "course/teacher/dashboard"
 );
 
+export const fetchAdminInstructors = createGenericThunk<User[]>(
+  "adminInstructors",
+  "admin/instructors"
+);
+
+export const fetchAdminStudents = createGenericThunk<User[]>(
+  "adminStudents",
+  "admin/students"
+);
+
+export const fetchPayments = createGenericThunk<Order[]>(
+  "adminPayments",
+  "admin/payments"
+);
+export const fetchAdminDashboard = createGenericThunk<AdminDashboardResponse>(
+  "adminDashboard",
+  "admin/dashboard"
+);
+
 // ==================
 // Slices
 // ==================
@@ -97,3 +119,23 @@ export const {
   reducer: teacherDashboardReducer,
   actions: teacherDashboardActions,
 } = createGenericSlice<TeacherDashboardResponse>("teacherDashboard", fetchTeacherDashboard);
+
+export const {
+  reducer: adminInstructorsReducer,
+  actions: adminInstructorsActions,
+} = createGenericSlice<User[]>("adminInstructors", fetchAdminInstructors);
+
+export const {
+  reducer: adminStudentsReducer,
+  actions: adminStudentsActions,
+} = createGenericSlice<User[]>("adminStudents", fetchAdminStudents);
+
+export const {
+  reducer: adminPaymentsReducer,
+  actions: adminPaymentsActions,
+} = createGenericSlice<Order[]>("adminPayments", fetchPayments);
+
+export const {
+  reducer: adminDashboardReducer,
+  actions: adminDashboardActions,
+} = createGenericSlice<AdminDashboardResponse>("adminDashboard", fetchAdminDashboard);

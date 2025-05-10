@@ -30,6 +30,9 @@ import EditCourse from "./components/Pages/Teacher/EditCourse/EditCourse";
 import EditModule from "./components/Pages/Teacher/EditCourse/EditModule/EditModule";
 import CourseUploadPage from "./components/Pages/Teacher/CreateCourse/LectureUploadTemporary";
 import ManageLectures from "./components/Pages/Teacher/ManageLectures/ManageLectures";
+import AdminPaymentsPage from "./components/Pages/Admin/AdminPaymentsPage";
+import AdminInstructorsPage from "./components/Pages/Admin/AdminTeachersPage";
+import AdminStudentsPage from "./components/Pages/Admin/AdminStudentsPage";
 
 function App() {
   return (
@@ -100,6 +103,9 @@ function App() {
           }
         >
           <Route path="dashboard" element={<AdminDashboard />} />
+          <Route path="teachers" element={<AdminInstructorsPage />} />
+          <Route path="students" element={<AdminStudentsPage />} />
+          <Route path="payments" element={<AdminPaymentsPage />} />
         </Route>
       </Routes>
     </BrowserRouter>

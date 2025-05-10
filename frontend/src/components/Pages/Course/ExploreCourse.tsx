@@ -67,7 +67,7 @@ const ExploreCourses = () => {
           <div className="w-full md:w-3/4">
             {loading ? (
               <div className="flex justify-center items-center h-32">
-                <Loader size={30} />
+                <Loader className="text-text" size={30} />
               </div>
             ) : (
               <div className="grid grid-cols-3 gap-6">

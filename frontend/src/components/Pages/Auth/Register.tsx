@@ -62,7 +62,7 @@ const Register: React.FC = () => {
           required
         />
         <SelectInput
-          options={data.map((role: Role) => ({
+          options={data && data.map((role: Role) => ({
             label: role.name,
             value: role._id,
           }))}

@@ -93,3 +93,14 @@ export interface Assignment {
   dueDate: string;
   submissionType: string;
 }
+
+export interface Order {
+  _id: string;
+  user: User;
+  courses: Course[];
+  stripeSessionId: string;
+  paymentIntentId?: string;
+  status: "pending" | "paid" | "failed";
+  createdAt: string;
+  updatedAt: string;
+}

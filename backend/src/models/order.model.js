@@ -4,13 +4,13 @@ const orderSchema = new mongoose.Schema(
   {
     user: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
+      ref: "users",
       required: true,
     },
     courses: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Course",
+        ref: "courses",
       },
     ],
     stripeSessionId: {
@@ -23,6 +23,23 @@ const orderSchema = new mongoose.Schema(
       enum: ["pending", "paid", "failed"],
       default: "pending",
     },
+    paymentMethod: {
+      type: String,
+      enum: ["card", "paypal", "bank_transfer"],
+    },
+    totalAmount: {
+      type: Number,
+      required: true,
+    },
+    coursesPrices: [
+      {
+        courseId: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "courses",
+        },
+        price: Number,
+      }
+    ],
   },
   { timestamps: true }
 );

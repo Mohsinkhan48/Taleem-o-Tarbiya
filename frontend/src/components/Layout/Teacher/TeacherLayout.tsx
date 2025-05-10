@@ -20,11 +20,13 @@ function TeacherLayout() {
       <Navbar />
       <div className="flex-1 flex flex-row min-h-screen">
         <Sidebar items={sidebarItems} brand="Teacher Panel" />
-        <div className="flex-1 overflow-auto p-4">
-          <Outlet />
-        </div>
+        <main className="flex-1 flex flex-col overflow-auto">
+          <div className="min-h-screen">
+            <Outlet />
+          </div>
+          <Footer />
+        </main>
       </div>
-      <Footer />
       <ThemeChooser />
       <LanguageChooser />
     </div>
