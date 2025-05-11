@@ -163,8 +163,8 @@ const AdminDashboard = () => {
                   Ordered: {new Date(order.createdAt).toLocaleDateString()}
                 </p>
                 <p className="text-sm text-secondary">
-                  Courses:{" "}
-                  {order.courses.map((course) => course.title).join(", ")}
+                  Course:{" "}
+                  {order.course?.title}
                 </p>
               </li>
             ))}

@@ -40,7 +40,7 @@ export const Table = <T,>({ data, columns, actions, loading = false }: TableProp
               </td>
             </tr>
           ) : (
-            data.map((row, idx) => (
+            data && data.map((row, idx) => (
               <tr key={idx} className="border-t border-border">
                 {columns.map((col, colIdx) => (
                   <td key={colIdx} className="px-4 py-2 whitespace-nowrap">

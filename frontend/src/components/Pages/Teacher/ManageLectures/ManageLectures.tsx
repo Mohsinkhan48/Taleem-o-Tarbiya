@@ -8,6 +8,8 @@ import Modal from "../../../Reusable/Modal";
 import LectureForm from "../CreateCourse/LectureForm";
 import { fetchInstructoryCourseById } from "../../../../redux/slices/getInstructorCourseByIdSlice";
 import { Lecture } from "../../../../types/course.types";
+import { FaPlayCircle, FaRegTimesCircle } from "react-icons/fa";
+import { BsPlayBtnFill } from "react-icons/bs";
 
 const ManageLectures: React.FC = () => {
   const { id: courseId } = useParams<{ id: string }>();
@@ -50,15 +52,28 @@ const ManageLectures: React.FC = () => {
   }
 
   if (!course) {
-    return <div className="text-text">No Course Found</div>;
+    return (
+      <div className="text-error text-center text-lg mt-10 font-medium">
+        No Course Found
+      </div>
+    );
   }
 
   return (
     <div className="max-w-6xl mx-auto p-6 space-y-8 text-text">
+      <h1 className="text-3xl font-bold flex items-center gap-2 mb-6">
+        Manage Lectures
+      </h1>
+
       <div className="space-y-6">
         {course.modules.map((module) => (
-          <div key={module._id} className="border-b border-border pb-4">
-            <h2 className="text-xl font-semibold mb-2">{module.title}</h2>
+          <div
+            key={module._id}
+            className="border border-border bg-card rounded-xl p-4 shadow-sm transition hover:shadow-md"
+          >
+            <h2 className="text-2xl font-semibold mb-3 text-primary">
+              {module.title}
+            </h2>
             <div className="grid gap-2">
               {module.chapters.map((chapter) => (
                 <div
@@ -70,13 +85,22 @@ const ManageLectures: React.FC = () => {
                       chapter.lecture
                     )
                   }
-                  className="cursor-pointer hover:text-primary underline flex items-center space-x-2"
+                  className="cursor-pointer px-4 py-2 rounded-md bg-background hover:bg-secondary/10 flex justify-between items-center transition group"
                 >
-                  <span>{chapter.title}</span>
+                  <div className="flex items-center gap-2">
+                    <BsPlayBtnFill className="text-lg text-link group-hover:text-link-hover" />
+                    <span className="font-medium">{chapter.title}</span>
+                  </div>
                   {chapter.lecture ? (
-                    <span className="text-sm text-success">● Has Lecture</span>
+                    <span className="flex items-center gap-1 text-success text-sm font-semibold">
+                      <FaPlayCircle />
+                      Has Lecture
+                    </span>
                   ) : (
-                    <span className="text-sm text-warning">● No Lecture</span>
+                    <span className="flex items-center gap-1 text-warning text-sm font-semibold">
+                      <FaRegTimesCircle />
+                      No Lecture
+                    </span>
                   )}
                 </div>
               ))}

@@ -69,7 +69,7 @@ const adminService = {
   getPayments: async () => {
     const orders = await Order.find({ status: "paid" })
       .populate("user", "fullName email")
-      .populate("courses", "title price")
+      .populate("course", "title price")
       .select("-__v");
 
     return orders;
@@ -133,7 +133,7 @@ const adminService = {
         .sort({ createdAt: -1 })
         .limit(5)
         .populate("user", "fullName email")
-        .populate("courses", "title price"),
+        .populate("course", "title price"),
       CourseCategory.countDocuments(),
       CourseTag.countDocuments(),
     ]);

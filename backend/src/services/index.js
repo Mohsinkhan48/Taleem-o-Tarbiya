@@ -9,3 +9,4 @@ module.exports.cartService = require("./cart.service");
 module.exports.paymentService = require("./payment.service");
 module.exports.progressService = require("./progress.service");
 module.exports.adminService = require("./admin.service");
+module.exports.teacherService = require("./teacher.service");

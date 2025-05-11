@@ -1,58 +1,72 @@
 const Stripe = require("stripe");
-const { Course, Order } = require("../models");
-const { STRIPE_SECRET_KEY } = require("../config/env.config");
+const { Course, Order, User } = require("../models");
+const { STRIPE_SECRET_KEY, FRONTEND_URL } = require("../config/env.config");
 const stripe = new Stripe(STRIPE_SECRET_KEY);
 
 const paymentService = {
   createCheckoutSession: async (body, user) => {
-    const { courseIds } = body;
+    const { courseId } = body;
 
-    const courses = await Course.find({ _id: { $in: courseIds } });
-    if (!courses.length) throw new Error("No valid courses found");
+    const course = await Course.findById(courseId).populate("instructor");
+    if (!course) throw new Error("Course not found");
 
-    let totalAmount = 0;
-    const coursesPrices = courses.map((course) => {
-      const coursePrice = course.price;
-      totalAmount += coursePrice;
-      return {
-        courseId: course._id,
-        price: course.price,
-      };
-    });
+    const instructor = course.instructor;
 
-    const line_items = courses.map((course) => ({
-      price_data: {
-        currency: "usd",
-        product_data: {
-          name: course.title,
-          description: course.description,
-        },
-        unit_amount: course.price * 100, // Price in cents
-      },
-      quantity: 1,
-    }));
+    if (!instructor || !instructor.stripeAccountId) {
+      throw new Error("Instructor has no connected Stripe account");
+    }
+
+    const stripeAccount = await stripe.accounts.retrieve(instructor.stripeAccountId);
+
+    if (
+      stripeAccount.charges_enabled !== true ||
+      stripeAccount.details_submitted !== true
+    ) {
+      throw new Error("Instructor's Stripe account is not fully onboarded");
+    }
+
+    const priceInCents = course.price * 100;
 
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
       mode: "payment",
       customer_email: user.email,
-      line_items,
+      line_items: [
+        {
+          price_data: {
+            currency: "usd",
+            product_data: {
+              name: course.title,
+              description: course.description,
+            },
+            unit_amount: priceInCents,
+          },
+          quantity: 1,
+        },
+      ],
       metadata: {
         userId: user._id.toString(),
-        courseIds: courseIds.join(","),
+        courseId: courseId,
       },
-      success_url: `${process.env.FRONTEND_URL}student/payment/success`,
-      cancel_url: `${process.env.FRONTEND_URL}student/payment/cancel`,
+      success_url: `${FRONTEND_URL}student/payment/success`,
+      cancel_url: `${FRONTEND_URL}student/payment/cancel`,
+
+      // Split logic here
+      payment_intent_data: {
+        application_fee_amount: Math.round(priceInCents * 0.3), // 30% fee
+        transfer_data: {
+          destination: instructor.stripeAccountId, // 70% goes to instructor
+        },
+      },
     });
 
-    // Create a pending order entry in DB, including coursesPrices and totalAmount
+    // Save order
     await Order.create({
       user: user._id,
-      courses: courseIds,
+      course: courseId,
       stripeSessionId: session.id,
       status: "pending",
-      totalAmount,
-      coursesPrices,
+      totalAmount: course.price,
     });
 
     return session;

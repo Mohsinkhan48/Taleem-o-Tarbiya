@@ -10,6 +10,7 @@ const paymentRoutes = require("./payment.routes");
 const stripeRoutes = require("./stripe.routes");
 const progressRoutes = require("./progress.routes");
 const adminRoutes = require("./admin.routes");
+const teacherRoutes = require("./teacher.routes");
 
 const defaultRoutes = [
   {
@@ -43,6 +44,10 @@ const defaultRoutes = [
   {
     path: "/admin",
     route: adminRoutes,
+  },
+  {
+    path: "/teacher",
+    route: teacherRoutes,
   }
 ];
 

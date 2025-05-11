@@ -96,7 +96,7 @@ const QuizAttempt: React.FC<Props> = ({
   if (loading) {
     return (
       <div className="flex justify-center items-center h-40 text-xl font-medium text-primary">
-        <Loader className="text-text" className="mr-3"/> Loading Quiz...
+        <Loader className="text-text mr-3"/> Loading Quiz...
       </div>
     );
   }
