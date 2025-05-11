@@ -73,7 +73,11 @@ const Cart: React.FC = () => {
                     </p>
                   </div>
                 </div>
-                <div className="mt-4 sm:mt-0">
+                <div className="mt-4 sm:mt-0 flex flex-col gap-2 items-end">
+                  <CheckoutButton
+                    courseId={item.course._id}
+                    isLoading={loading}
+                  />
                   <RemoveFromCartButton courseId={item.course._id} />
                 </div>
               </li>
@@ -94,9 +98,6 @@ const Cart: React.FC = () => {
             >
               Clear Cart
             </Button>
-          </div>
-          <div className="mt-10">
-            <CheckoutButton cartItems={cart} isLoading={loading} />
           </div>
         </>
       )}

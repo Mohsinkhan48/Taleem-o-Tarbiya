@@ -7,3 +7,4 @@ module.exports.paymentController = require("./payment.controller");
 module.exports.stripeController = require("./stripe.controller");
 module.exports.progressController = require("./progress.controller");
 module.exports.adminController = require("./admin.controller");
+module.exports.teacherController = require("./teacher.controller");

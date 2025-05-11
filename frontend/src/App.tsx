@@ -33,6 +33,9 @@ import ManageLectures from "./components/Pages/Teacher/ManageLectures/ManageLect
 import AdminPaymentsPage from "./components/Pages/Admin/AdminPaymentsPage";
 import AdminInstructorsPage from "./components/Pages/Admin/AdminTeachersPage";
 import AdminStudentsPage from "./components/Pages/Admin/AdminStudentsPage";
+import StripeReauth from "./components/Pages/Teacher/StripeAccount/StripeReauth";
+import StripeConnected from "./components/Pages/Teacher/StripeAccount/StripeConnected";
+import StripeAccountManager from "./components/Pages/Teacher/StripeAccount/StripeAccountManager";
 
 function App() {
   return (
@@ -77,6 +80,9 @@ function App() {
           <Route path="courses" element={<TeacherCourses />} />
           <Route path="lecture-upload" element={<CourseUploadPage />} />
           <Route path="manage-lectures/:id" element={<ManageLectures />} />
+          <Route path="stripe/reauth" element={<StripeReauth />} />
+          <Route path="stripe/onboard" element={<StripeAccountManager />} />
+          <Route path="stripe/connected" element={<StripeConnected />} />
         </Route>
 
         <Route

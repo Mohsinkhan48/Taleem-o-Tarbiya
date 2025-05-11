@@ -2,7 +2,7 @@ const { Router } = require("express");
 const { courseValidation } = require("../validations");
 const { courseController } = require("../controllers");
 
-const { validate, isMember, isAuth, parseFormDataFields } = require("../middlewares");
+const { validate, isMember, isAuth } = require("../middlewares");
 const hasRole = require("../middlewares/hasRole.middleware");
 const { ROLES } = require("../constants");
 

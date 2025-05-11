@@ -97,10 +97,11 @@ export interface Assignment {
 export interface Order {
   _id: string;
   user: User;
-  courses: Course[];
+  course: Course;
   stripeSessionId: string;
   paymentIntentId?: string;
   status: "pending" | "paid" | "failed";
+  totalAmount: string;
   createdAt: string;
   updatedAt: string;
 }

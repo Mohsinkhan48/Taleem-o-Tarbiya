@@ -13,6 +13,7 @@ function TeacherLayout() {
     { label: "Dashboard", icon: RxDashboard, path: "dashboard" },
     { label: "Create Course", icon: FiPlus, path: "create-course" },
     { label: "My Courses", icon: FiBook, path: "courses" },
+    { label: "Stripe Account", icon: FiBook, path: "stripe/onboard" },
   ];
 
   return (

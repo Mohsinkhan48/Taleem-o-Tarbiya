@@ -7,12 +7,12 @@ const orderSchema = new mongoose.Schema(
       ref: "users",
       required: true,
     },
-    courses: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "courses",
-      },
-    ],
+    course: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "courses",
+      required: true,
+    },
+
     stripeSessionId: {
       type: String,
       required: true,
@@ -31,15 +31,6 @@ const orderSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
-    coursesPrices: [
-      {
-        courseId: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: "courses",
-        },
-        price: Number,
-      }
-    ],
   },
   { timestamps: true }
 );

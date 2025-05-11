@@ -17,10 +17,10 @@ const AdminPaymentsPage: React.FC = () => {
     { label: "User", accessor: "user.fullName", render: (order) => order.user.fullName },
     { label: "Email", accessor: "user.email", render: (order) => order.user.email },
     {
-      label: "Courses",
-      accessor: "courses",
+      label: "Course",
+      accessor: "course",
       render: (order) => {
-        return order.courses.length > 0 ? order.courses.map((c) => c.title).join(", ") : "No courses"
+        return order.course?.title
       },
     },
     {

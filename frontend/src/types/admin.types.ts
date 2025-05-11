@@ -27,10 +27,10 @@ export interface AdminDashboardResponse {
         fullName: string;
         email: string;
       };
-      courses: {
+      course: {
         title: string;
         price: number;
-      }[];
+      };
       createdAt: string; // ISO date string
     }[];
   };

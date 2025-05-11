@@ -33,6 +33,10 @@ const userSchema = mongoose.Schema(
       ref: "roles",
       required: true,
     },
+    stripeAccountId: {
+      type: mongoose.Schema.Types.String,
+      required: false,
+    },
   },
   {
     timestamps: true,
