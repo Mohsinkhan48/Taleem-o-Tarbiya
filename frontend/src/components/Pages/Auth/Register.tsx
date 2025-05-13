@@ -4,7 +4,7 @@ import { AppDispatch, RootState } from "../../../redux/store";
 import { registerUser } from "../../../redux/slices/authSlice";
 import Input from "../../Reusable/Input";
 import Button from "../../Reusable/Button";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { useLanguage } from "../../../context/LanguageContext";
 import SelectInput from "../../Reusable/SelectInput";
 import { fetchAllRoles, Role } from "../../../redux/slices/fetch/fetchSlices";
@@ -15,6 +15,7 @@ const Register: React.FC = () => {
   const { t } = useLanguage();
   const { loading, error } = useSelector((state: RootState) => state.auth);
   const { data } = useSelector((state: RootState) => state.role); // 👈 fetch roles from store
+  const navigate = useNavigate();
 
   useEffect(() => {
     dispatch(fetchAllRoles());
@@ -27,9 +28,12 @@ const Register: React.FC = () => {
     role: "", // 👈 added role field
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    dispatch(registerUser(form));
+    const result = await dispatch(registerUser(form));
+    if (result) {
+      navigate("/");
+    }
   };
   return (
     <AuthLayout title={t("signup")}>

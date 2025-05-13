@@ -30,6 +30,7 @@ const progressService = {
       module: moduleId,
       lecture: lectureId,
     });
+
     if (!lectureProgress) {
       lectureProgress = new LectureProgress({
         user: userId,
@@ -63,27 +64,45 @@ const progressService = {
         chapterProgress.lectureCompleted = true;
       }
       await chapterProgress.save();
+
       let courseProgress = await CourseProgress.findOne({
         user: userId,
         course: courseId,
       });
+
       if (!courseProgress) {
         courseProgress = new CourseProgress({
           user: userId,
           course: courseId,
-          completedChapters: [chapterId]
+          completedChapters: [chapterId],
+          completed: false,
         });
       } else {
         if (!courseProgress.completedChapters.includes(chapterId)) {
           courseProgress.completedChapters.push(chapterId);
         }
       }
+
+      // ✅ Check if all chapters are completed
+      const allCourseChapters = await Chapter.find({ course: courseId }).select(
+        "_id"
+      );
+      const allChapterIds = allCourseChapters.map((ch) => ch._id.toString());
+      const completedChapterIds = courseProgress.completedChapters.map((id) =>
+        id.toString()
+      );
+
+      const isCourseCompleted = allChapterIds.every((id) =>
+        completedChapterIds.includes(id)
+      );
+      courseProgress.completed = isCourseCompleted;
+      courseProgress.completedAt = new Date().toLocaleDateString();
+
       await courseProgress.save();
     }
 
     return lectureProgress;
   },
-
   // Submit quiz progress
   submitQuizProgress: async (
     userId,

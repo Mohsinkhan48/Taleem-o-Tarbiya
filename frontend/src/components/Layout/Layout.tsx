@@ -1,6 +1,5 @@
 import { Outlet } from "react-router";
 import ThemeChooser from "../ThemeChooser";
-import LanguageChooser from "../LanguageChooser";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
 
@@ -16,7 +15,6 @@ function Layout() {
       </div>
       <Footer />
       <ThemeChooser />
-      <LanguageChooser />
     </div>
   );
 }

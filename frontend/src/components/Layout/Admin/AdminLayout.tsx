@@ -1,7 +1,6 @@
 // AdminLayout.tsx
 import { Outlet } from "react-router";
 import ThemeChooser from "../../ThemeChooser";
-import LanguageChooser from "../../LanguageChooser";
 import Footer from "../Footer";
 import Navbar from "../Navbar";
 import Sidebar, { SidebarItem } from "../Sidebar";
@@ -29,7 +28,6 @@ function AdminLayout() {
         </main>
       </div>
       <ThemeChooser />
-      <LanguageChooser />
     </div>
   );
 }

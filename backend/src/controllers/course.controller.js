@@ -151,6 +151,29 @@ const courseController = {
       });
     });
   }),
+  getCertificate: catchAsync(async (req, res, next) => {
+    const studentId = req.user;
+    const { courseId } = req.params;
+
+    // You can add a progress check service here if needed:
+    const isCompleted = await courseService.checkCourseCompletion(
+      studentId,
+      courseId
+    );
+    if (!isCompleted) return R2XX(res, "Course is not competed yet.", 200, {
+      isCertificate: false,
+    });
+
+    const filePath = await courseService.generateCertificatePDF(
+      studentId,
+      courseId
+    );
+
+    return R2XX(res, "Certificate generated successfully", 200, {
+      certificateUrl: filePath,
+      isCertificate: true,
+    });
+  }),
   getAllCourses: catchAsync(async (req, res) => {
     const filters = CourseFilters(req.query);
     const user = await getOptionalUserFromRequest(req);

@@ -78,9 +78,14 @@ const CourseDetail: React.FC<CourseDetailProps> = ({ course }) => {
             Last Updated:{" "}
             <span className="font-medium">{timeAgo(course.updatedAt!)}</span>
           </p>
+          <p className="text-2xl font-bold text-text">
+            {course.isPaid ? `$${course.price}` : "Free"}
+          </p>
+          <AddToCartButton courseId={course._id} />
         </div>
 
         {/* Right: Image + Price */}
+        {/* Right: Image */}
         <div className="w-full lg:w-[300px] xl:w-[350px]">
           <div className="border border-card-border rounded-lg bg-card p-4 space-y-4">
             <ImageContainer
@@ -90,12 +95,6 @@ const CourseDetail: React.FC<CourseDetailProps> = ({ course }) => {
               width="w-full"
               height="max-h-[250px]"
             />
-            <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
-              <p className="text-2xl font-bold text-text">
-                {course.isPaid ? `$${course.price}` : "Free"}
-              </p>
-              <AddToCartButton courseId={course._id} />
-            </div>
           </div>
         </div>
       </div>

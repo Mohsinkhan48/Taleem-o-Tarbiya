@@ -9,7 +9,12 @@ const {
   LectureProgress,
   CourseProgress,
   Lecture,
+  User,
 } = require("../models");
+const fs = require("fs");
+const path = require("path");
+const chrome = require("html-pdf-chrome");
+const generateTemplate = require("../email-templates/certificate.template");
 
 const courseService = {
   createCourse: async (courseData, instructor_id) => {
@@ -78,7 +83,7 @@ const courseService = {
               content: chapterData.content,
               lecture: chapterData?.lecture,
               isPreview: chapterData.isPreview || false,
-              resources: Data.resources || [],
+              resources: chapterData.resources || [],
               quiz: quiz?._id,
               assignment: assignment?._id,
               module: module._id, // Associate chapter with module
@@ -333,36 +338,38 @@ const courseService = {
         },
       ],
     });
-  
+
     const courses = enrollments.map((enrollment) => enrollment.course);
-  
+
     const updatedCourses = await Promise.all(
       courses.map(async (course) => {
         // ✅ Get total number of chapters across all modules
         const totalChapters = course.modules.reduce((acc, module) => {
           return acc + (module.chapters?.length || 0);
         }, 0);
-  
+
         const courseProgress = await CourseProgress.findOne({
           user: studentId,
           course: course._id,
         });
-  
+
         // ✅ Safe handling if no progress yet
-        const completedChaptersCount = courseProgress?.completedChapters?.length || 0;
-  
+        const completedChaptersCount =
+          courseProgress?.completedChapters?.length || 0;
+
         // ✅ Avoid divide by zero
-        const progressPercentage = totalChapters > 0
-          ? (completedChaptersCount / totalChapters) * 100
-          : 0;
-  
+        const progressPercentage =
+          totalChapters > 0
+            ? (completedChaptersCount / totalChapters) * 100
+            : 0;
+
         return {
           ...course.toObject(),
           progress: Math.round(progressPercentage), // optional: round percentage
         };
       })
     );
-  
+
     return updatedCourses;
   },
   getStudentEnrolledCourse: async (studentId, courseId) => {
@@ -430,73 +437,90 @@ const courseService = {
     return course;
   },
   getTeacherDashboard: async (teacherId) => {
-  const thirtyDaysAgo = new Date();
-  thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+    const thirtyDaysAgo = new Date();
+    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
 
-  // 1. Get all courses by this teacher
-  const courses = await Course.find({ instructor: teacherId }).select("_id title ratings");
+    // 1. Get all courses by this teacher
+    const courses = await Course.find({ instructor: teacherId }).select(
+      "_id title ratings"
+    );
 
-  const courseIds = courses.map((course) => course._id);
+    const courseIds = courses.map((course) => course._id);
 
-  // 2. Enrollments
-  const enrollmentsCount = await Enrollment.countDocuments({
-    course: { $in: courseIds },
-  });
+    // 2. Enrollments
+    const enrollmentsCount = await Enrollment.countDocuments({
+      course: { $in: courseIds },
+    });
 
-  const enrollmentsLast30Days = await Enrollment.countDocuments({
-    course: { $in: courseIds },
-    createdAt: { $gte: thirtyDaysAgo },
-  });
+    const enrollmentsLast30Days = await Enrollment.countDocuments({
+      course: { $in: courseIds },
+      createdAt: { $gte: thirtyDaysAgo },
+    });
 
-  // 3. Count lectures and duration
-  const modules = await Module.find({ course: { $in: courseIds } }).select("_id");
-  const moduleIds = modules.map((m) => m._id);
+    // 3. Count lectures and duration
+    const modules = await Module.find({ course: { $in: courseIds } }).select(
+      "_id"
+    );
+    const moduleIds = modules.map((m) => m._id);
 
-  const chapters = await Chapter.find({ module: { $in: moduleIds } }).select("lecture");
-  const lectureIds = chapters.map((c) => c.lecture).filter(Boolean);
+    const chapters = await Chapter.find({ module: { $in: moduleIds } }).select(
+      "lecture"
+    );
+    const lectureIds = chapters.map((c) => c.lecture).filter(Boolean);
 
-  const lecturesProgresses = await LectureProgress.find({ lecture: { $in: lectureIds } }).select("currentTime createdAt");
-  const lectureCount = lecturesProgresses.length;
-  const lectureCountLast30Days = lecturesProgresses.filter((l) => l.createdAt >= thirtyDaysAgo).length;
+    const lecturesProgresses = await LectureProgress.find({
+      lecture: { $in: lectureIds },
+    }).select("currentTime createdAt");
+    const lectureCount = lecturesProgresses.length;
+    const lectureCountLast30Days = lecturesProgresses.filter(
+      (l) => l.createdAt >= thirtyDaysAgo
+    ).length;
 
-  const totalLearningSeconds = lecturesProgresses.reduce((sum, lec) => sum + (lec.currentTime || 0), 0);
-  const totalLearningHours = +(totalLearningSeconds / 3600).toFixed(2);
+    const totalLearningSeconds = lecturesProgresses.reduce(
+      (sum, lec) => sum + (lec.currentTime || 0),
+      0
+    );
+    const totalLearningHours = +(totalLearningSeconds / 3600).toFixed(2);
 
-  const totalLearningSeconds30 = lecturesProgresses
-    .filter((l) => l.createdAt >= thirtyDaysAgo)
-    .reduce((sum, lec) => sum + (lec.currentTime || 0), 0);
-  const totalLearningHours30 = +(totalLearningSeconds30 / 3600).toFixed(2);
+    const totalLearningSeconds30 = lecturesProgresses
+      .filter((l) => l.createdAt >= thirtyDaysAgo)
+      .reduce((sum, lec) => sum + (lec.currentTime || 0), 0);
+    const totalLearningHours30 = +(totalLearningSeconds30 / 3600).toFixed(2);
 
-  // 4. Course progress entries (lectures started by students)
-  const progressEntries = await LectureProgress.find({
-    course: { $in: courseIds },
-  }).select("createdAt");
+    // 4. Course progress entries (lectures started by students)
+    const progressEntries = await LectureProgress.find({
+      course: { $in: courseIds },
+    }).select("createdAt");
 
-  const lecturesTaken = progressEntries.length;
-  const lecturesTaken30 = progressEntries.filter((p) => p.createdAt >= thirtyDaysAgo).length;
+    const lecturesTaken = progressEntries.length;
+    const lecturesTaken30 = progressEntries.filter(
+      (p) => p.createdAt >= thirtyDaysAgo
+    ).length;
 
-  // 5. Average ratings per course (optional)
-  const averageRatings = courses.map((c) => {
-    const avg =
-      c.ratings.length > 0
-        ? +(c.ratings.reduce((sum, r) => sum + r, 0) / c.ratings.length).toFixed(2)
-        : null;
-    return { courseId: c._id, title: c.title, avgRating: avg };
-  });
+    // 5. Average ratings per course (optional)
+    const averageRatings = courses.map((c) => {
+      const avg =
+        c.ratings.length > 0
+          ? +(
+              c.ratings.reduce((sum, r) => sum + r, 0) / c.ratings.length
+            ).toFixed(2)
+          : null;
+      return { courseId: c._id, title: c.title, avgRating: avg };
+    });
 
-  return {
-    totalCourses: courses.length,
-    totalEnrollments: enrollmentsCount,
-    enrollmentsLast30Days,
-    totalLectures: lectureCount,
-    lecturesLast30Days: lectureCountLast30Days,
-    totalLearningHours,
-    learningHoursLast30Days: totalLearningHours30,
-    lecturesTaken,
-    lecturesTakenLast30Days: lecturesTaken30,
-    averageRatings,
-  };
-},
+    return {
+      totalCourses: courses.length,
+      totalEnrollments: enrollmentsCount,
+      enrollmentsLast30Days,
+      totalLectures: lectureCount,
+      lecturesLast30Days: lectureCountLast30Days,
+      totalLearningHours,
+      learningHoursLast30Days: totalLearningHours30,
+      lecturesTaken,
+      lecturesTakenLast30Days: lecturesTaken30,
+      averageRatings,
+    };
+  },
   updateThumbnail: async (courseId, thumbnailPath) => {
     return await Course.findByIdAndUpdate(
       courseId,
@@ -534,6 +558,59 @@ const courseService = {
     });
 
     return chapter;
+  },
+  checkCourseCompletion: async (studentId, courseId) => {
+    const progress = await CourseProgress.findOne({
+      user: studentId,
+      course: courseId,
+    });
+    if (progress) return progress.completed;
+    return false;
+  },
+  generateCertificatePDF: async (studentId, courseId) => {
+    const progress = await CourseProgress.findOne({
+      user: studentId,
+      course: courseId,
+    });
+
+    if (progress && progress?.certificateUrl) return progress.certificateUrl;
+
+    const user = await User.findById(studentId);
+    const course = await Course.findById(courseId).populate('instructor', 'fullName').populate('level');
+    const html = generateTemplate(user.fullName, course, course.instructor.fullName, progress && progress?.completedAt || new Date().toLocaleDateString());
+
+    const certificateDir = path.join(
+      __dirname,
+      "..",
+      "uploads",
+      "certificates",
+      `Student_${studentId}`,
+      `Course_${courseId}`
+    );
+    fs.mkdirSync(certificateDir, { recursive: true });
+
+    const filePath = path.join(certificateDir, `certificate.pdf`);
+
+    const pdf = await chrome.create(html, { printOptions: { format: "A4" } });
+    fs.writeFileSync(filePath, pdf.toBuffer());
+
+    const relativePath = `/uploads/certificates/Student_${studentId}/Course_${courseId}/certificate.pdf`;
+
+    // ✅ Save the certificate URL to CourseProgress
+    if (progress) {
+      progress.certificateUrl = relativePath;
+      await progress.save();
+    } else {
+      await CourseProgress.create({
+        user: studentId,
+        course: courseId,
+        completed: true,
+        completedAt: new Date(),
+        certificateUrl: relativePath,
+      });
+    }
+
+    return relativePath;
   },
 };
 

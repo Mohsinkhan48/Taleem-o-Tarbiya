@@ -44,6 +44,15 @@ router.post(
   courseController.uploadThumbnail
 );
 
+router.get(
+  "/get-certificate/:courseId",
+  validate(courseValidation.getCourseById),
+  isAuth,
+  isMember,
+  hasRole([ROLES.STUDENT]),
+  courseController.getCertificate
+);
+
 router.post(
   "/upload-lecture/:courseId/:moduleId/:chapterId",
   validate(courseValidation.uploadLectureVideo),

@@ -1,7 +1,6 @@
 // TeacherLayout.tsx
 import { Outlet } from "react-router";
 import ThemeChooser from "../../ThemeChooser";
-import LanguageChooser from "../../LanguageChooser";
 import Footer from "../Footer";
 import { FiBook, FiPlus } from "react-icons/fi";
 import Sidebar, { SidebarItem } from "../Sidebar";
@@ -29,7 +28,6 @@ function TeacherLayout() {
         </main>
       </div>
       <ThemeChooser />
-      <LanguageChooser />
     </div>
   );
 }

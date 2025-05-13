@@ -1,6 +1,5 @@
 import { Outlet } from "react-router";
 import ThemeChooser from "../../ThemeChooser";
-import LanguageChooser from "../../LanguageChooser";
 import Footer from "../Footer";
 import { FiBook } from "react-icons/fi";
 import Sidebar, { SidebarItem } from "../Sidebar";
@@ -23,7 +22,6 @@ function StudentLayout() {
         </main>
       </div>
       <ThemeChooser />
-      <LanguageChooser />
     </div>
   );
 }

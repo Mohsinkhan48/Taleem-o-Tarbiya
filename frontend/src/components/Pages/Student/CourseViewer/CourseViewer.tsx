@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../../redux/store";
@@ -9,10 +9,13 @@ import CourseDetails from "./CourseDetails";
 import InstructorCard from "./InstructorCard";
 import ModuleAccordion from "./ModuleAccordian";
 import { setSelectedChapter } from "../../../../redux/slices/selectedChapter";
+import Modal from "../../../Reusable/Modal";
+import CertificateViewer from "./CertificateViewer";
 
 const CourseViewer: React.FC = () => {
   const { id } = useParams();
   const dispatch = useDispatch<AppDispatch>();
+  const [isModalOpen, setIsModalOpen] = useState(false); // ✅ modal state
 
   useEffect(() => {
     dispatch(fetchStudentEnrolledCourse(id!));
@@ -24,6 +27,7 @@ const CourseViewer: React.FC = () => {
   const { chapter, courseId, moduleId } = useSelector(
     (state: RootState) => state.selectedChapter
   );
+
   useEffect(() => {
     if (
       course &&
@@ -66,13 +70,29 @@ const CourseViewer: React.FC = () => {
             chapterId={chapter._id!}
           />
         )}
+
         <CourseDetails course={course} />
         <InstructorCard instructor={course.instructor} />
+
+        {/* ✅ Certificate Button */}
+        <div className="mt-4">
+          <button
+            onClick={() => setIsModalOpen(true)}
+            className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded"
+          >
+            🎓 View Certificate
+          </button>
+        </div>
       </main>
 
       <aside className="w-80 max-h-screen overflow-y-auto">
         <ModuleAccordion modules={course.modules} courseId={course._id} />
       </aside>
+
+      {/* ✅ Certificate Modal */}
+      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+        <CertificateViewer courseId={id!} />
+      </Modal>
     </div>
   );
 };

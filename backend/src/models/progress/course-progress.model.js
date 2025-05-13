@@ -1,3 +1,4 @@
+const { boolean } = require("joi");
 const mongoose = require("mongoose");
 
 const CourseProgressSchema = new mongoose.Schema(
@@ -17,6 +18,8 @@ const CourseProgressSchema = new mongoose.Schema(
     },
 
     completedChapters: [{ type: mongoose.Schema.Types.ObjectId, ref: "chapters" }],
+    completed: { type: Boolean, default: false },
+    certificateUrl: { type: String, required: false },
     completedAt: { type: Date },
   },
   { timestamps: true }
