@@ -60,7 +60,7 @@ const TeacherDashboard: React.FC = () => {
           last30DaysValue={dashboard.lecturesTakenLast30Days}
         />
       </div>
-
+{/* 
       <div className="mt-10">
         <h2 className="text-xl font-semibold mb-4">Course Ratings</h2>
         <div className="space-y-3">
@@ -79,7 +79,7 @@ const TeacherDashboard: React.FC = () => {
             </Card>
           ))}
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };

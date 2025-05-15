@@ -38,7 +38,7 @@ const ExploreCourses = () => {
   }, [dispatch, filters]);
 
   const categoryName = useMemo(() => {
-    const match = courseCategories.find((cat) => cat._id === categoryId);
+    const match = courseCategories && courseCategories.find((cat) => cat._id === categoryId) || null;
     return match?.name || "All Categories";
   }, [courseCategories, categoryId]);
 
