@@ -37,7 +37,6 @@ const AssignmentSection: React.FC<Props> = ({ assignment }) => {
     <div className="pt-4 space-y-2">
       <h4 className="font-medium text-secondary">{assignment.title}</h4>
       <p className="text-sm text-text">{assignment.description}</p>
-      <p className="text-xs text-warning">Due: {new Date(assignment.dueDate).toLocaleDateString()}</p>
 
       {/* <input
         type="file"

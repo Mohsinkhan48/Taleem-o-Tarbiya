@@ -88,9 +88,6 @@ const ChapterForm: React.FC<Props> = ({ chapter, onChange, onRemove }) => {
         {chapter.assignment ? (
           <Card className="p-2 flex-1 mr-2">
             <div className="text-sm font-medium">{chapter.assignment.title || "Untitled Assignment"}</div>
-            <div className="text-xs text-text">
-              Due: {chapter.assignment.dueDate?.split("T")[0]}
-            </div>
           </Card>
         ) : (
           <div className="flex-1 mr-2 text-text text-sm italic">

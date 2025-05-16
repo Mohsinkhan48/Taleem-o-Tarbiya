@@ -68,12 +68,12 @@ const courseService = {
             let assignment = null;
 
             // Step 5: Create Quiz (if exists)
-            if (chapterData.quiz) {
+            if (chapterData.quiz && chapterData.quiz.title) {
               quiz = await Quiz.create(chapterData.quiz);
             }
 
             // Step 6: Create Assignment (if exists)
-            if (chapterData.assignment) {
+            if (chapterData.assignment && chapterData.assignment.title && chapterData.assignment.description) {
               assignment = await Assignment.create(chapterData.assignment);
             }
 

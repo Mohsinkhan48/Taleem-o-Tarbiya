@@ -30,7 +30,6 @@ const CreateCourse = () => {
             assignment: {
               title: "",
               description: "",
-              dueDate: ""
             }
           }
         ]
@@ -121,7 +120,6 @@ const CreateCourse = () => {
       assignment: {
         title: "",
         description: "",
-        dueDate: ""
       }
     });
     setFormData(prev => ({ ...prev, modules: updated }));
@@ -130,7 +128,7 @@ const CreateCourse = () => {
 
   const addAssignment = () => setFormData(prev => ({
     ...prev,
-    assignment: [...prev.assignment, { title: "", description: "", dueDate: "" }]
+    assignment: [...prev.assignment, { title: "", description: "" }]
   }));
 
   const addQuiz = () => setFormData(prev => ({
@@ -234,13 +232,6 @@ const CreateCourse = () => {
               value={chap.assignment?.description || ""}
               onChange={(e) => handleAssignmentChange(i, j, e)}
               placeholder="Assignment Description"
-              className="w-full p-2 border rounded"
-            />
-            <input
-              type="date"
-              name="dueDate"
-              value={chap.assignment?.dueDate || ""}
-              onChange={(e) => handleAssignmentChange(i, j, e)}
               className="w-full p-2 border rounded"
             />
           </div>

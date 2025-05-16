@@ -90,8 +90,6 @@ const CreateCourseForm: React.FC = () => {
               ? {
                   title: chapter.assignment.title,
                   description: chapter.assignment.description,
-                  dueDate: chapter.assignment.dueDate,
-                  submissionType: chapter.assignment.submissionType,
                 }
               : undefined,
           })),

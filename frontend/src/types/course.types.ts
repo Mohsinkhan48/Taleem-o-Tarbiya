@@ -90,8 +90,6 @@ export interface Assignment {
   _id?: string;
   title: string;
   description: string;
-  dueDate: string;
-  submissionType: string;
 }
 
 export interface Order {

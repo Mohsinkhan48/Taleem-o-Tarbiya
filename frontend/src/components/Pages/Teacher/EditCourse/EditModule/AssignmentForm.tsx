@@ -9,7 +9,7 @@ interface Props {
 }
 
 const AssignmentForm: React.FC<Props> = ({
-  assignment = { title: '', description: '', dueDate: '', submissionType: 'file' },
+  assignment = { title: '', description: '' },
   onChange,
 }) => {
   return (
@@ -23,17 +23,6 @@ const AssignmentForm: React.FC<Props> = ({
         label="Description"
         value={assignment.description}
         onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange({ ...assignment, description: e.target.value })}
-      />
-      <Input
-        label="Due Date"
-        type="date"
-        value={assignment.dueDate?.split('T')[0]}
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange({ ...assignment, dueDate: e.target.value })}
-      />
-      <Input
-        label="Submission Type"
-        value={assignment.submissionType}
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange({ ...assignment, submissionType: e.target.value })}
       />
     </div>
   );

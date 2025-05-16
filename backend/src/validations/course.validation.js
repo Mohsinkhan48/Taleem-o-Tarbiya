@@ -51,12 +51,8 @@ const courseValidation = {
                       .required(),
                   }).optional(),
                   assignment: Joi.object({
-                    title: Joi.string().required(),
-                    description: Joi.string().required(),
-                    dueDate: Joi.date().iso().required(),
-                    submissionType: Joi.string()
-                      .valid("file", "text", "link")
-                      .required(),
+                    title: Joi.string().optional().allow(null, ""),
+                    description: Joi.string().optional().allow(null, ""),
                   }).optional(),
                 })
               )
@@ -92,7 +88,20 @@ const courseValidation = {
                 Joi.object({
                   title: Joi.string().required(),
                   content: Joi.string().required(),
-                  lecture: Joi.custom(objectId).optional(),
+                  lecture: Joi.object({
+                    _id: Joi.string().required(),
+                    title: Joi.string().required(),
+                    description: Joi.string().required(),
+                    chapter: Joi.string().required(),
+                    videoUrl: Joi.string().required(),
+                    duration: Joi.number().required(),
+                    resolution: Joi.string().required(),
+                    size: Joi.number().required(),
+                    format: Joi.string().required(),
+                    createdAt: Joi.date().iso().required(),
+                    updatedAt: Joi.date().iso().required(),
+                    __v: Joi.number().optional(),
+                  }),
                   isPreview: Joi.boolean().default(false),
                   resources: Joi.array()
                     .items(
@@ -119,12 +128,8 @@ const courseValidation = {
                       .required(),
                   }).optional(),
                   assignment: Joi.object({
-                    title: Joi.string().required(),
-                    description: Joi.string().required(),
-                    dueDate: Joi.date().iso().required(),
-                    submissionType: Joi.string()
-                      .valid("file", "text", "link")
-                      .required(),
+                    title: Joi.string().optional().allow(null, ""),
+                    description: Joi.string().optional().allow(null, ""),
                   }).optional(),
                 })
               )
@@ -132,7 +137,7 @@ const courseValidation = {
               .required(),
           })
         )
-        .min(0)
+        .min(0),
     }),
   },
   addChapterToModule: {
@@ -171,12 +176,8 @@ const courseValidation = {
             .required(),
         }).optional(),
         assignment: Joi.object({
-          title: Joi.string().required(),
-          description: Joi.string().required(),
-          dueDate: Joi.date().iso().required(),
-          submissionType: Joi.string()
-            .valid("file", "text", "link")
-            .required(),
+          title: Joi.string().optional().allow(null, ""),
+          description: Joi.string().optional().allow(null, ""),
         }).optional(),
       }).required(),
     }),
