@@ -43,7 +43,7 @@ export interface Chapter {
 }
 export interface Lecture {
   _id?: string;
-  title: string;
+  title?: string;
   description?: string;
   chapter: string;
   videoUrl: string;

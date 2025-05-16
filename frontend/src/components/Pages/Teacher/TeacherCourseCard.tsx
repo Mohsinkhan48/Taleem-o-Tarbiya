@@ -41,7 +41,7 @@ const TeacherCourseCard: React.FC<TeacherCourseCardProps> = ({
         <h2 className="text-primary font-bold text-2xl mb-2 line-clamp-1">
           {course.title}
         </h2>
-        
+
         <p className="text-text text-base mb-2 line-clamp-2">
           {course.description}
         </p>
@@ -53,9 +53,11 @@ const TeacherCourseCard: React.FC<TeacherCourseCardProps> = ({
 
         <div className="flex justify-between items-center">
           <div>
-            <p className="text-sm font-semibold text-secondary mb-2">
-              Price: ${course.price}
+            <p className="text-sm font-semibold text-secondary">
+              Price: ${course.price} (
+              {(course.price * 280).toLocaleString("en-PK")} PKR)
             </p>
+
             <p
               className={`text-sm font-semibold ${
                 course.isPublished ? "text-success" : "text-warning"
@@ -87,7 +89,9 @@ const TeacherCourseCard: React.FC<TeacherCourseCardProps> = ({
                 View as Student
               </DropdownItem>
               <DropdownItem
-                onClick={() => navigate(`/teacher/manage-lectures/${course._id}`)}
+                onClick={() =>
+                  navigate(`/teacher/manage-lectures/${course._id}`)
+                }
                 className="text-text hover:text-primary"
               >
                 Manage Lectures

@@ -79,7 +79,14 @@ const CourseDetail: React.FC<CourseDetailProps> = ({ course }) => {
             <span className="font-medium">{timeAgo(course.updatedAt!)}</span>
           </p>
           <p className="text-2xl font-bold text-text">
-            {course.isPaid ? `Price: $${course.price}` : "Free of cost"}
+            {course.isPaid ? (
+              <p className="text-sm font-semibold text-secondary">
+                Price: ${course.price} (
+                {(course.price * 280).toLocaleString("en-PK")} PKR)
+              </p>
+            ) : (
+              "Free of cost"
+            )}
           </p>
           <AddToCartButton courseId={course._id} />
         </div>

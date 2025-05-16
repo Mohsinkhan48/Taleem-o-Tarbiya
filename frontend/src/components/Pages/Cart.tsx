@@ -68,8 +68,9 @@ const Cart: React.FC = () => {
                     <p className="text-sm mt-1 text-text">
                       <span className="mr-2">⏱ {item.course.duration}</span>
                     </p>
-                    <p className="mt-2 text-secondary font-semibold">
-                      Price: ${item.course.price.toFixed(2)}
+                    <p className="text-sm font-semibold text-secondary">
+                      Price: ${item.course.price} (
+                      {(item.course.price * 280).toLocaleString("en-PK")} PKR)
                     </p>
                   </div>
                 </div>
@@ -87,9 +88,9 @@ const Cart: React.FC = () => {
           <div className="mt-8 flex flex-col sm:flex-row justify-between items-center border-t border-card-border pt-6">
             <div className="text-xl font-medium text-text">
               Total Price:{" "}
-              <span className="text-success font-bold">
-                ${totalPrice.toFixed(2)}
-              </span>
+              <p className="text-sm font-semibold text-secondary">
+                ${totalPrice} ({(totalPrice * 280).toLocaleString("en-PK")} PKR)
+              </p>
             </div>
             <Button
               onClick={handleClear}

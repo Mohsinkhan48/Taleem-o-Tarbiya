@@ -39,6 +39,7 @@ const ManageLectures: React.FC = () => {
   };
 
   const closeModal = () => {
+    if (courseId) dispatch(fetchInstructoryCourseById(courseId));
     setIsModalOpen(false);
     setSelectedChapter(null);
   };

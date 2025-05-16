@@ -10,6 +10,7 @@ const {
   CourseProgress,
   Lecture,
   User,
+  ChapterProgress,
 } = require("../models");
 const fs = require("fs");
 const path = require("path");
@@ -73,7 +74,11 @@ const courseService = {
             }
 
             // Step 6: Create Assignment (if exists)
-            if (chapterData.assignment && chapterData.assignment.title && chapterData.assignment.description) {
+            if (
+              chapterData.assignment &&
+              chapterData.assignment.title &&
+              chapterData.assignment.description
+            ) {
               assignment = await Assignment.create(chapterData.assignment);
             }
 
@@ -184,7 +189,11 @@ const courseService = {
             quiz = await Quiz.create(chapterData.quiz);
           }
 
-          if (chapterData.assignment) {
+          if (
+            chapterData.assignment &&
+            chapterData.assignment.title &&
+            chapterData.assignment.description
+          ) {
             assignment = await Assignment.create(chapterData.assignment);
           }
 
@@ -564,8 +573,44 @@ const courseService = {
       user: studentId,
       course: courseId,
     });
-    if (progress) return progress.completed;
-    return false;
+
+    if (!progress || !progress.completed) {
+      return {
+        completed: false,
+        reason: "Course lectures are not fully completed.",
+      };
+    }
+
+    // Step 1: Get all chapters of this course that have a quiz
+    const chaptersWithQuiz = await Chapter.find({
+      course: courseId,
+      quiz: { $ne: null }, // only chapters that have a quiz assigned
+    });
+    console.log("chaptersQuiz", chaptersWithQuiz)
+
+    if (chaptersWithQuiz.length > 0) {
+      // Step 2: Check if user completed the quiz for each of those chapters
+      for (const chapter of chaptersWithQuiz) {
+        const chapterProgress = await ChapterProgress.findOne({
+          user: studentId,
+          chapter: chapter._id,
+          quizCompleted: true,
+        });
+
+        if (!chapterProgress) {
+          return {
+            completed: false,
+            reason: `Quiz not completed for chapter: "${chapter.title}".`,
+          };
+        }
+      }
+    }
+
+    // All validations passed
+    return {
+      completed: true,
+      reason: "Course fully completed.",
+    };
   },
   generateCertificatePDF: async (studentId, courseId) => {
     const progress = await CourseProgress.findOne({
@@ -576,8 +621,15 @@ const courseService = {
     if (progress && progress?.certificateUrl) return progress.certificateUrl;
 
     const user = await User.findById(studentId);
-    const course = await Course.findById(courseId).populate('instructor', 'fullName').populate('level');
-    const html = generateTemplate(user.fullName, course, course.instructor.fullName, progress && progress?.completedAt || new Date().toLocaleDateString());
+    const course = await Course.findById(courseId)
+      .populate("instructor", "fullName")
+      .populate("level");
+    const html = generateTemplate(
+      user.fullName,
+      course,
+      course.instructor.fullName,
+      (progress && progress?.completedAt) || new Date().toLocaleDateString()
+    );
 
     const certificateDir = path.join(
       __dirname,

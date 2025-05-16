@@ -115,6 +115,7 @@ const ChapterCard: React.FC<Props> = ({
             quizId={chapter.quiz._id!}
             questions={chapter.quiz.questions}
             onClose={handleQuizClose}
+            title={chapter.quiz.title}
           />
         </Modal>
       )}

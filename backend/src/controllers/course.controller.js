@@ -156,12 +156,13 @@ const courseController = {
     const { courseId } = req.params;
 
     // You can add a progress check service here if needed:
-    const isCompleted = await courseService.checkCourseCompletion(
+    const {completed, reason} = await courseService.checkCourseCompletion(
       studentId,
       courseId
     );
-    if (!isCompleted) return R2XX(res, "Course is not competed yet.", 200, {
+    if (!completed) return R2XX(res, "Course is not competed yet.", 200, {
       isCertificate: false,
+      notcompletionReason: reason
     });
 
     const filePath = await courseService.generateCertificatePDF(

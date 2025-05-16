@@ -8,6 +8,7 @@ import { Loader } from "../../../../assets/Loader";
 interface CertificateResponse {
   certificateUrl?: string;
   isCertificate: boolean;
+  notcompletionReason: string;
 }
 
 interface CertificateViewerProps {
@@ -58,7 +59,7 @@ const CertificateViewer: React.FC<CertificateViewerProps> = ({ courseId }) => {
     return (
       <div className="flex items-center text-warning font-medium p-4 rounded bg-warning/10">
         <BiInfoCircle className="text-2xl mr-2" />
-        You need to complete the course to get a certificate.
+        {certificateData.notcompletionReason}
       </div>
     );
   }

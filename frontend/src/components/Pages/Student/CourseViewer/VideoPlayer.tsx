@@ -90,10 +90,6 @@ const VideoPlayer: React.FC<Props> = ({
           }
         }}
       />
-
-      <div className="absolute bottom-2 right-4 text-xs text-gray-300 bg-black/60 px-2 py-1 rounded-md">
-        {progressSaved ? "Progress saved ✅" : "Watching..."}
-      </div>
     </div>
   );
 };

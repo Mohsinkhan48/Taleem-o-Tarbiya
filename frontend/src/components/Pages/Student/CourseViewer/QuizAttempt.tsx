@@ -12,6 +12,7 @@ interface Props {
   moduleId: string;
   chapterId: string;
   quizId: string;
+  title: string;
   questions: Question[];
   onClose: () => void;
 }
@@ -21,6 +22,7 @@ const QuizAttempt: React.FC<Props> = ({
   moduleId,
   chapterId,
   quizId,
+  title,
   questions,
   onClose,
 }) => {
@@ -145,7 +147,8 @@ const QuizAttempt: React.FC<Props> = ({
 
   return (
     <div className="w-full max-w-xl p-6 space-y-6">
-      <h2 className="text-xl font-bold text-primary">
+      <h1 className="text-2xl font-bold text-primary text-center">{title}</h1>
+      <h2 className="text-lg font-bold text-primary">
         Question {current + 1} of {questions.length}
       </h2>
 

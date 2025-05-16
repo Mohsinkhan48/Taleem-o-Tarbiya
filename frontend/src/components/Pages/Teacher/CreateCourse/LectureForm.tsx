@@ -3,8 +3,6 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../../redux/store";
 import { uploadLectureVideo } from "../../../../redux/slices/lectureUploadSlice";
-import Input from "../../../Reusable/Input";
-import TextArea from "../../../Reusable/TextArea";
 import Button from "../../../Reusable/Button";
 import FileInput from "../../../Reusable/FileInput";
 import { Lecture } from "../../../../types/course.types";
@@ -59,21 +57,6 @@ const LectureForm = ({
         {isEditMode ? "Edit Lecture" : "Add Lecture"}
       </h2>
       <form onSubmit={handleSubmit} className="space-y-4">
-        <Input
-          label="Lecture Title"
-          value={title}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-            setTitle(e.target.value)
-          }
-          required
-        />
-        <TextArea
-          label="Description"
-          value={description}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-            setDescription(e.target.value)
-          }
-        />
         <FileInput
           label={isEditMode ? "Replace Video (optional)" : "Upload Video"}
           onChange={setFile}

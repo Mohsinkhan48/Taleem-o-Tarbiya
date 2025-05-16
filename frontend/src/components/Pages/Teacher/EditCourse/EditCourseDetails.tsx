@@ -31,7 +31,7 @@ const EditCourseDetails: React.FC<EditThumbnailProps> = ({
     level: course.level._id,
     price: course.price,
     tags: course.tags.map((tag) => tag._id),
-    modules: []
+    modules: [],
   });
   const { loading } = useSelector((state: RootState) => state.updateCourse);
   const handleChange = (
@@ -89,7 +89,14 @@ const EditCourseDetails: React.FC<EditThumbnailProps> = ({
             {course.level.name}
           </div>
           <div className="bg-card rounded py-2 px-4 text-primary">
-            {course.isPaid ? course.price + " $" : "Free"}
+            {course.isPaid ? (
+              <p className="text-sm font-semibold text-secondary">
+                Price: ${course.price} (
+                {(course.price * 280).toLocaleString("en-PK")} PKR)
+              </p>
+            ) : (
+              "Free"
+            )}
           </div>
         </div>
         <div className="mt-6">

@@ -45,7 +45,8 @@ const CourseCard: React.FC<CourseCardProps> = ({ course, onClick }) => {
             <p className="text-sm text-text">Level: {course.level.name}</p>
             <p className="text-sm text-text">Duration: {course.duration}</p>
             <p className="text-sm font-semibold text-secondary">
-              Price: ${course.price}
+              Price: ${course.price} (
+              {(course.price * 280).toLocaleString("en-PK")} PKR)
             </p>
           </div>
           <div className="flex flex-col gap-2 items-end">
