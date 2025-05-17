@@ -374,7 +374,10 @@ const courseService = {
 
         return {
           ...course.toObject(),
-          progress: Math.round(progressPercentage), // optional: round percentage
+          progress:
+            Math.round(progressPercentage) > 100
+              ? 100
+              : Math.round(progressPercentage), // optional: round percentage
         };
       })
     );
@@ -573,7 +576,7 @@ const courseService = {
       user: studentId,
       course: courseId,
     });
-
+    console.log("progress", progress)
     if (!progress || !progress.completed) {
       return {
         completed: false,
@@ -581,28 +584,33 @@ const courseService = {
       };
     }
 
-    // Step 1: Get all chapters of this course that have a quiz
-    const chaptersWithQuiz = await Chapter.find({
-      course: courseId,
-      quiz: { $ne: null }, // only chapters that have a quiz assigned
+    // Step 1: Get all chapters of this course (through modules) that have a quiz
+    const course = await Course.findById(courseId).populate({
+      path: "modules",
+      populate: {
+        path: "chapters",
+        match: { quiz: { $ne: null } }, // only include chapters with quizzes
+      },
     });
-    console.log("chaptersQuiz", chaptersWithQuiz)
 
-    if (chaptersWithQuiz.length > 0) {
-      // Step 2: Check if user completed the quiz for each of those chapters
-      for (const chapter of chaptersWithQuiz) {
-        const chapterProgress = await ChapterProgress.findOne({
-          user: studentId,
-          chapter: chapter._id,
-          quizCompleted: true,
-        });
+    // Flatten chapters from all modules
+    const chaptersWithQuiz = course.modules.flatMap(
+      (mod) => mod.chapters || []
+    );
 
-        if (!chapterProgress) {
-          return {
-            completed: false,
-            reason: `Quiz not completed for chapter: "${chapter.title}".`,
-          };
-        }
+    // Step 2: Check if user completed the quiz for each of those chapters
+    for (const chapter of chaptersWithQuiz) {
+      const chapterProgress = await ChapterProgress.findOne({
+        user: studentId,
+        chapter: chapter._id,
+        quizCompleted: true,
+      });
+
+      if (!chapterProgress) {
+        return {
+          completed: false,
+          reason: `Quiz not completed for chapter: "${chapter.title}".`,
+        };
       }
     }
 
