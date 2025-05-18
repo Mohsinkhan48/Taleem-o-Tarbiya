@@ -61,6 +61,7 @@ const CourseViewer: React.FC = () => {
       <main className="flex-1 space-y-6 overflow-y-auto">
         {chapter && (
           <VideoPlayer
+            hasVideo={chapter.lecture?.hasVideo!}
             videoUrl={chapter?.lecture?.videoUrl!}
             lectureId={chapter?.lecture?._id!}
             isCompleted={chapter.lecture?.progress?.completed!}
@@ -68,6 +69,36 @@ const CourseViewer: React.FC = () => {
             courseId={courseId!}
             moduleId={moduleId!}
             chapterId={chapter._id!}
+            content={chapter.content}
+            onComplete={(completedChapterId) => {
+              console.log("completed")
+              if (!course) return;
+
+              let found = false;
+
+              for (let m = 0; m < course.modules.length; m++) {
+                const module = course.modules[m];
+                for (let c = 0; c < module.chapters.length; c++) {
+                  const current = module.chapters[c];
+
+                  if (found) {
+                    // ✅ This is the next chapter after the completed one
+                    dispatch(
+                      setSelectedChapter({
+                        chapter: current,
+                        moduleId: module._id!,
+                        courseId: course._id,
+                      })
+                    );
+                    return;
+                  }
+
+                  if (current._id === completedChapterId) {
+                    found = true; // ✅ Mark current chapter as completed
+                  }
+                }
+              }
+            }}
           />
         )}
 

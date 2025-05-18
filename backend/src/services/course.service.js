@@ -381,7 +381,6 @@ const courseService = {
         };
       })
     );
-
     return updatedCourses;
   },
   getStudentEnrolledCourse: async (studentId, courseId) => {
@@ -425,10 +424,14 @@ const courseService = {
 
     const course = enrollment.course;
 
-    // Inject LectureProgress into each lecture
     for (const module of course.modules) {
       for (const chapter of module.chapters) {
         if (chapter.lecture) {
+          const lecture = chapter.lecture.toObject
+            ? chapter.lecture.toObject()
+            : chapter.lecture;
+
+          // 🔍 Check lecture progress
           const lectureProgress = await LectureProgress.findOne({
             user: studentId,
             lecture: chapter.lecture._id,
@@ -436,12 +439,52 @@ const courseService = {
             course: courseId,
             module: module._id,
           });
-          // Append progress info directly into the lecture object
-          const lectureObj = chapter.lecture.toObject
-            ? chapter.lecture.toObject()
-            : chapter.lecture;
-          lectureObj.progress = lectureProgress || null;
-          chapter.lecture = lectureObj;
+
+          lecture.progress = lectureProgress || null;
+
+          const videoUrl = lecture.videoUrl || "";
+          let hasVideo = false;
+
+          console.log("🔍 Checking lecture video:", {
+            title: lecture.title,
+            videoUrl,
+          });
+
+          if (videoUrl.startsWith("/uploads/")) {
+            const relativePath = videoUrl.replace(/^\/uploads[\/\\]?/, ""); // remove leading "/uploads/"
+            const uploadsBasePath = path.join(process.cwd(), "src", "uploads"); // project root -> src/uploads
+            const absoluteVideoPath = path.join(uploadsBasePath, relativePath);
+
+            console.log("📂 Relative video path:", relativePath);
+            console.log("📂 Uploads base path:", uploadsBasePath);
+            console.log("📂 Absolute full path to check:", absoluteVideoPath);
+            try {
+              const exists = fs.existsSync(absoluteVideoPath);
+              if (exists) {
+                hasVideo = true;
+                console.log(`✅ Video file exists: ${lecture.title}`);
+              } else {
+                hasVideo = false;
+                console.log(
+                  `❌ Video file does NOT exist: ${absoluteVideoPath}`
+                );
+              }
+            } catch (err) {
+              hasVideo = false;
+              console.error(
+                `❌ Error checking video file: ${absoluteVideoPath}`,
+                err
+              );
+            }
+          } else {
+            console.log(
+              "⚠️ Video URL does not start with '/uploads/', skipping check."
+            );
+          }
+
+          lecture.hasVideo = hasVideo;
+
+          chapter.lecture = lecture;
         }
       }
     }
@@ -576,7 +619,7 @@ const courseService = {
       user: studentId,
       course: courseId,
     });
-    console.log("progress", progress)
+    console.log("progress", progress);
     if (!progress || !progress.completed) {
       return {
         completed: false,

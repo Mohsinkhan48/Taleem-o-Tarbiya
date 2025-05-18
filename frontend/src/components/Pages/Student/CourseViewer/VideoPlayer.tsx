@@ -3,6 +3,7 @@ import { BACKEND_URL } from "../../../../constants/env.constants";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../../redux/store";
 import { CourseService } from "../../../../service/courseService";
+import { FaRedo, FaStepForward } from "react-icons/fa";
 
 interface Props {
   courseId: string;
@@ -10,8 +11,11 @@ interface Props {
   chapterId: string;
   lectureId: string;
   videoUrl: string;
+  hasVideo: boolean;
+  content: string;
   isCompleted: boolean;
-  initialWatchedTime?: number; // seconds
+  initialWatchedTime?: number;
+  onComplete?: (chapterId: string) => void;
 }
 
 const VideoPlayer: React.FC<Props> = ({
@@ -21,24 +25,26 @@ const VideoPlayer: React.FC<Props> = ({
   lectureId,
   videoUrl,
   isCompleted,
+  content,
+  hasVideo,
   initialWatchedTime = 0,
+  onComplete,
 }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(initialWatchedTime);
   const [duration, setDuration] = useState(0);
-  const [progressSaved, setProgressSaved] = useState(false);
-  const hasSeeked = useRef(false); // ensures seeking happens once
+  const [videoEnded, setVideoEnded] = useState(false);
+  const hasSeeked = useRef(false);
 
   const user = useSelector((state: RootState) => state.auth.user);
 
-  // Save progress every 4 seconds
   useEffect(() => {
     const interval = setInterval(() => {
       if (videoRef.current && isPlaying && duration > 0) {
         const current = videoRef.current.currentTime;
-        const isCompleted = current >= duration - 5;
-        saveProgress(current, isCompleted);
+        const isVideoCompleted = current >= duration - 5;
+        saveProgress(current, isVideoCompleted);
       }
     }, 4000);
 
@@ -55,41 +61,86 @@ const VideoPlayer: React.FC<Props> = ({
         chapterId,
         lectureId,
         time,
-        isCompleted ? true : completed
+        completed
       );
 
-      setProgressSaved(true);
-      setTimeout(() => setProgressSaved(false), 3000);
+      if (completed) {
+        setVideoEnded(true); // show buttons when video completes
+      }
     } catch (err) {
       console.error("Progress save error:", err);
-      setProgressSaved(false);
     }
+  };
+
+  const handleReplay = () => {
+    if (videoRef.current) {
+      videoRef.current.currentTime = 0;
+      videoRef.current.play();
+      setVideoEnded(false);
+    }
+  };
+
+  const handleNext = () => {
+    setVideoEnded(false);
+    onComplete?.(chapterId);
   };
 
   return (
     <div className="relative w-full aspect-video bg-black rounded-lg overflow-hidden border border-border">
-      <video
-        ref={videoRef}
-        src={`${BACKEND_URL}${videoUrl}`}
-        className="w-full h-full"
-        controls
-        onPlay={() => setIsPlaying(true)}
-        onPause={() => setIsPlaying(false)}
-        onTimeUpdate={(e) => {
-          const current = (e.target as HTMLVideoElement).currentTime;
-          setCurrentTime(current);
-        }}
-        onLoadedMetadata={(e) => {
-          const video = e.target as HTMLVideoElement;
-          setDuration(video.duration);
+      {hasVideo ? (
+        <div className="relative w-full h-full">
+          <video
+            ref={videoRef}
+            src={`${BACKEND_URL}${videoUrl}`}
+            className="w-full h-full"
+            controls
+            onPlay={() => setIsPlaying(true)}
+            onPause={() => setIsPlaying(false)}
+            onTimeUpdate={(e) =>
+              setCurrentTime((e.target as HTMLVideoElement).currentTime)
+            }
+            onLoadedMetadata={(e) => {
+              const video = e.target as HTMLVideoElement;
+              setDuration(video.duration);
 
-          // Seek to the initial watched time only once
-          if (!hasSeeked.current && initialWatchedTime > 0) {
-            video.currentTime = initialWatchedTime;
-            hasSeeked.current = true;
-          }
-        }}
-      />
+              if (!hasSeeked.current && initialWatchedTime > 0) {
+                video.currentTime = initialWatchedTime;
+                hasSeeked.current = true;
+              }
+            }}
+            onEnded={() => {
+              setVideoEnded(true);
+              saveProgress(duration, true); // ensure final progress is saved
+            }}
+          />
+
+          {videoEnded && (
+            <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-70 z-10">
+              <div className="space-x-4">
+                <button
+                  onClick={handleReplay}
+                  className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 flex items-center gap-2"
+                >
+                  <FaRedo /> Replay
+                </button>
+                <button
+                  onClick={handleNext}
+                  className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 flex items-center gap-2"
+                >
+                  <FaStepForward /> Next
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+      ) : (
+        <div className="w-full h-full p-4 text-white overflow-auto">
+          <div
+            className="prose prose-invert max-w-none"
+            dangerouslySetInnerHTML={{ __html: content }}
+          />
+        </div>
+      )}
     </div>
   );
 };

@@ -21,7 +21,7 @@ const StudentCourseCard: React.FC<CourseCardProps> = ({ course }) => {
   return (
     <Card
       className="group relative cursor-pointer rounded-xl overflow-hidden"
-      onClick={() => navigate(`/courses/${course._id}`)}
+      onClick={() => navigate(`/student/courses/${course._id}`)}
     >
       <div className="relative h-60 md:h-60 w-full">
         <ImageContainer

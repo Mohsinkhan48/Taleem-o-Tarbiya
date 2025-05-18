@@ -15,6 +15,7 @@ interface Props {
 const ModuleAccordion: React.FC<Props> = ({ courseId, modules }) => {
   const dispatch = useDispatch<AppDispatch>();
   const onChapterClick = (chapter: Chapter, moduleId: string): void => {
+    console.log("lectur: ", chapter.lecture)
     dispatch(
       setSelectedChapter({
         chapter: chapter,

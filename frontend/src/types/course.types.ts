@@ -52,6 +52,7 @@ export interface Lecture {
   size?: number;
   format?: string;
   progress?: LectureProgress;
+  hasVideo?: boolean;
   createdAt?: Date;
   updatedAt?: Date;
 }
