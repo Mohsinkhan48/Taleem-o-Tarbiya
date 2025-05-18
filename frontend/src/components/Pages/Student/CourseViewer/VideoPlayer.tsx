@@ -3,7 +3,7 @@ import { BACKEND_URL } from "../../../../constants/env.constants";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../../redux/store";
 import { CourseService } from "../../../../service/courseService";
-import { FaRedo, FaStepForward } from "react-icons/fa";
+import { FaRedo, FaStepForward, FaCheckCircle } from "react-icons/fa";
 
 interface Props {
   courseId: string;
@@ -35,6 +35,7 @@ const VideoPlayer: React.FC<Props> = ({
   const [currentTime, setCurrentTime] = useState(initialWatchedTime);
   const [duration, setDuration] = useState(0);
   const [videoEnded, setVideoEnded] = useState(false);
+  const [loading, setLoading] = useState(false);
   const hasSeeked = useRef(false);
 
   const user = useSelector((state: RootState) => state.auth.user);
@@ -54,7 +55,6 @@ const VideoPlayer: React.FC<Props> = ({
   const saveProgress = async (time: number, completed: boolean) => {
     try {
       if (!user?._id) return;
-
       await CourseService.updateLectureProgress(
         courseId,
         moduleId,
@@ -65,7 +65,7 @@ const VideoPlayer: React.FC<Props> = ({
       );
 
       if (completed) {
-        setVideoEnded(true); // show buttons when video completes
+        setVideoEnded(true);
       }
     } catch (err) {
       console.error("Progress save error:", err);
@@ -83,6 +83,16 @@ const VideoPlayer: React.FC<Props> = ({
   const handleNext = () => {
     setVideoEnded(false);
     onComplete?.(chapterId);
+  };
+
+  const handleMarkAsCompleted = async () => {
+    try {
+      // setLoading(true);
+      // await saveProgress(0, true);
+      onComplete?.(chapterId);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -110,13 +120,13 @@ const VideoPlayer: React.FC<Props> = ({
             }}
             onEnded={() => {
               setVideoEnded(true);
-              saveProgress(duration, true); // ensure final progress is saved
+              saveProgress(duration, true); // Ensure final save
             }}
           />
 
           {videoEnded && (
             <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-70 z-10">
-              <div className="space-x-4">
+              <div className="flex space-x-4">
                 <button
                   onClick={handleReplay}
                   className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 flex items-center gap-2"
@@ -134,11 +144,20 @@ const VideoPlayer: React.FC<Props> = ({
           )}
         </div>
       ) : (
-        <div className="w-full h-full p-4 text-white overflow-auto">
+        <div className="w-full h-full p-4 text-white overflow-auto flex flex-col justify-between">
           <div
             className="prose prose-invert max-w-none"
             dangerouslySetInnerHTML={{ __html: content }}
           />
+          <div className="mt-6 text-center">
+            <button
+              onClick={handleMarkAsCompleted}
+              disabled={loading}
+              className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 flex items-center gap-2 mx-auto"
+            >
+              <FaCheckCircle /> {loading ? "Marking..." : "Mark as Completed"}
+            </button>
+          </div>
         </div>
       )}
     </div>
