@@ -20,4 +20,12 @@ router.get(
   teacherController.getStripeAccountStatus
 );
 
+router.post(
+  "/update-university",
+  isAuth,
+  isMember,
+  hasRole([ROLES.TEACHER]),
+  teacherController.updateUniversity
+);
+
 module.exports = router;

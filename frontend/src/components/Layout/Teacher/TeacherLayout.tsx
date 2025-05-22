@@ -6,9 +6,11 @@ import { FiBook, FiPlus } from "react-icons/fi";
 import Sidebar, { SidebarItem } from "../Sidebar";
 import { RxDashboard } from "react-icons/rx";
 import Navbar from "../Navbar";
+import { BsPerson } from "react-icons/bs";
 
 function TeacherLayout() {
   const sidebarItems: SidebarItem[] = [
+    { label: "Profile", icon: BsPerson, path: "profile" },
     { label: "Dashboard", icon: RxDashboard, path: "dashboard" },
     { label: "Create Course", icon: FiPlus, path: "create-course" },
     { label: "My Courses", icon: FiBook, path: "courses" },

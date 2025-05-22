@@ -8,6 +8,7 @@ import { User } from "./auth.types";
 export interface Course {
   _id: string;
   image: string;
+  previewUrl?: string;
   title: string;
   description: string;
   content: string;
@@ -40,6 +41,7 @@ export interface Chapter {
   resources?: Resource[];
   quiz?: Quiz;
   assignment?: Assignment;
+  progress?: LectureProgress;
 }
 export interface Lecture {
   _id?: string;
@@ -51,7 +53,6 @@ export interface Lecture {
   resolution?: string;
   size?: number;
   format?: string;
-  progress?: LectureProgress;
   hasVideo?: boolean;
   createdAt?: Date;
   updatedAt?: Date;
@@ -70,6 +71,7 @@ export interface LectureProgress {
 }
 
 export interface Resource {
+  _id?: string;
   name: string;
   url: string;
 }

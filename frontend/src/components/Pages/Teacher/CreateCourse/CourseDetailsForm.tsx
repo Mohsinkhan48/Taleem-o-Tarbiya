@@ -15,6 +15,7 @@ import {
 import { Module } from "../../../../types/course.types";
 
 export interface CourseDetails {
+  _id?: string;
   title: string;
   description: string;
   content: string;

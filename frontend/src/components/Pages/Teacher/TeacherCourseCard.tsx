@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router";
 import Card from "../../Reusable/Card";
 import DropdownMenu from "../../Reusable/DropdownMenu";
@@ -6,20 +6,28 @@ import DropdownItem from "../../Reusable/DropdownItem";
 import ImageContainer from "../../Reusable/ImageContainer";
 import { BACKEND_URL } from "../../../constants/env.constants";
 import { Course } from "../../../types/course.types";
+import Modal from "../../Reusable/Modal";
+import Button from "../../Reusable/Button";
+import { TeacherService } from "../../../service/teacherService";
 
 interface TeacherCourseCardProps {
   course: Course;
   onClick?: () => void;
-  onTogglePublish?: (courseId: string) => void; // optional publish toggle
+  onPublish?: (courseId: string) => void;
 }
 
 const TeacherCourseCard: React.FC<TeacherCourseCardProps> = ({
   course,
   onClick,
-  onTogglePublish,
+  onPublish
 }) => {
   const navigate = useNavigate();
+  const [modal, setModal] = useState(false);
+  const [loading, setLoading] = useState(false);
 
+  const onClickPublish = () => {
+    setModal(true);
+  };
   return (
     <Card
       className="overflow-hidden rounded-lg flex flex-col items-center gap-2 h-full w-full shadow-lg hover:shadow-xl transition-shadow duration-300"
@@ -98,7 +106,7 @@ const TeacherCourseCard: React.FC<TeacherCourseCardProps> = ({
               </DropdownItem>
               {!course.isPublished && (
                 <DropdownItem
-                  onClick={() => onTogglePublish?.(course._id)}
+                  onClick={onClickPublish}
                   className="text-text hover:text-primary"
                 >
                   Publish
@@ -108,6 +116,43 @@ const TeacherCourseCard: React.FC<TeacherCourseCardProps> = ({
           </DropdownMenu>
         </div>
       </div>
+      <Modal isOpen={modal} onClose={() => setModal(false)}>
+        <div className="p-6">
+          <p className="text-xl font-semibold text-text mb-4">
+            Are you sure you want to publish this course?
+          </p>
+
+          <div className="flex justify-end space-x-4">
+            <Button variant="secondary" onClick={() => setModal(false)}>
+              Cancel
+            </Button>
+
+            <Button
+              variant="primary"
+              isLoading={loading}
+              onClick={async () => {
+                setLoading(true)
+                try {
+                  const response = await TeacherService.publishCourse(
+                    course._id!
+                  );
+                  setLoading(false)
+                  if(response) {
+                    onPublish?.(course._id)
+                    setModal(false)
+                  }
+                } catch (err) {
+                  console.log(err)
+                  console.log("In catch")
+                  alert("Failed to publish course");
+                }
+              }}
+            >
+              Publish
+            </Button>
+          </div>
+        </div>
+      </Modal>
     </Card>
   );
 };

@@ -103,47 +103,71 @@ const QuizAttempt: React.FC<Props> = ({
     );
   }
 
-  if (quizProgress) {
-    return (
-      <div className="w-full p-6 max-w-xl space-y-4">
-        <h2 className="text-xl font-bold text-success flex items-center gap-2">
-          <AiOutlineCheckCircle className="text-success text-2xl" />
-          Quiz Already Attempted
-        </h2>
-        <p className="text-text">
-          You scored <span className="font-semibold text-primary">{quizProgress.score}</span> out of{" "}
-          <span className="font-semibold text-primary">{quizProgress.total}</span>
-        </p>
+if (quizProgress) {
+  const percentage = (quizProgress.score / quizProgress.total) * 100;
 
-        <div className="divide-y">
-          {quizProgress.answers.map((ans: any, idx: number) => (
-            <div key={idx} className="py-3">
-              <p className="font-medium mb-1 text-text">{idx + 1}. {ans.question}</p>
-              <p
-                className={`flex items-center gap-2 text-sm font-semibold ${
-                  ans.isCorrect ? "text-success" : "text-error"
-                }`}
-              >
-                {ans.isCorrect ? (
-                  <AiOutlineCheckCircle className="text-lg" />
-                ) : (
-                  <AiOutlineCloseCircle className="text-lg" />
-                )}
-                {ans.selectedOption}
-              </p>
-            </div>
-          ))}
-        </div>
+  const handleRetry = () => {
+    setQuizProgress(null);
+    setAnswers({});
+    setCurrent(0);
+    setSuccess("");
+    setError("");
+  };
 
-        <Button
-          onClick={onClose}
-          variant="secondary"
-        >
+  return (
+    <div className="w-full p-6 max-w-xl space-y-4">
+      <h2 className={`text-xl font-bold flex items-center gap-2 ${
+        percentage >= 50 ? "text-success" : "text-error"
+      }`}>
+        {percentage >= 50 ? (
+          <AiOutlineCheckCircle className="text-2xl" />
+        ) : (
+          <AiOutlineCloseCircle className="text-2xl" />
+        )}
+        Quiz {percentage >= 50 ? "Passed" : "Failed"}
+      </h2>
+
+      <p className="text-text">
+        You scored <span className="font-semibold text-primary">{quizProgress.score}</span> out of{" "}
+        <span className="font-semibold text-primary">{quizProgress.total}</span> (
+        <span className="font-semibold text-primary">{Math.round(percentage)}%</span>)
+      </p>
+
+      <div className="divide-y">
+        {quizProgress.answers.map((ans: any, idx: number) => (
+          <div key={idx} className="py-3">
+            <p className="font-medium mb-1 text-text">{idx + 1}. {ans.question}</p>
+            <p
+              className={`flex items-center gap-2 text-sm font-semibold ${
+                ans.isCorrect ? "text-success" : "text-error"
+              }`}
+            >
+              {ans.isCorrect ? (
+                <AiOutlineCheckCircle className="text-lg" />
+              ) : (
+                <AiOutlineCloseCircle className="text-lg" />
+              )}
+              {ans.selectedOption}
+            </p>
+          </div>
+        ))}
+      </div>
+
+      <div className="flex gap-3">
+        <Button onClick={onClose} variant="secondary">
           Close
         </Button>
+
+        {percentage < 50 && (
+          <Button onClick={handleRetry} variant="danger">
+            Retry Quiz
+          </Button>
+        )}
       </div>
-    );
-  }
+    </div>
+  );
+}
+
 
   return (
     <div className="w-full max-w-xl p-6 space-y-6">

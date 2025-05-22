@@ -8,7 +8,7 @@ const progressController = {
     const userId = req.user;
     const { lectureId, courseId, moduleId, chapterId } = req.params;
     const { currentTime, completed } = req.body;
-
+    
     const progress = await progressService.updateLectureProgress(
       userId,
       courseId,

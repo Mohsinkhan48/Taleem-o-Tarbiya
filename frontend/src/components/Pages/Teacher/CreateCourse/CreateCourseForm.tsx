@@ -32,6 +32,7 @@ const CreateCourseForm: React.FC = () => {
   );
 
   const initialValues: CourseDetails = {
+    _id: "",
     title: "",
     description: "",
     content: "",
@@ -56,6 +57,7 @@ const CreateCourseForm: React.FC = () => {
   useEffect(() => {
     if (id && instructorCourse) {
       const transformed: CourseDetails = {
+        _id: instructorCourse._id,
         title: instructorCourse.title,
         description: instructorCourse.description,
         content: instructorCourse.content,
@@ -66,18 +68,22 @@ const CreateCourseForm: React.FC = () => {
         tags: instructorCourse.tags.map((tag) => tag._id),
         isPaid: instructorCourse.isPaid,
         modules: instructorCourse.modules.map((module) => ({
+          _id: module._id,
           title: module.title,
           chapters: module.chapters.map((chapter) => ({
+            _id: chapter._id,
             title: chapter.title,
             content: chapter.content,
             lecture: chapter.lecture,
             isPreview: chapter.isPreview,
             resources: chapter.resources?.map((res) => ({
+              _id: res._id,
               name: res.name,
               url: res.url,
             })),
             quiz: chapter.quiz
               ? {
+                  _id: chapter.quiz._id,
                   title: chapter.quiz.title,
                   questions: chapter.quiz.questions.map((q) => ({
                     question: q.question,
@@ -88,6 +94,7 @@ const CreateCourseForm: React.FC = () => {
               : undefined,
             assignment: chapter.assignment
               ? {
+                  _id: chapter.assignment._id,
                   title: chapter.assignment.title,
                   description: chapter.assignment.description,
                 }

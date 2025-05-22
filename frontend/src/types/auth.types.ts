@@ -19,6 +19,7 @@ export interface User {
   email: string;
   isEmailVerified: boolean;
   role?: Role;
+  university?: string
 }
 
 export type OtpType = "password" | "email";

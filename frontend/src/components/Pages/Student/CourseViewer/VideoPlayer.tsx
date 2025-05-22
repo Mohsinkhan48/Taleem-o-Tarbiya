@@ -87,8 +87,8 @@ const VideoPlayer: React.FC<Props> = ({
 
   const handleMarkAsCompleted = async () => {
     try {
-      // setLoading(true);
-      // await saveProgress(0, true);
+      setLoading(true);
+      await saveProgress(0, true);
       onComplete?.(chapterId);
     } finally {
       setLoading(false);
@@ -150,13 +150,15 @@ const VideoPlayer: React.FC<Props> = ({
             dangerouslySetInnerHTML={{ __html: content }}
           />
           <div className="mt-6 text-center">
-            <button
-              onClick={handleMarkAsCompleted}
-              disabled={loading}
-              className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 flex items-center gap-2 mx-auto"
-            >
-              <FaCheckCircle /> {loading ? "Marking..." : "Mark as Completed"}
-            </button>
+            {!isCompleted && (
+              <button
+                onClick={handleMarkAsCompleted}
+                disabled={loading}
+                className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 flex items-center gap-2 mx-auto"
+              >
+                <FaCheckCircle /> {loading ? "Marking..." : "Mark as Completed"}
+              </button>
+            )}
           </div>
         </div>
       )}

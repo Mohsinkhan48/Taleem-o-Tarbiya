@@ -59,7 +59,7 @@ const ChapterCard: React.FC<Props> = ({
       }`}
     >
       <div className="flex items-center gap-2">
-        <Checkbox checked={chapter.lecture?.progress?.completed} />
+        <Checkbox checked={chapter?.progress?.completed} />
         <h3
           className="text-md font-semibold text-primary cursor-pointer hover:underline"
           onClick={handleChapterClick}

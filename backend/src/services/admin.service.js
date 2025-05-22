@@ -67,7 +67,7 @@ const adminService = {
   },
 
   getPayments: async () => {
-    const orders = await Order.find({ status: "paid" })
+    const orders = await Order.find()
       .populate("user", "fullName email")
       .populate("course", "title price")
       .select("-__v");

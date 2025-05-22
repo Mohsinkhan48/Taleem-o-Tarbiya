@@ -1,12 +1,13 @@
 const { ROLES } = require("../constants");
 const { CourseFilters } = require("../filters/course.filters");
-const { Lecture, Chapter } = require("../models");
+const { Lecture, Chapter, Course } = require("../models");
 const { R2XX, R4XX } = require("../Responses");
 const { courseService } = require("../services");
 const { catchAsync, getOptionalUserFromRequest } = require("../utils");
 const {
   getThumbnailUploader,
   getVideoUploader,
+  getPreviewVideoUploader,
 } = require("../utils/multer.utils");
 const path = require("path");
 const fs = require("fs");
@@ -84,7 +85,16 @@ const courseController = {
         console.error("❌ File does not exist:", absolutePath);
         return R4XX(res, 500, "File does not exist at the specified path.");
       }
+      // ✅ Check file size limit (300 MB = 300 * 1024 * 1024 bytes)
+      const mbs = 150;
+      const MAX_SIZE_BYTES = mbs * 1024 * 1024;
+      const fileSize = req.file.size;
 
+      if (fileSize > MAX_SIZE_BYTES) {
+        fs.unlinkSync(absolutePath); // 🧹 Delete oversized file
+        console.error("❌ File too large:", fileSize);
+        return R4XX(res, 400, `File size exceeds ${mbs}MB limit.`);
+      }
       ffmpeg.ffprobe(absolutePath, async (err, metadata) => {
         if (err) {
           console.error("❌ ffprobe failed:", err.message);
@@ -151,19 +161,94 @@ const courseController = {
       });
     });
   }),
+  uploadPreviewVideo: catchAsync(async (req, res, next) => {
+    const { courseId } = req.params;
+    const teacherId = req.user;
+
+    const upload = getPreviewVideoUploader(teacherId, courseId);
+    const uploadSingle = upload.single("video");
+
+    uploadSingle(req, res, async (err) => {
+      if (err) {
+        console.error("❌ Upload error:", err);
+        return R4XX(res, 400, err.message);
+      }
+
+      const absolutePath = req.file.path;
+      const relativePath = path
+        .relative(path.join(__dirname, ".."), absolutePath)
+        .replace(/\\/g, "/");
+
+      if (!fs.existsSync(absolutePath)) {
+        console.error("❌ File does not exist:", absolutePath);
+        return R4XX(res, 500, "File does not exist at the specified path.");
+      }
+
+      const mbs = 150;
+      const MAX_SIZE_BYTES = mbs * 1024 * 1024;
+      const fileSize = req.file.size;
+
+      if (fileSize > MAX_SIZE_BYTES) {
+        fs.unlinkSync(absolutePath);
+        console.error("❌ File too large:", fileSize);
+        return R4XX(res, 400, `File size exceeds ${mbs}MB limit.`);
+      }
+
+      ffmpeg.ffprobe(absolutePath, async (err, metadata) => {
+        if (err) {
+          console.error("❌ ffprobe failed:", err.message);
+          return R4XX(res, 500, "Failed to extract video metadata.");
+        }
+
+        const format = metadata.format;
+
+        const course = await Course.findById(courseId);
+
+        if (!course) {
+          return R4XX(res, 404, "Course not found.");
+        }
+
+        // 🧹 Remove existing preview video if exists
+        if (course.previewUrl && course.previewUrl.startsWith("/uploads/")) {
+          const oldAbsolutePath = path.join(
+            __dirname,
+            "..",
+            course.previewUrl.replace(/\//g, path.sep)
+          );
+
+          if (fs.existsSync(oldAbsolutePath)) {
+            fs.unlinkSync(oldAbsolutePath);
+            console.log("🗑️ Deleted old preview video at:", oldAbsolutePath);
+          }
+        }
+
+        // ✅ Save new preview video path
+        course.previewUrl = `/${relativePath}`;
+        await course.save();
+
+        return R2XX(res, "Preview video uploaded successfully", 200, {
+          previewUrl: course.previewUrl,
+          duration: Math.round(format.duration),
+          size: format.size,
+          format: format.format_name,
+        });
+      });
+    });
+  }),
   getCertificate: catchAsync(async (req, res, next) => {
     const studentId = req.user;
     const { courseId } = req.params;
 
     // You can add a progress check service here if needed:
-    const {completed, reason} = await courseService.checkCourseCompletion(
+    const { completed, reason } = await courseService.checkCourseCompletion(
       studentId,
       courseId
     );
-    if (!completed) return R2XX(res, "Course is not competed yet.", 200, {
-      isCertificate: false,
-      notcompletionReason: reason
-    });
+    if (!completed)
+      return R2XX(res, "Course is not competed yet.", 200, {
+        isCertificate: false,
+        notcompletionReason: reason,
+      });
 
     const filePath = await courseService.generateCertificatePDF(
       studentId,
@@ -244,6 +329,16 @@ const courseController = {
     R2XX(res, "Fetched teacher dashboard successfully", 200, {
       data: teacherDashboardData,
     });
+  }),
+  publishCourse: catchAsync(async (req, res) => {
+    const { courseId } = req.body;
+    await courseService.publishCourse(courseId);
+    R2XX(res, "Course published successfully", 200, {});
+  }),
+  getTeacherPublicProfile: catchAsync(async (req, res) => {
+    const { teacherId } = req.body;
+    const data = await courseService.getTeacherPublicProfile(teacherId);
+    R2XX(res, "Teacher profile fetched successfully", 200, { data });
   }),
 };
 

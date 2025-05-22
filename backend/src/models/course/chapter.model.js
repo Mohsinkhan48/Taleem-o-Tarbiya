@@ -23,10 +23,12 @@ const ChapterSchema = new mongoose.Schema(
     quiz: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "quizes",
+      default: null
     },
     assignment: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "assignments",
+      default: null
     },
   },
   {

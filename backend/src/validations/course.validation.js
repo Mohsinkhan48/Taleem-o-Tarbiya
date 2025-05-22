@@ -5,6 +5,7 @@ const { CART } = require("../constants");
 const courseValidation = {
   createCourse: {
     body: Joi.object({
+      _id: Joi.string().trim().optional().allow(""),
       image: Joi.string().optional(),
       title: Joi.string().trim().required(),
       description: Joi.string().required(),
@@ -70,6 +71,7 @@ const courseValidation = {
         "any.required": CART.COURSE_ID_REQUIRED,
         "any.invalid": CART.INVALID_COURSEID,
       }),
+      _id: Joi.string().trim().optional().allow(""),
       title: Joi.string().trim().required(),
       description: Joi.string().required(),
       content: Joi.string().required(),
@@ -82,36 +84,43 @@ const courseValidation = {
       modules: Joi.array()
         .items(
           Joi.object({
+            _id: Joi.string().trim().optional().allow(""),
             title: Joi.string().required(),
             chapters: Joi.array()
               .items(
                 Joi.object({
+                  _id: Joi.string().trim().optional().allow(""),
+
                   title: Joi.string().required(),
                   content: Joi.string().required(),
                   lecture: Joi.object({
-                    _id: Joi.string().required(),
-                    title: Joi.string().optional().allow(null, ''),
-                    description: Joi.string().optional().allow(null, ''),
-                    chapter: Joi.string().optional().allow(null, ''),
-                    videoUrl: Joi.string().optional().allow(null, ''),
-                    duration: Joi.number().optional().allow(null, ''),
-                    resolution: Joi.string().optional().allow(null, ''),
-                    size: Joi.number().optional().allow(null, ''),
-                    format: Joi.string().optional().allow(null, ''),
-                    createdAt: Joi.date().iso().optional().allow(null, ''),
-                    updatedAt: Joi.date().iso().optional().allow(null, ''),
-                    __v: Joi.number().optional().allow(null, ''),
+                    _id: Joi.string().trim().optional().allow(""),
+                    title: Joi.string().optional().allow(null, ""),
+                    description: Joi.string().optional().allow(null, ""),
+                    chapter: Joi.string().optional().allow(null, ""),
+                    videoUrl: Joi.string().optional().allow(null, ""),
+                    duration: Joi.number().optional().allow(null, ""),
+                    resolution: Joi.string().optional().allow(null, ""),
+                    size: Joi.number().optional().allow(null, ""),
+                    format: Joi.string().optional().allow(null, ""),
+                    createdAt: Joi.date().iso().optional().allow(null, ""),
+                    updatedAt: Joi.date().iso().optional().allow(null, ""),
+                    __v: Joi.number().optional().allow(null, ""),
                   }),
                   isPreview: Joi.boolean().default(false),
                   resources: Joi.array()
                     .items(
                       Joi.object({
+                        _id: Joi.string().trim().optional().allow(""),
+
                         name: Joi.string().required(),
                         url: Joi.string().uri().required(),
                       })
                     )
                     .optional(),
                   quiz: Joi.object({
+                    _id: Joi.string().trim().optional().allow(""),
+
                     title: Joi.string().required(),
                     questions: Joi.array()
                       .items(
@@ -128,6 +137,7 @@ const courseValidation = {
                       .required(),
                   }).optional(),
                   assignment: Joi.object({
+                    _id: Joi.string().trim().optional().allow(""),
                     title: Joi.string().optional().allow(null, ""),
                     description: Joi.string().optional().allow(null, ""),
                   }).optional(),
@@ -184,8 +194,8 @@ const courseValidation = {
   },
   uploadLectureVideo: {
     body: Joi.object({
-      title: Joi.string().optional().allow(null, ''),
-      description: Joi.string().optional().allow(null, ''),
+      title: Joi.string().optional().allow(null, ""),
+      description: Joi.string().optional().allow(null, ""),
     }),
     params: Joi.object({
       courseId: Joi.string().required().custom(objectId),

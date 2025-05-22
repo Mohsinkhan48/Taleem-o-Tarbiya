@@ -33,8 +33,14 @@ const userSchema = mongoose.Schema(
       ref: "roles",
       required: true,
     },
-    stripeAccountId: {
+    stripeAccountId: { // in case of teacher
       type: mongoose.Schema.Types.String,
+      required: false,
+      default: null,
+    },
+    university: { // in case of teacher
+      type: mongoose.Schema.Types.String,
+      default: null,
       required: false,
     },
   },

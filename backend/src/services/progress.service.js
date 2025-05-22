@@ -7,6 +7,7 @@ const {
   Chapter,
   Quiz,
   Assignment,
+  Module,
 } = require("../models");
 
 const progressService = {
@@ -20,38 +21,53 @@ const progressService = {
     currentTime,
     completed
   ) => {
-    const lecture = await Lecture.findById(lectureId);
-    if (!lecture) return null;
+    // If lectureId is provided, validate it exists
+    if (lectureId) {
+      const lecture = await Lecture.findById(lectureId);
+      if (!lecture) return null;
+    }
 
-    let lectureProgress = await LectureProgress.findOne({
+    // Build the query conditionally
+    const query = {
       user: userId,
       chapter: chapterId,
       course: courseId,
       module: moduleId,
-      lecture: lectureId,
-    });
+    };
+    if (lectureId) {
+      query.lecture = lectureId;
+    }
+
+    let lectureProgress = await LectureProgress.findOne(query);
 
     if (!lectureProgress) {
-      lectureProgress = new LectureProgress({
+      const newProgressData = {
         user: userId,
-        lecture: lectureId,
         chapter: chapterId,
         course: courseId,
         module: moduleId,
         currentTime,
         completed,
-      });
+      };
+      if (lectureId) {
+        newProgressData.lecture = lectureId;
+      }
+
+      lectureProgress = new LectureProgress(newProgressData);
     } else {
       lectureProgress.currentTime = currentTime;
       lectureProgress.completed = completed;
     }
+
     await lectureProgress.save();
 
+    // === CHAPTER PROGRESS ===
     if (completed) {
       let chapterProgress = await ChapterProgress.findOne({
         user: userId,
         chapter: chapterId,
       });
+
       if (!chapterProgress) {
         chapterProgress = new ChapterProgress({
           user: userId,
@@ -65,6 +81,7 @@ const progressService = {
       }
       await chapterProgress.save();
 
+      // === COURSE PROGRESS ===
       let courseProgress = await CourseProgress.findOne({
         user: userId,
         course: courseId,
@@ -83,10 +100,14 @@ const progressService = {
         }
       }
 
-      // ✅ Check if all chapters are completed
-      const allCourseChapters = await Chapter.find({ course: courseId }).select(
+      const courseModules = await Module.find({ course: courseId }).select(
         "_id"
       );
+      const moduleIds = courseModules.map((m) => m._id);
+
+      const allCourseChapters = await Chapter.find({
+        module: { $in: moduleIds },
+      }).select("_id");
       const allChapterIds = allCourseChapters.map((ch) => ch._id.toString());
       const completedChapterIds = courseProgress.completedChapters.map((id) =>
         id.toString()
@@ -128,6 +149,15 @@ const progressService = {
       };
     });
 
+    // 💥 Delete existing progress if it exists
+    await QuizProgress.deleteMany({
+      user: userId,
+      quiz: quizId,
+      chapter: chapterId,
+      course: courseId,
+    });
+
+    // 💾 Save new progress
     const quizProgress = new QuizProgress({
       user: userId,
       quiz: quizId,
@@ -139,10 +169,12 @@ const progressService = {
     });
     await quizProgress.save();
 
+    // ✅ Update or create chapter progress
     let chapterProgress = await ChapterProgress.findOne({
       user: userId,
       chapter: chapterId,
     });
+
     if (!chapterProgress) {
       chapterProgress = new ChapterProgress({
         user: userId,
@@ -154,6 +186,7 @@ const progressService = {
     } else {
       chapterProgress.quizCompleted = true;
     }
+
     await chapterProgress.save();
 
     return quizProgress;

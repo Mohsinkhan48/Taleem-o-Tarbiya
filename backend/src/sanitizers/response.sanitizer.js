@@ -4,7 +4,8 @@ const userSanitizer = (user) => {
     fullName: user.fullName,
     email: user.email,
     isEmailVerified: user.isEmailVerified,
-    role: user.role
+    role: user.role,
+    university: user.university,
   };
 };
 
@@ -23,7 +24,7 @@ const courseSanitizer = (course) => {
     category: course.category,
     isPaid: course.isPaid,
     createdAt: course.createdAt,
-    updatedAt: course.updatedAt
+    updatedAt: course.updatedAt,
   };
 };
 

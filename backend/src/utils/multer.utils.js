@@ -72,5 +72,42 @@ const getVideoUploader = (teacherId, courseId, moduleId, chapterId) => {
     },
   });
 };
+const getPreviewVideoUploader = (teacherId, courseId) => {
+  const uploadPath = path.join(
+    __dirname,
+    "..",
+    "uploads",
+    "teachers",
+    `${teacherId}`,
+    "courses",
+    `${courseId}`,
+    "preview"
+  );
 
-module.exports = { getThumbnailUploader, getVideoUploader };
+  fs.mkdirSync(uploadPath, { recursive: true });
+
+  const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+      cb(null, uploadPath);
+    },
+    filename: (req, file, cb) => {
+      const uniqueName = `preview-${Date.now()}${path.extname(file.originalname)}`;
+      cb(null, uniqueName);
+    },
+  });
+
+  return multer({
+    storage,
+    limits: {
+      fileSize: 300 * 1024 * 1024, // 300MB
+    },
+    fileFilter: (req, file, cb) => {
+      const ext = path.extname(file.originalname).toLowerCase();
+      if (![".mp4", ".mov", ".avi", ".mkv"].includes(ext)) {
+        return cb(new Error("Only video files are allowed!"));
+      }
+      cb(null, true);
+    },
+  });
+}
+module.exports = { getThumbnailUploader, getVideoUploader, getPreviewVideoUploader };

@@ -44,6 +44,14 @@ router.post(
   courseController.uploadThumbnail
 );
 
+router.post(
+  "/upload-preview-video/:courseId",
+  isAuth,
+  isMember,
+  hasRole([ROLES.TEACHER]),
+  courseController.uploadPreviewVideo
+);
+
 router.get(
   "/get-certificate/:courseId",
   validate(courseValidation.getCourseById),
@@ -51,6 +59,13 @@ router.get(
   isMember,
   hasRole([ROLES.STUDENT]),
   courseController.getCertificate
+);
+
+router.post(
+  "/teacher/public-profile",
+  isAuth,
+  isMember,
+  courseController.getTeacherPublicProfile
 );
 
 router.post(
@@ -84,6 +99,14 @@ router.get(
   isAuth,
   isMember,
   courseController.getCoursesByInstructor
+);
+
+router.post(
+  "/instructor/publish-course",
+  isAuth,
+  isMember,
+  hasRole([ROLES.TEACHER]),
+  courseController.publishCourse
 );
 
 router.get(

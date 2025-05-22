@@ -64,8 +64,8 @@ const CourseViewer: React.FC = () => {
             hasVideo={chapter.lecture?.hasVideo!}
             videoUrl={chapter?.lecture?.videoUrl!}
             lectureId={chapter?.lecture?._id!}
-            isCompleted={chapter.lecture?.progress?.completed!}
-            initialWatchedTime={chapter.lecture?.progress?.currentTime || 0}
+            isCompleted={chapter?.progress?.completed!}
+            initialWatchedTime={chapter?.progress?.currentTime || 0}
             courseId={courseId!}
             moduleId={moduleId!}
             chapterId={chapter._id!}

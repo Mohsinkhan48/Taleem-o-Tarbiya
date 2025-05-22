@@ -36,6 +36,8 @@ import AdminStudentsPage from "./components/Pages/Admin/AdminStudentsPage";
 import StripeReauth from "./components/Pages/Teacher/StripeAccount/StripeReauth";
 import StripeConnected from "./components/Pages/Teacher/StripeAccount/StripeConnected";
 import StripeAccountManager from "./components/Pages/Teacher/StripeAccount/StripeAccountManager";
+import TeacherProfile from "./components/Pages/Teacher/TeacherProfile";
+import TeacherPublicProfile from "./components/Pages/Course/TeacherPublicProfile";
 
 function App() {
   return (
@@ -51,6 +53,7 @@ function App() {
           <Route path="/email-verification" element={<EmailVerification />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/course/:id" element={<CourseDetails />} />
+          <Route path="/teacher/:id" element={<TeacherPublicProfile />} />
           <Route path="*" element={<PageNotFound />} />
         </Route>
         <Route
@@ -73,6 +76,7 @@ function App() {
           }
         >
           <Route path="dashboard" element={<TeacherDashboard />} />
+          <Route path="profile" element={<TeacherProfile />} />
           <Route path="create-course/:id?" element={<CreateCourseForm />} />
           <Route path="edit-course/:id?" element={<CreateCourseForm />} />
           <Route path="courses/:id" element={<EditCourse />} />

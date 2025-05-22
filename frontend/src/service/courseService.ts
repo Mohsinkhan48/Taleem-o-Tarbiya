@@ -92,7 +92,7 @@ export const CourseService = {
     completed: boolean
   ) => {
     return apiClient.post(
-      `${SERVER_URL}progress/lecture/${courseId}/${moduleId}/${chapterId}/${lectureId}`,
+      `${SERVER_URL}progress/lecture/${courseId}/${moduleId}/${chapterId}/${lectureId ? lectureId : ""}`,
       { currentTime, completed }
     );
   },
